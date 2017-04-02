@@ -60,3 +60,16 @@
     color: white;
   }
 }
+
+.new_race, .edit_race {
+  .field {
+    select {
+      width: 100px;
+      padding: 3px;
+    }
+  }
+}
+
+#add_category_list li {
+  margin: .6em;
+}

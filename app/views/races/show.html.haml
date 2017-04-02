@@ -1,6 +1,16 @@
 %h1
   = @race.name
 
+%h4
+  Vrijeme utrke:
+  %b
+    = l @race.date, format: :short
+
+%h4
+  Prijave otvorene do:
+  %b
+    = l @race.registration_threshold, format: :short
+
 .race-actions
   = link_to races_path do
     .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
@@ -11,7 +21,11 @@
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
         Export CSV
 
-  - unless @race.date - 1.days < DateTime.now
+    = link_to edit_race_path(@race) do
+      .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
+        Izmijeni
+
+  - if @race.date > @race.registration_threshold
     - if user_signed_in? && !@racer_has_race_result
       = form_for RaceResult.new do |f|
         = f.hidden_field :racer_id, value: current_user.racer.try(:id)
@@ -53,20 +67,19 @@
       %th Klub
       %th Vrijeme
       %th Status
-      %th Bodovi
       - if user_signed_in? && current_user.admin
         %th
   %tbody
-    - Racer.categories.each do |category|
-      %tr{ class: 'cat-' + category[0].gsub('+', '') }
+    - @race.categories.each_with_index do |category, index|
+      %tr{ class: "cat-#{index}" }
         %td{ colspan: user_signed_in? && current_user.admin ? 8 : 7 }
-          = category[0].upcase
+          = category.name.upcase
 
-      - (@race.race_results.select{|rr| rr.lap_times.length > 0}.sort{|x, y| x.finish_time <=> y.finish_time} + @race.race_results.select{|rr| rr.lap_times.length == 0}.sort{|x, y| y.status <=> x.status}).select{|rr| rr.racer.category == category[0]}.each_with_index do |race_result, index|
+      - (@race.race_results.select{|rr| rr.lap_times.length > 0}.sort{|x, y| x.position <=> y.position} + @race.race_results.select{|rr| rr.lap_times.length == 0}.sort{|x, y| y.status <=> x.status}).select{|rr| rr.category == category}.each_with_index do |race_result|
         %tr
           %td
             - if race_result.status == 3
-              = "#{index + 1}."
+              = race_result.position
           %td
             = link_to race_result.racer.start_number, race_result.racer
           %td= race_result.racer.full_name
@@ -79,7 +92,6 @@
               = race_result.pretty_status
           - else
             %td= race_result.pretty_status
-          %td= race_result.points
           - if user_signed_in? && current_user.admin && race_result.status && race_result.status < 2
             %td
               = form_for race_result do |f|

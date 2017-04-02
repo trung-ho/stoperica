@@ -7,19 +7,40 @@
           %li= msg
 
   .field
-    = f.label :name
+    = f.label 'Naslov'
     = f.text_field :name
   .field
-    = f.label :date
+    = f.label 'Datum utrke'
     = f.datetime_select :date
   .field
-    = f.label :laps
-    = f.number_field :laps
+    = f.label 'Datum prijava'
+    = f.datetime_select :registration_threshold
   .field
+    = f.label 'Broj krugova'
+    = f.number_field :laps
+  -# .field
     = f.label :easy_laps
     = f.number_field :easy_laps
   .field
-    = f.label :description_url
+    = f.label 'URL raspisa'
     = f.text_field :description_url
   .actions
-    = f.submit 'Save'
+    = f.submit 'Spremi'
+
+
+%h4
+  Kategorije
+- unless @race.id
+  Spremi utrku da bi dodao kategorije
+- else
+  #add_category.mdl-button.mdl-button--raised.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect
+    Dodaj
+  %ul#add_category_list
+    - @race.categories.each do |category|
+      %li= category.name
+
+  :javascript
+    document.querySelector('#add_category').addEventListener('click', function(){
+      var li = '<li><input type="text" placeholder="Naslov kategorije"></li>';
+      document.querySelector('#add_category_list').insertAdjacentHTML('beforeend', li);
+    });

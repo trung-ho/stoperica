@@ -20,9 +20,7 @@
     %br
     %b Mjesto stanovanja:
     = @racer.town
-%h4
-  %b Kategorija:
-  = @racer.category.upcase
+
 - if user_signed_in? && (current_user.admin || current_user.racer == @racer)
   %p
     %b Kontakt:
@@ -46,19 +44,13 @@
     %tr
       %th Utrka
       %th Vrijeme
-      %th Bodovi
       %th Mjesto
   %tbody
     - @racer.race_results.each do |race_result|
       %tr
         %td= race_result.race.name
         %td= race_result.finish_time
-        %td= race_result.points || '- -'
-        %td
-          - if race_result.points
-            = Race.points.index(race_result.points) + 1
-          - else
-            = '- -'
+        %td= race_result.try(:position)
 
 
 %br

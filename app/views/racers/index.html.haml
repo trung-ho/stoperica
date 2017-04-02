@@ -2,51 +2,11 @@
   Natjecatelji
   = "(#{@racers.count})"
 
-- if user_signed_in? && current_user.admin
-  %label{ for: 'category_select' }
-    Filtriraj po kategoriji
-  %select#category_select{ autocomplete: 'off' }
-    %option{ value: 'null', selected: ( params[:category].blank? ) }
-      Odaberi kategoriju
-    - Racer.categories.each do |category|
-      %option{ value: category[1], selected: ( params[:category] == category[1].to_s )}
-        = category[0].upcase
-
-  %label{ for: 'racer_order' }
-    Poredaj po startnom broju
-  %input#racer_order{ type: 'checkbox', checked: params[:order] == 'start_number' }
-  %br
-  %br
-  :javascript
-    document.getElementById('category_select').addEventListener('change', function(){
-      buildParams();
-    });
-
-    document.getElementById('racer_order').addEventListener('change', function(){
-      buildParams();
-    });
-
-    function buildParams() {
-      var queryString = '';
-      
-      var categoryQuery = document.getElementById('category_select').value;
-      if(categoryQuery && categoryQuery != 'null') {
-        queryString += 'category=' + categoryQuery;
-      }
-      
-      var racerOrderQuery = document.getElementById('racer_order').checked;
-      queryString += racerOrderQuery ? '&order=start_number' : '&order=total_points';
-
-      window.location.search = queryString;
-    }
-
 %table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
   %thead
     %tr
-      %th Broj
-      %th Kategorija
       %th Ime i Prezime
-      %th Ukupno bodova
+      %th Godina rodenja
       %th Klub
       - if user_signed_in? && current_user.admin
         %th Email
@@ -55,27 +15,18 @@
         %th
 
   %tbody
-    - Racer.categories.each do |category|
-      %tr{ class: 'cat-' + category[0].gsub('+', '') }
-        %td{ colspan: 9 }
-          = category[0].upcase
-      - @racers.select{|r| r.category.to_s == category[0]}.sort_by{|r| (@order ? r.start_number : -r.total_points)}.each do |racer|
-        %tr
+    - @racers.each do |racer|
+      %tr
+        %td= link_to racer.full_name, racer
+        %td= racer.year_of_birth
+        %td= racer.club.try(:name) || '- -'
+        - if user_signed_in? && current_user.admin
+          %td= racer.email
           %td
-            = link_to racer.start_number, racer
+            %a{href: "tel:#{racer.phone_number}"}
+              = racer.phone_number
           %td
-            = racer.category.try(:upcase)
-          %td= racer.full_name
+            = link_to 'Izmijeni', edit_racer_path(racer), class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored', style: 'color: white;'
           %td
-            %b= racer.total_points
-          %td= racer.club.try(:name) || '- -'
-          - if user_signed_in? && current_user.admin
-            %td= racer.email
-            %td
-              %a{href: "tel:#{racer.phone_number}"}
-                = racer.phone_number
-            %td
-              = link_to 'Izmijeni', edit_racer_path(racer), class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored', style: 'color: white;'
-            %td
-              = form_for racer, method: :delete do |f|
-                = f.submit 'Izbrisi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent', style: 'color: white;'
+            = form_for racer, method: :delete do |f|
+              = f.submit 'Izbrisi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent', style: 'color: white;'

@@ -41,6 +41,16 @@
     %label.mdl-radio.mdl-js-radio.mdl-js-ripple-effect{:for => 'spol-muski'}
       %input#spol-muski.mdl-radio__button{name: 'racer[gender]', type: 'radio', value: 2, required: true, checked: @racer.gender == 2}
       %span.mdl-radio__label Musko
+
+  .field
+    .mdl-textfield
+      %select{ name: 'racer[shirt_size]' }
+        %option{ disabled: true, selected: @racer.shirt_size.nil?, value: 0 }
+          Velicina majice
+        - %w(S M L XL).each do |size|
+          %option{ value: size, selected: @racer.shirt_size == size }
+            = size
+
   .field
     .mdl-textfield.mdl-js-textfield
       %input#phone_number.mdl-textfield__input{pattern: "-?[0-9]*(\\.[0-9]+)?", type: 'text', name: 'racer[phone_number]', required: true, value: @racer.phone_number}
@@ -67,7 +77,7 @@
           %option{ value: club.id, selected: @racer.club.try(:id) == club.id  }
             = club.name
   .field
-    = recaptcha_tags
+    -# = recaptcha_tags
 
   %hr
 

@@ -1,9 +1,7 @@
 %h1
-  %b
-    = @racer.start_number
-  = '-'
+  %b.uppercase
+    = @racer.last_name
   = @racer.first_name
-  = @racer.last_name
 
 %h4
   %b Klub:
@@ -20,6 +18,9 @@
     %br
     %b Mjesto stanovanja:
     = @racer.town
+    %br
+    %b Velicina majice:
+    = @racer.shirt_size || '-'
 
 - if user_signed_in? && (current_user.admin || current_user.racer == @racer)
   %p

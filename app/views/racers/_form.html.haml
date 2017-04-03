@@ -64,7 +64,7 @@
         %option{ disabled: true, selected: @racer.club.nil?, value: 0 }
           Klub
         - Club.all.each do |club|
-          %option{ value: club.id, selected: @racer.club.try(:id) == club.id  }
+          %option{ value: club.id, selected: @racer.club_id == club.id  }
             = club.name
   .field
     = recaptcha_tags

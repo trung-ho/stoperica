@@ -82,9 +82,8 @@
           %td
             - if race_result.status == 3
               = race_result.position
-          %td
-            = link_to race_result.racer.start_number, race_result.racer
-          %td= race_result.racer.full_name
+          %td= race_result.start_number
+          %td= link_to race_result.racer.full_name, race_result.racer
           %td= race_result.racer.club.try(:name)
           %td= race_result.finish_time
           - if @race.ended_at.present? && race_result.status == 1

@@ -1,6 +1,7 @@
 class RacesController < ApplicationController
   before_action :set_race, only: [:show, :edit, :update, :destroy, :add_racer]
   before_action :check_race_result, only: [:show]
+  before_action :only_admin, only: [:new, :edit, :destroy]
 
   # GET /races
   # GET /races.json

@@ -96,6 +96,6 @@ class RaceResultsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def race_result_params
-      params.require(:race_result).permit(:racer_id, :race_id, :status, :lap_times)
+      params.require(:race_result).permit(:racer_id, :race_id, :status, :lap_times, :category_id)
     end
 end

@@ -31,6 +31,7 @@
         = f.hidden_field :racer_id, value: current_user.racer.try(:id)
         = f.hidden_field :race_id, value: @race.id
         = f.hidden_field :status, value: 1
+        = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}
         .actions
           = f.submit 'Prijavi se', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
     - elsif user_signed_in? && @racer_has_race_result
@@ -49,6 +50,7 @@
     = f.select :racer_id, options_for_select(Racer.where.not(id: @race.race_results.pluck(:racer_id)).collect{|r| ["#{r.start_number} - #{r.full_name}", r.id]}), include_blank: true
     = f.hidden_field :race_id, value: @race.id
     = f.hidden_field :status, value: 1
+    = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}
     = f.submit 'Prijavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
 
   %br

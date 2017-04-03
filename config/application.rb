@@ -16,5 +16,8 @@ module MtbTiming
     # -- all .rb files in that directory are automatically loaded.
     config.react.camelize_props = true
     config.i18n.default_locale = :hr
+    config.action_dispatch.default_headers = {
+     'X-Frame-Options': 'ALLOWALL'
+    }
   end
 end

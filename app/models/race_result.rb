@@ -40,8 +40,10 @@ class RaceResult < ApplicationRecord
 
   def to_csv
     # ['Startni broj', 'Ime', 'Prezime', 'Klub',
-    # 'Godiste', 'Prebivaliste', 'Email', 'Mobitel', 'Vrijeme', 'Status', 'Bodovi']
-    return [racer.start_number, racer.first_name, racer.last_name, racer.club.try(:name),
-      racer.year_of_birth, racer.town, racer.email, racer.phone_number, finish_time, status, points]
+    # 'Kategorija', 'Velicina majice',
+    # 'Godiste', 'Prebivaliste', 'Email', 'Mobitel', 'Vrijeme', 'Status']
+    return [start_number, racer.first_name, racer.last_name, racer.club.try(:name),
+      category.try(:name), racer.shirt_size,
+      racer.year_of_birth, racer.town, racer.email, racer.phone_number, finish_time, status]
   end
 end

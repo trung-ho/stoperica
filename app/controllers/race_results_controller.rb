@@ -65,9 +65,7 @@ class RaceResultsController < ApplicationController
 
   # POST /race_results/from_timing
   def from_timing
-    race = Race.find(params[:race_id])
-    racer = Racer.find_by(start_number: params[:start_number])
-    race_result = RaceResult.where(race: race, racer: racer).first
+    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: params[:start_number])
     race_result.lap_times << params[:time].to_f/1000 if params[:time]
     race_result.status = params[:status]
     race_result.save!
@@ -78,9 +76,7 @@ class RaceResultsController < ApplicationController
 
   # DELETE /race_results/destroy_from_timing
   def destroy_from_timing
-    race = Race.find(params[:race_id])
-    racer = Racer.find_by(start_number: params[:start_number])
-    race_result = RaceResult.where(race: race, racer: racer).first
+    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: params[:start_number])
     race_result.lap_times -= ["#{params[:time].to_f/1000}"]
     race_result.save!
     respond_to do |format|
@@ -96,6 +92,6 @@ class RaceResultsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def race_result_params
-      params.require(:race_result).permit(:racer_id, :race_id, :status, :lap_times, :category_id)
+      params.require(:race_result).permit(:racer_id, :race_id, :status, :lap_times, :category_id, :start_number)
     end
 end

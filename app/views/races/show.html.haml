@@ -60,7 +60,7 @@
   Prijavljeni vozaci
   = "(#{@race.race_results.count})"
 
-%table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
+%table#raceResults.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
   %thead
     %tr
       %th Mjesto
@@ -70,6 +70,7 @@
       %th Vrijeme
       %th Status
       - if user_signed_in? && current_user.admin
+        %th
         %th
   %tbody
     - @race.categories.each_with_index do |category, index|
@@ -98,9 +99,45 @@
               = form_for race_result do |f|
                 = f.hidden_field :status, value: 2
                 .actions
-                  = f.submit 'Potvrdi uplatu', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+                  = f.submit 'Na startu', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
           - elsif user_signed_in? && current_user.admin
             %td
               = form_for race_result, method: :delete do |f|
                 .actions
                   = f.submit 'Odjavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect', onclick: "return confirm('Ovo ce izbrisati rezultat iz baze podataka. Molim potvrdi.')"
+          - if user_signed_in? && current_user.admin
+            %td
+              = form_for race_result do |f|
+                = f.text_field :start_number, value: race_result.start_number, placeholder: 'Startni broj', autocomplete: 'off'
+                = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: race_result.category_id
+                = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+
+:javascript
+  var forms = document.querySelectorAll('form.edit_race_result');
+  for(var i = forms.length - 1; i >= 0; i--) {
+    forms[i].addEventListener('submit', submitAsync);
+  }
+
+  function submitAsync(e) {
+    e.preventDefault();
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+      if (this.readyState === 4) {
+        if (this.status === 200) {
+          var res = JSON.parse(xhr.responseText);
+          alert('Spremljen broj: ' + res.start_number);
+        }
+        else {
+          alert('GRESKA. Nije spremljeno.');
+        }
+      }
+    };
+
+    xhr.open('POST', this.action, true);
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.send(new FormData(this));
+
+    return false;
+  }

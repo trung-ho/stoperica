@@ -106,14 +106,14 @@
                 .actions
                   = f.submit 'Odjavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect', onclick: "return confirm('Ovo ce izbrisati rezultat iz baze podataka. Molim potvrdi.')"
           - if user_signed_in? && current_user.admin
-            %td
+            %td#adminFormContainer
               = form_for race_result do |f|
                 = f.text_field :start_number, value: race_result.start_number, placeholder: 'Startni broj', autocomplete: 'off'
                 = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: race_result.category_id
                 = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
 
 :javascript
-  var forms = document.querySelectorAll('form.edit_race_result');
+  var forms = document.querySelectorAll('#adminFormContainer form.edit_race_result');
   for(var i = forms.length - 1; i >= 0; i--) {
     forms[i].addEventListener('submit', submitAsync);
   }

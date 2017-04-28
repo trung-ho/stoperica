@@ -12,7 +12,8 @@ class RaceResults extends React.Component {
       race: { race_results: [] },
       categoryView: false,
       largeView: false,
-      newestFirst: false
+      newestFirst: false,
+      categories: []
     }
   }
 
@@ -51,8 +52,8 @@ class RaceResults extends React.Component {
         }
       }).map((raceResult)=>{
         return (<tr key={`race-result-${raceResult.id}`}>
-          <td>{raceResult.racer.start_number}</td>
-          <td>{raceResult.racer.category.toUpperCase()}</td>
+          <td>{raceResult.start_number}</td>
+          <td>{raceResult.category.name.toUpperCase()}</td>
           <td>{`${raceResult.racer.first_name} ${raceResult.racer.last_name}`}</td>
           <td>{raceResult.racer && raceResult.racer.club && raceResult.racer.club.name}</td>
           <td>{raceResult.finish_time}</td>
@@ -66,8 +67,8 @@ class RaceResults extends React.Component {
         return a.finish_time === '- -'
       }).map((raceResult)=>{
         return (<tr key={`race-result-${raceResult.id}`}>
-          <td>{raceResult.racer.start_number}</td>
-          <td>{raceResult.racer.category.toUpperCase()}</td>
+          <td>{raceResult.start_number}</td>
+          <td>{raceResult.category.name.toUpperCase()}</td>
           <td>{`${raceResult.racer.first_name} ${raceResult.racer.last_name}`}</td>
           <td>{raceResult.racer && raceResult.racer.club && raceResult.racer.club.name}</td>
           <td>{this._prettyStatus(raceResult.status)}</td>
@@ -76,15 +77,14 @@ class RaceResults extends React.Component {
   }
 
   _renderByCategory() {
-    const newestFirst = this.state.newestFirst;
-    const categories = ['zene', 'u16', '16-20', '20-30', '30-40', '40-50', '50+'];
+    const { newestFirst, categories } = this.state;
     let finishedTimes = this.state.race.race_results.filter((a)=>{
       return a.finish_time != '- -' && a.status == 3
     });
 
-    return categories.map((category)=>{
-      return [<tr className={`cat-${category.replace('+', '')}`}><td colSpan="6"><b>{category.toUpperCase()}</b></td></tr>].concat(finishedTimes.filter((a)=>{
-          return a.racer.category === category;
+    return categories.map((category, index) => {
+      return [<tr className={`cat-${index}`}><td colSpan="6"><b>{category.toUpperCase()}</b></td></tr>].concat(finishedTimes.filter((a)=>{
+          return a.category.name === category;
         })
         .sort((a, b)=>{
           if(newestFirst){
@@ -105,8 +105,8 @@ class RaceResults extends React.Component {
           }
         }).map((raceResult)=>{
           return (<tr key={`race-result-${raceResult.id}`}>
-            <td>{raceResult.racer.start_number}</td>
-            <td>{raceResult.racer.category.toUpperCase()}</td>
+            <td>{raceResult.start_number}</td>
+            <td>{raceResult.category.name.toUpperCase()}</td>
             <td>{`${raceResult.racer.first_name} ${raceResult.racer.last_name}`}</td>
             <td>{raceResult.racer && raceResult.racer.club && raceResult.racer.club.name}</td>
             <td>{raceResult.finish_time}</td>
@@ -139,7 +139,10 @@ class RaceResults extends React.Component {
     this.ajax = new Ajax(
       `/races/${this.props.raceId}`,
       (data) => {
-        this.setState({race: data})
+        this.setState({
+          race: data,
+          categories: data.categories.map(c => c.name)
+        })
       },
       (error, status) => {
         alert(error + status);

@@ -14,7 +14,7 @@ class RacesController < ApplicationController
   def show
     respond_to do |format|
       format.html { render :show }
-      format.json { render json: @race, include: {race_results: { include: {racer: {include: :club}}, methods: [:finish_time] }} }
+      format.json { render json: @race, include: [{race_results: { include: [{racer: {include: :club}}, :category], methods: [:finish_time] }}, :categories] }
       format.csv { send_data @race.to_csv }
     end
   end
@@ -56,7 +56,7 @@ class RacesController < ApplicationController
     @race.ended_at = Time.at(params[:ended_at].to_i/1000) if params[:ended_at].present?
     @race.save!
 
-    @race.assign_points if params[:ended_at].present? && @race.ended_at
+    @race.assign_positions if params[:ended_at].present? && @race.ended_at
 
     respond_to do |format|
       if @race.update(race_params)

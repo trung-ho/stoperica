@@ -5,7 +5,11 @@ class Race < ApplicationRecord
 
   def assign_positions
     categories.each do |category|
-      results = race_results.includes(:racer).where(status: 3).where('racers.category': category[1]).sort{|x,y| x.finish_time <=> y.finish_time}.select{ |rr| rr.lap_times.length > 0 }
+      results = race_results.includes(:racer).where(status: 3).where(category: category).sort{|x,y| x.finish_time <=> y.finish_time}.select{ |rr| rr.lap_times.length > 0 }
+      p 'results'
+      p 'results'
+      p 'results'
+      p results
       results.each_with_index do |rr, index|
         rr.update!(position: index + 1)
       end

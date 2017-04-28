@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170403180549) do
+ActiveRecord::Schema.define(version: 20170428175447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20170403180549) do
     t.integer  "points"
     t.integer  "start_number"
     t.integer  "category_id"
+    t.integer  "position"
     t.index ["category_id"], name: "index_race_results_on_category_id", using: :btree
     t.index ["race_id"], name: "index_race_results_on_race_id", using: :btree
     t.index ["racer_id"], name: "index_race_results_on_racer_id", using: :btree
@@ -80,6 +81,7 @@ ActiveRecord::Schema.define(version: 20170403180549) do
     t.datetime "ended_at"
     t.string   "description_url"
     t.datetime "registration_threshold"
+    t.date     "shirt_threshold"
   end
 
   create_table "users", force: :cascade do |t|

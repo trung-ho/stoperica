@@ -78,7 +78,7 @@
         %td{ colspan: user_signed_in? && current_user.admin ? 8 : 7 }
           = category.name.upcase
 
-      - (@race.race_results.select{|rr| rr.lap_times.length > 0}.sort{|x, y| x.position <=> y.position} + @race.race_results.select{|rr| rr.lap_times.length == 0}.sort{|x, y| y.status <=> x.status}).select{|rr| rr.category == category}.each_with_index do |race_result|
+      - (@race.race_results.select{|rr| rr.position.present?}.sort{|x, y| x.position <=> y.position} + @race.race_results.select{|rr| rr.position.nil?}.sort{|x, y| y.status <=> x.status}).select{|rr| rr.category == category}.each_with_index do |race_result|
         %tr
           %td
             - if race_result.status == 3

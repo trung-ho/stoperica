@@ -87,6 +87,7 @@ class RaceResultsController < ApplicationController
 
   # ALL /race_results/from_device
   def from_device
+      p 'params', params
       render json: params
   end
 

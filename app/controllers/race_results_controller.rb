@@ -44,7 +44,7 @@ class RaceResultsController < ApplicationController
   # PATCH/PUT /race_results/1.json
   def update
     if params[:race_result][:start_number]
-      @race_result.start_number = StartNumber.find_by(value: params[:race_result][:start_number])
+      @race_result.update!(start_number: StartNumber.find_by!(value: params[:race_result][:start_number]))
     end
 
     respond_to do |format|
@@ -71,7 +71,7 @@ class RaceResultsController < ApplicationController
 
   # POST /race_results/from_timing
   def from_timing
-    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: params[:start_number])
+    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: @start_number)
     race_result.lap_times << params[:time].to_f/1000 if params[:time]
     race_result.status = params[:status]
     race_result.save!
@@ -82,7 +82,7 @@ class RaceResultsController < ApplicationController
 
   # DELETE /race_results/destroy_from_timing
   def destroy_from_timing
-    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: params[:start_number])
+    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: @start_number)
     race_result.lap_times -= ["#{params[:time].to_f/1000}"]
     race_result.save!
     respond_to do |format|
@@ -129,6 +129,12 @@ class RaceResultsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_race_result
       @race_result = RaceResult.find(params[:id])
+    end
+
+    def set_start_number
+      if params[:race_result][:start_number]
+        @start_number = StartNumber.find_by!(value: params[:race_result][:start_number])
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -121,6 +121,7 @@ class RaceResultsController < ApplicationController
     end
 
     respond_to do |format|
+      format.html { render json: race_result }
       format.json { render json: race_result }
     end
   end

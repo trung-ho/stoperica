@@ -100,7 +100,7 @@ class RaceResultsController < ApplicationController
     else
       race = Race.last
     end
-    start_number = StartNumber.find_by!(tag_id: params[:TAGID])
+    start_number = StartNumber.find_by!(tag_id: params[:TAGID].strip)
 
     race_result = RaceResult.find_by(race: race, start_number: start_number)
     # TODO: add timezone

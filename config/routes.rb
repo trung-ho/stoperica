@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :start_numbers
   devise_for :users
   root to: 'dashboard#info'
 
@@ -11,6 +12,7 @@ Rails.application.routes.draw do
   resources :race_results do
     collection do
       post :from_timing
+      post :from_device
       delete :destroy_from_timing
     end
   end

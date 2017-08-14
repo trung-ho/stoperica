@@ -2,6 +2,7 @@ class RaceResult < ApplicationRecord
   belongs_to :racer
   belongs_to :race
   belongs_to :category
+  belongs_to :start_number
   attr_accessor :racer_start_number
 
   validate :disallow_duplicates
@@ -30,7 +31,7 @@ class RaceResult < ApplicationRecord
   end
 
   def finish_time
-    if race && lap_times.length > 0
+    if race&.started_at && lap_times.length > 0
       seconds = Time.at(lap_times.last.to_f) - race.started_at
       Time.at(seconds).utc.strftime("%H:%M:%S.%L")
     else
@@ -42,7 +43,7 @@ class RaceResult < ApplicationRecord
     # ['Startni broj', 'Ime', 'Prezime', 'Klub',
     # 'Kategorija', 'Velicina majice',
     # 'Godiste', 'Prebivaliste', 'Email', 'Mobitel', 'Vrijeme', 'Status']
-    return [start_number, racer.first_name, racer.last_name, racer.club.try(:name),
+    return [start_number&.value, racer.first_name, racer.last_name, racer.club.try(:name),
       category.try(:name), racer.shirt_size,
       racer.year_of_birth, racer.town, racer.email, racer.phone_number, finish_time, status]
   end

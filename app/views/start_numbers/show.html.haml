@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b Value:
+  = @start_number.value
+%p
+  %b Tag:
+  = @start_number.tag_id
+
+%p
+  %b Race Results
+  %ol
+    - @start_number.race_results.each do |race_result|
+      %li
+        %b= race_result.race.name
+        ,
+        = race_result.racer.full_name
+
+= link_to 'Edit', edit_start_number_path(@start_number)
+\|
+= link_to 'Back', start_numbers_path

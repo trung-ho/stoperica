@@ -2,6 +2,8 @@ class RaceResultsController < ApplicationController
   before_action :set_race_result, only: [:show, :edit, :update, :destroy]
   before_action :only_admin, only: [:from_timing, :destroy_from_timing]
 
+  protect_from_forgery :except => [:from_device]
+
   # GET /race_results
   # GET /race_results.json
   def index
@@ -41,6 +43,10 @@ class RaceResultsController < ApplicationController
   # PATCH/PUT /race_results/1
   # PATCH/PUT /race_results/1.json
   def update
+    if params[:race_result][:start_number]
+      @race_result.start_number = StartNumber.find_by(value: params[:race_result][:start_number])
+    end
+
     respond_to do |format|
       if @race_result.update(race_result_params)
         format.html { redirect_to @race_result.race, notice: 'Uplata uspjesno zaprimljena.' }
@@ -84,6 +90,41 @@ class RaceResultsController < ApplicationController
     end
   end
 
+  # "TAGID"=>" 00 00 00 00 00 00 00 00 00 01 65 19",
+  # "RSSI"=>"60",
+  # "TIME"=>"14.08.2017 13:07:14.36753"
+  def from_device
+    # TODO: race_id
+    if params[:race_id]
+      race = Race.get(params[:race_id])
+    else
+      race = Race.last
+    end
+    start_number = StartNumber.find_by!(tag_id: params[:TAGID])
+
+    race_result = RaceResult.find_by(race: race, start_number: start_number)
+    # TODO: add timezone
+    millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L').to_f
+
+    signal_strength = params[:RSSI].to_i
+
+    # HACK for existing race results
+    if race_result.signal_strength.nil?
+      race_result.signal_strength = 1000
+    end
+
+    if race_result.signal_strength > signal_strength
+      race_result.signal_strength = signal_strength
+      race_result.lap_times = [millis]
+      race_result.status = 3
+      race_result.save!
+    end
+
+    respond_to do |format|
+      format.json { render json: race_result }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_race_result
@@ -92,6 +133,6 @@ class RaceResultsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def race_result_params
-      params.require(:race_result).permit(:racer_id, :race_id, :status, :lap_times, :category_id, :start_number)
+      params.require(:race_result).permit(:racer_id, :race_id, :status, :lap_times, :category_id)
     end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170428175447) do
+ActiveRecord::Schema.define(version: 20170814113448) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,16 +35,18 @@ ActiveRecord::Schema.define(version: 20170428175447) do
     t.integer  "racer_id"
     t.integer  "race_id"
     t.integer  "status"
-    t.text     "lap_times",    default: [],              array: true
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.text     "lap_times",       default: [],                array: true
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "points"
-    t.integer  "start_number"
     t.integer  "category_id"
     t.integer  "position"
+    t.integer  "start_number_id"
+    t.integer  "signal_strength", default: 1000, null: false
     t.index ["category_id"], name: "index_race_results_on_category_id", using: :btree
     t.index ["race_id"], name: "index_race_results_on_race_id", using: :btree
     t.index ["racer_id"], name: "index_race_results_on_racer_id", using: :btree
+    t.index ["start_number_id"], name: "index_race_results_on_start_number_id", using: :btree
   end
 
   create_table "racers", force: :cascade do |t|
@@ -54,7 +56,6 @@ ActiveRecord::Schema.define(version: 20170428175447) do
     t.integer  "gender"
     t.string   "email"
     t.string   "phone_number"
-    t.integer  "start_number"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.integer  "user_id"
@@ -81,7 +82,13 @@ ActiveRecord::Schema.define(version: 20170428175447) do
     t.datetime "ended_at"
     t.string   "description_url"
     t.datetime "registration_threshold"
-    t.date     "shirt_threshold"
+  end
+
+  create_table "start_numbers", force: :cascade do |t|
+    t.string   "value"
+    t.string   "tag_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

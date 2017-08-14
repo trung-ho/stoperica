@@ -14,7 +14,7 @@ class RacesController < ApplicationController
   def show
     respond_to do |format|
       format.html { render :show }
-      format.json { render json: @race, include: [{race_results: { include: [{racer: {include: :club}}, :category], methods: [:finish_time] }}, :categories] }
+      format.json { render json: @race, include: [{race_results: { include: [{racer: {include: :club}}, :category, :start_number], methods: [:finish_time] }}, :categories] }
       format.csv { send_data @race.to_csv }
     end
   end

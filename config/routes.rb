@@ -11,8 +11,8 @@ Rails.application.routes.draw do
   resources :clubs
   resources :race_results do
     collection do
+      get :from_device
       post :from_timing
-      post :from_device
       delete :destroy_from_timing
     end
   end

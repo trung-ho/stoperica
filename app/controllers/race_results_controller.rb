@@ -110,10 +110,11 @@ class RaceResultsController < ApplicationController
 
     # HACK for existing race results
     if race_result.signal_strength.nil?
-      race_result.signal_strength = 1000
+      race_result.signal_strength = -1000
     end
 
-    if race_result.signal_strength > signal_strength
+    # write new result if new signal_strength is larger than existing
+    if signal_strength > race_result.signal_strength
       race_result.signal_strength = signal_strength
       race_result.lap_times = [millis]
       race_result.status = 3

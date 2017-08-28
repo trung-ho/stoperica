@@ -47,7 +47,7 @@
 
 - if user_signed_in? && current_user.admin
   = form_for RaceResult.new do |f|
-    = f.select :racer_id, options_for_select(Racer.where.not(id: @race.race_results.pluck(:racer_id)).collect{|r| ["#{r.start_number} - #{r.full_name}", r.id]}), include_blank: true
+    = f.select :racer_id, options_for_select(Racer.where.not(id: @race.race_results.pluck(:racer_id)).collect{|r| [r.full_name, r.id]}.sort{|a, b| a[0] <=> b[0]}), include_blank: true
     = f.hidden_field :race_id, value: @race.id
     = f.hidden_field :status, value: 1
     = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}

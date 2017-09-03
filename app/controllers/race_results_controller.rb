@@ -96,9 +96,7 @@ class RaceResultsController < ApplicationController
   # "RACEID"=>5
   def from_device
     if params[:RACEID]
-      race = Race.get(params[:RACEID])
-    else
-      race = Race.last
+      race = Race.find(params[:RACEID])
     end
     start_number = StartNumber.find_by!(tag_id: params[:TAGID].strip)
 

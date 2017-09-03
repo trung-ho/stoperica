@@ -106,7 +106,8 @@ class RaceResultsController < ApplicationController
     signal_strength = params[:RSSI].to_i
 
     # HACK for existing race results
-    if race_result.signal_strength.nil?
+    # check and remove before production
+    if race_result.signal_strength.nil? || race_result.signal_strength == 1000
       race_result.signal_strength = -1000
     end
 

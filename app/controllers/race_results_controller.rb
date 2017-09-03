@@ -92,19 +92,18 @@ class RaceResultsController < ApplicationController
 
   # "TAGID"=>" 00 00 00 00 00 00 00 00 00 01 65 19",
   # "RSSI"=>"60",
-  # "TIME"=>"14.08.2017 13:07:14.36753"
+  # "TIME"=>"14.08.2017 13:07:14.36753 +02:00",
+  # "RACEID"=>5
   def from_device
-    # TODO: race_id
-    if params[:race_id]
-      race = Race.get(params[:race_id])
+    if params[:RACEID]
+      race = Race.get(params[:RACEID])
     else
       race = Race.last
     end
     start_number = StartNumber.find_by!(tag_id: params[:TAGID].strip)
 
     race_result = RaceResult.find_by(race: race, start_number: start_number)
-    # TODO: add timezone
-    millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L').to_f
+    millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z').to_f
 
     signal_strength = params[:RSSI].to_i
 

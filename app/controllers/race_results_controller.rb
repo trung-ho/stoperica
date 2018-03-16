@@ -120,8 +120,14 @@ class RaceResultsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render json: race_result }
-      format.json { render json: race_result }
+      data = {
+        start_number: race_result.start_number.value,
+        name: race_result.racer.full_name,
+        time: race_result.finish_time
+      }
+
+      format.html { render json: data }
+      format.json { render json: data }
     end
   end
 

@@ -5,7 +5,7 @@ default: &default
 
 development:
   <<: *default
-  database: mtb_development
+  database: stoperica_development
 
 test:
   <<: *default
@@ -14,5 +14,5 @@ test:
 production:
   <<: *default
   database: mtb_production
-  username: mtb_timinf
+  username: mtb_timing
   password: <%= ENV['MTB_TIMING _DATABASE_PASSWORD'] %>

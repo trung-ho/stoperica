@@ -4,7 +4,9 @@ class RaceStart extends React.Component {
 
     this.state = {
       selectedRaceId: 0,
-      raceStarted: false
+      raceStarted: false,
+      categories: [],
+      selectedCategories: []
     }
   }
 
@@ -19,7 +21,10 @@ class RaceStart extends React.Component {
           this.setState({ raceStarted: true });
         }
         RaceResultActions.setRace(raceId);
-        this.setState({ selectedRaceId: raceId });
+        this.setState({
+          selectedRaceId: raceId,
+          categories: data.categories
+        });
       },
       (error, status) => {
         console.log(error, status);
@@ -32,7 +37,8 @@ class RaceStart extends React.Component {
   startRace() {
     // PUT started_at to selected race
     let data = {
-      started_at: timeSync.now()
+      started_at: timeSync.now(),
+      categories: this.state.selectedCategories
     }
     // show end race button
     let ajax = new Ajax(
@@ -58,8 +64,6 @@ class RaceStart extends React.Component {
     let ajax = new Ajax(
       `/races/${this.state.selectedRaceId}`,
       (data) => {
-        console.log(data);
-        // this.setState({selectedRaceId: 0, raceStarted: false });
         window.location = `/races/${this.state.selectedRaceId}`;
       },
       (error, status) => {
@@ -67,6 +71,18 @@ class RaceStart extends React.Component {
       }
     );
     ajax.put(data);
+  }
+
+  handleCategoryChange({ target }, category) {
+    const { selectedCategories } = this.state;
+    if (target.checked) {
+      selectedCategories.push(target.value);
+    }
+    else {
+      const index = selectedCategories.indexOf(target.value);
+      selectedCategories.splice(index, 1);
+    }
+    this.setState({ selectedCategories })
   }
 
   render () {
@@ -101,7 +117,7 @@ class RaceStart extends React.Component {
             null
           }
           {
-            !this.state.raceStarted && this.state.selectedRaceId ?
+            this.state.selectedRaceId ?
             (
               <button
                 className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect"
@@ -113,6 +129,24 @@ class RaceStart extends React.Component {
             :
             null
           }
+          <ul className="timing-category-list">
+            {
+              this.state.categories.map(c => {
+                return (
+                  <li>
+                    <input
+                      type="checkbox"
+                      value={c.id}
+                      onChange={ event => this.handleCategoryChange(event, c) }
+                    />
+                    <label className={ c['started?'] ? 'started' : '' }>
+                      {c.name}
+                    </label>
+                  </li>
+                );
+              })
+            }
+          </ul>
         </span>
         <RaceTime />
         {

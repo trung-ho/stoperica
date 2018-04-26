@@ -2,12 +2,8 @@ class RaceResultsController < ApplicationController
   before_action :set_race_result, only: [:show, :edit, :update, :destroy]
   before_action :only_admin, only: [:from_timing, :destroy_from_timing]
 
-<<<<<<< HEAD
   protect_from_forgery :except => [:from_device]
 
-=======
-  protect_from_forgery except: :from_device
->>>>>>> origin/master
   # GET /race_results
   # GET /race_results.json
   def index
@@ -47,8 +43,12 @@ class RaceResultsController < ApplicationController
   # PATCH/PUT /race_results/1
   # PATCH/PUT /race_results/1.json
   def update
-    if params[:race_result][:start_number]
-      @race_result.update!(start_number: StartNumber.find_by!(value: params[:race_result][:start_number]))
+    start_number_val = params[:race_result][:start_number]
+    if start_number_val
+      start_number = StartNumber.find_by(value: start_number_val, race: @race_result.race)
+      start_number = StartNumber.find_by(value: start_number_val) if start_number.nil?
+      raise 'Start number not found' if start_number.nil?
+      @race_result.update!(start_number: start_number)
     end
 
     respond_to do |format|

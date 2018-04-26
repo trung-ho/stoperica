@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180413173041) do
+ActiveRecord::Schema.define(version: 20180426164941) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,8 @@ ActiveRecord::Schema.define(version: 20180413173041) do
     t.string   "tag_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "race_id"
+    t.index ["race_id"], name: "index_start_numbers_on_race_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -116,4 +118,5 @@ ActiveRecord::Schema.define(version: 20180413173041) do
   add_foreign_key "race_results", "races"
   add_foreign_key "racers", "clubs"
   add_foreign_key "racers", "users"
+  add_foreign_key "start_numbers", "races"
 end

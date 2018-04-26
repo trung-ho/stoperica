@@ -1,8 +1,9 @@
 %h1 Listing start_numbers
 
-%table
+%table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
   %thead
     %tr
+      %th Race
       %th Value
       %th Tag
       %th
@@ -12,6 +13,7 @@
   %tbody
     - @start_numbers.each do |start_number|
       %tr
+        %td= start_number.race&.name
         %td= start_number.value
         %td= start_number.tag_id
         %td= link_to 'Show', start_number

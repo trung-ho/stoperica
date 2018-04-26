@@ -7,6 +7,9 @@
           %li= msg
 
   .field
+    = f.label :race
+    = f.select(:race_id, options_for_select(Race.all.collect {|r| [ r.name, r.id ] }, { include_blank: true }))
+  .field
     = f.label :value
     = f.text_field :value
   .field

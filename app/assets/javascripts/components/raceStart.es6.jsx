@@ -109,21 +109,19 @@ class RaceStart extends React.Component {
           >
             <option value="0">Odaberi utrku</option>
             {
-              races.map((race)=>{
+              races.sort((a, b) => (b.id - a.id)).map((race)=>{
                 return <option key={`race-select-${race.id}`} value={race.id}>{race.name}</option>;
               })
             }
           </select>
           {
-            this.state.raceStarted ?
-            (
-             <button
-                className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
-                onClick={ this.endRace.bind(this) }
+            this.state.selectedRaceId ?
+            <button
+              className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
+              onClick={ this.endRace.bind(this) }
               >
-                Finish
-              </button>
-            )
+              Finish
+            </button>
             :
             null
           }

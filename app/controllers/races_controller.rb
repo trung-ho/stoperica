@@ -58,7 +58,9 @@ class RacesController < ApplicationController
   # PATCH/PUT /races/1
   # PATCH/PUT /races/1.json
   def update
-    @race.started_at = Time.at(params[:started_at].to_i/1000) if params[:started_at].present?
+    if params[:started_at].present? && @race.started_at.nil?
+      @race.started_at = Time.at(params[:started_at].to_i/1000)
+    end
     @race.ended_at = Time.at(params[:ended_at].to_i/1000) if params[:ended_at].present?
     @race.save!
 
@@ -107,7 +109,7 @@ class RacesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def race_params
-      params.require(:race).permit(:name, :date, :laps, :easy_laps, :description_url, :registration_threshold, :categories, :started_at)
+      params.require(:race).permit(:name, :date, :laps, :easy_laps, :description_url, :registration_threshold, :categories)
     end
 
     def check_race_result

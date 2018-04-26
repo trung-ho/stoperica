@@ -35,17 +35,19 @@ ActiveRecord::Schema.define(version: 20180413173041) do
     t.integer  "racer_id"
     t.integer  "race_id"
     t.integer  "status"
-    t.text     "lap_times",    default: [],              array: true
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.text     "lap_times",       default: [],                 array: true
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.integer  "points"
-    t.integer  "start_number"
     t.integer  "category_id"
     t.integer  "position"
     t.datetime "started_at"
+    t.integer  "start_number_id"
+    t.integer  "signal_strength", default: -1000, null: false
     t.index ["category_id"], name: "index_race_results_on_category_id", using: :btree
     t.index ["race_id"], name: "index_race_results_on_race_id", using: :btree
     t.index ["racer_id"], name: "index_race_results_on_racer_id", using: :btree
+    t.index ["start_number_id"], name: "index_race_results_on_start_number_id", using: :btree
   end
 
   create_table "racers", force: :cascade do |t|
@@ -55,7 +57,6 @@ ActiveRecord::Schema.define(version: 20180413173041) do
     t.integer  "gender"
     t.string   "email"
     t.string   "phone_number"
-    t.integer  "start_number"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.integer  "user_id"
@@ -82,6 +83,13 @@ ActiveRecord::Schema.define(version: 20180413173041) do
     t.datetime "ended_at"
     t.string   "description_url"
     t.datetime "registration_threshold"
+  end
+
+  create_table "start_numbers", force: :cascade do |t|
+    t.string   "value"
+    t.string   "tag_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

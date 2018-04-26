@@ -2,7 +2,12 @@ class RaceResultsController < ApplicationController
   before_action :set_race_result, only: [:show, :edit, :update, :destroy]
   before_action :only_admin, only: [:from_timing, :destroy_from_timing]
 
+<<<<<<< HEAD
+  protect_from_forgery :except => [:from_device]
+
+=======
   protect_from_forgery except: :from_device
+>>>>>>> origin/master
   # GET /race_results
   # GET /race_results.json
   def index
@@ -42,6 +47,10 @@ class RaceResultsController < ApplicationController
   # PATCH/PUT /race_results/1
   # PATCH/PUT /race_results/1.json
   def update
+    if params[:race_result][:start_number]
+      @race_result.update!(start_number: StartNumber.find_by!(value: params[:race_result][:start_number]))
+    end
+
     respond_to do |format|
       if @race_result.update(race_result_params)
         format.html { redirect_to @race_result.race, notice: 'Uplata uspjesno zaprimljena.' }
@@ -66,7 +75,7 @@ class RaceResultsController < ApplicationController
 
   # POST /race_results/from_timing
   def from_timing
-    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: params[:start_number])
+    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: @start_number)
     race_result.lap_times << params[:time].to_f/1000 if params[:time]
     race_result.status = params[:status]
     race_result.save!
@@ -77,7 +86,7 @@ class RaceResultsController < ApplicationController
 
   # DELETE /race_results/destroy_from_timing
   def destroy_from_timing
-    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: params[:start_number])
+    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: @start_number)
     race_result.lap_times -= ["#{params[:time].to_f/1000}"]
     race_result.save!
     respond_to do |format|
@@ -85,10 +94,29 @@ class RaceResultsController < ApplicationController
     end
   end
 
-  # ALL /race_results/from_device
+  # "TAGID"=>" 00 00 00 00 00 00 00 00 00 01 65 19",
+  # "RSSI"=>"60",
+  # "TIME"=>"14.08.2017 13:07:14.36753 %2B02:00",
+  # "RACEID"=>5
   def from_device
-      p 'params', params
-      render json: params
+    race = Race.find(params[:RACEID])
+    start_number = StartNumber.find_by!(tag_id: params[:TAGID].strip)
+
+    race_result = RaceResult.find_by(race: race, start_number: start_number)
+    millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z').to_f
+
+    race_result.lap_times << millis
+    race_result.status = 3
+    race_result.save!
+
+    data = {
+      finish_time: race_result.finish_time,
+      racer_name: race_result.racer.full_name,
+      start_number: race_result.start_number.value,
+      tag_id: race_result.start_number.tag_id
+    }
+
+    render json: data
   end
 
   private
@@ -97,8 +125,14 @@ class RaceResultsController < ApplicationController
       @race_result = RaceResult.find(params[:id])
     end
 
+    def set_start_number
+      if params[:race_result][:start_number]
+        @start_number = StartNumber.find_by!(value: params[:race_result][:start_number])
+      end
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def race_result_params
-      params.require(:race_result).permit(:racer_id, :race_id, :status, :lap_times, :category_id, :start_number)
+      params.require(:race_result).permit(:racer_id, :race_id, :status, :lap_times, :category_id)
     end
 end

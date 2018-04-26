@@ -70,6 +70,6 @@ class StartNumbersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def start_number_params
-      params.require(:start_number).permit(:value, :tag_id, :race_result)
+      params.require(:start_number).permit(:value, :tag_id, :race_result, :race_id)
     end
 end

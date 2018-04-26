@@ -92,43 +92,27 @@ class RaceResultsController < ApplicationController
 
   # "TAGID"=>" 00 00 00 00 00 00 00 00 00 01 65 19",
   # "RSSI"=>"60",
-  # "TIME"=>"14.08.2017 13:07:14.36753 +02:00",
+  # "TIME"=>"14.08.2017 13:07:14.36753 %2B02:00",
   # "RACEID"=>5
   def from_device
-    if params[:RACEID]
-      race = Race.find(params[:RACEID])
-    end
+    race = Race.find(params[:RACEID])
     start_number = StartNumber.find_by!(tag_id: params[:TAGID].strip)
 
     race_result = RaceResult.find_by(race: race, start_number: start_number)
     millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z').to_f
 
-    signal_strength = params[:RSSI].to_i
+    race_result.lap_times << millis
+    race_result.status = 3
+    race_result.save!
 
-    # HACK for existing race results
-    # check and remove before production
-    if race_result.signal_strength.nil? || race_result.signal_strength == 1000
-      race_result.signal_strength = -1000
-    end
+    data = {
+      finish_time: race_result.finish_time,
+      racer_name: race_result.racer.full_name,
+      start_number: race_result.start_number.value,
+      tag_id: race_result.start_number.tag_id
+    }
 
-    # write new result if new signal_strength is larger than existing
-    if signal_strength > race_result.signal_strength
-      race_result.signal_strength = signal_strength
-      race_result.lap_times = [millis]
-      race_result.status = 3
-      race_result.save!
-    end
-
-    respond_to do |format|
-      data = {
-        start_number: race_result.start_number.value,
-        name: race_result.racer.full_name,
-        time: race_result.finish_time
-      }
-
-      format.html { render json: data }
-      format.json { render json: data }
-    end
+    render json: data
   end
 
   private

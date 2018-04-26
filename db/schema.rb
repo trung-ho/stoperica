@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170814185023) do
+ActiveRecord::Schema.define(version: 20180413173041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20170814185023) do
     t.integer  "points"
     t.integer  "category_id"
     t.integer  "position"
+    t.datetime "started_at"
     t.integer  "start_number_id"
     t.integer  "signal_strength", default: -1000, null: false
     t.index ["category_id"], name: "index_race_results_on_category_id", using: :btree

@@ -4,22 +4,26 @@ class RaceStart extends React.Component {
 
     this.state = {
       selectedRaceId: 0,
-      raceStarted: false
+      raceStarted: false,
+      categories: [],
+      selectedCategories: []
     }
   }
 
   selectRace(event) {
     let raceId = event.target.value;
-    // GET race tp check if it has been started
     let ajax = new Ajax(
       `/races/${raceId}.json`,
-      (data) => {
+      data => {
         if(data.started_at) {
           RaceResultActions.startRace(new Date(data.started_at));
           this.setState({ raceStarted: true });
         }
         RaceResultActions.setRace(raceId);
-        this.setState({ selectedRaceId: raceId });
+        this.setState({
+          selectedRaceId: raceId,
+          categories: data.categories
+        });
       },
       (error, status) => {
         console.log(error, status);
@@ -30,17 +34,31 @@ class RaceStart extends React.Component {
   }
 
   startRace() {
-    // PUT started_at to selected race
+    const { selectedCategories, selectedRaceId, categories } = this.state;
     let data = {
-      started_at: timeSync.now()
+      started_at: timeSync.now(),
+      categories: selectedCategories
     }
-    // show end race button
     let ajax = new Ajax(
-      `/races/${this.state.selectedRaceId}`,
-      (data) => {
-        this.setState({raceStarted: true});
+      `/races/${selectedRaceId}`,
+      data => {
+        const updatedCategories = categories.map(c => {
+          if (selectedCategories.indexOf(c.id.toString()) > -1) {
+            c['started?'] = true;
+          }
+          return c;
+        });
+        this.setState({
+          raceStarted: true,
+          selectedCategories: [],
+          categories: updatedCategories
+        });
         RaceResultActions.startRace(new Date(data.started_at));
-        RaceResultActions.setRace(this.state.selectedRaceId);
+        RaceResultActions.setRace(selectedRaceId);
+        const startedCategories = categories.map(c => {
+          if (selectedCategories.includes(c.id.toString())) return c.name;
+        });
+        window.alert(`Startali: ${startedCategories.join(', ')}`)
       },
       (error, status) => {
         console.log(error, status);
@@ -54,12 +72,9 @@ class RaceStart extends React.Component {
     let data = {
       ended_at: timeSync.now()
     }
-    // show end race button
     let ajax = new Ajax(
       `/races/${this.state.selectedRaceId}`,
       (data) => {
-        console.log(data);
-        // this.setState({selectedRaceId: 0, raceStarted: false });
         window.location = `/races/${this.state.selectedRaceId}`;
       },
       (error, status) => {
@@ -67,6 +82,18 @@ class RaceStart extends React.Component {
       }
     );
     ajax.put(data);
+  }
+
+  handleCategoryChange({ target }, category) {
+    const { selectedCategories } = this.state;
+    if (target.checked) {
+      selectedCategories.push(target.value);
+    }
+    else {
+      const index = selectedCategories.indexOf(target.value);
+      selectedCategories.splice(index, 1);
+    }
+    this.setState({ selectedCategories })
   }
 
   render () {
@@ -101,7 +128,7 @@ class RaceStart extends React.Component {
             null
           }
           {
-            !this.state.raceStarted && this.state.selectedRaceId ?
+            this.state.selectedRaceId ?
             (
               <button
                 className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect"
@@ -113,6 +140,24 @@ class RaceStart extends React.Component {
             :
             null
           }
+          <ul className="timing-category-list">
+            {
+              this.state.categories.map(c => {
+                return (
+                  <li key={c.id}>
+                    <input
+                      type="checkbox"
+                      value={c.id}
+                      onChange={ event => this.handleCategoryChange(event, c) }
+                    />
+                    <label className={ c['started?'] ? 'started' : '' }>
+                      {c.name}
+                    </label>
+                  </li>
+                );
+              })
+            }
+          </ul>
         </span>
         <RaceTime />
         {

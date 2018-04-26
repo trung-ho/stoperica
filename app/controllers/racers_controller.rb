@@ -4,13 +4,7 @@ class RacersController < ApplicationController
   # GET /racers
   # GET /racers.json
   def index
-    if params[:category].present?
-      @racers = Racer.includes(:race_results).where(category: params[:category].to_i)
-    else
-      @racers = Racer.includes(:race_results).all
-    end
-
-    @order = params[:order] == 'start_number' if params[:order].present?
+    @racers = Racer.includes(:race_results).order(:created_at)
   end
 
   # GET /racers/1

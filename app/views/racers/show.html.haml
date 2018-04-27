@@ -47,7 +47,7 @@
       %th Vrijeme
       %th Mjesto
   %tbody
-    - @racer.race_results.each do |race_result|
+    - @racer.race_results.sort{|a, b| b.id <=> a.id}.each do |race_result|
       %tr
         %td= race_result.race.name
         %td= race_result.finish_time

@@ -126,7 +126,7 @@ class RaceResultsController < ApplicationController
     end
 
     def set_start_number
-      if params[:race_result][:start_number]
+      if params[:start_number]
         @start_number = StartNumber.find_by(race_id: params[:race_id], value: params[:start_number])
         @start_number = StartNumber.find_by(value: params[:start_number]) if @start_number.nil?
       end

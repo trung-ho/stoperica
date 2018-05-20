@@ -29,6 +29,10 @@ class RaceResultsController < ApplicationController
   # POST /race_results.json
   def create
     @race_result = RaceResult.new(race_result_params)
+    RacerMailer.race_details(
+      @race_result.racer,
+      @race_result.race
+    ).deliver_later if @race_result.race.email_body
 
     respond_to do |format|
       if @race_result.save

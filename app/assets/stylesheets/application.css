@@ -11,12 +11,18 @@
  * It is generally better to create a new file per style scope.
  *
  *= require material
+ *= require quill.snow
  *= require_tree .
  *= require_self
  */
 
 * {
     font-family: Roboto, 'sans';
+}
+
+.turbolinks-progress-bar {
+  height: 5px;
+  background-color: rgb(64,196,255);
 }
 
 .page-content {

@@ -2,7 +2,7 @@ class RaceResult < ApplicationRecord
   belongs_to :racer
   belongs_to :race
   belongs_to :category
-  belongs_to :start_number
+  belongs_to :start_number, optional: true
   attr_accessor :racer_start_number
 
   validate :disallow_duplicates

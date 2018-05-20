@@ -10,11 +10,16 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require turbolinks
 //= require material
+//= require vendor/quill.min
 //= require vendor/timesync
-//= require moment
 //= require react
 //= require react_ujs
 //= require react-flux
 //= require components
 //= require_tree .
+
+document.addEventListener('turbolinks:load', function () {
+    componentHandler.upgradeDom();
+});

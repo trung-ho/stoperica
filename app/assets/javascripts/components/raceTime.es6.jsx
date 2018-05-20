@@ -13,7 +13,7 @@ class RaceTime extends React.Component {
     if(startDate) {
       setInterval(()=>{
         let time = timeSync.now() - startDate;
-        this.setState({raceTime: timeSync.humanTime(time)});
+        this.setState({ raceTime: timeSync.humanTime(time) });
       }, 1000)
     }
   }

@@ -1,8 +1,13 @@
 class RacerMailer < ApplicationMailer
-  default from: "registracije@xczld.info"
+  default from: 'Stoperica Timing <stoperica.timing@gmail.com>'
 
-  def welcome_email(racer)
+  def race_details(racer, race)
     @racer = racer
-    mail(to: @racer.email, subject: 'Registracija za MTB ligu Dalmacije')
+    mail(
+      to: @racer.email,
+      subject: "Prijava na #{race.name}",
+      body: race.email_body,
+      content_type: 'text/html'
+    )
   end
 end

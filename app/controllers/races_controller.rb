@@ -14,13 +14,13 @@ class RacesController < ApplicationController
   def show
     respond_to do |format|
       format.html { render :show }
-      format.json {
+      format.json do
         render json: @race,
-          include: [
-            { race_results: { include: [{racer: {include: :club}}, :category], methods: [:finish_time] }},
-            categories: { methods: :started? }
-          ]
-      }
+               include: [
+                 { race_results: { include: [{ racer: { include: :club } }, :category], methods: [:finish_time] } },
+                 categories: { methods: :started? }
+               ]
+      end
       format.csv { send_data @race.to_csv }
     end
   end
@@ -59,15 +59,15 @@ class RacesController < ApplicationController
   # PATCH/PUT /races/1.json
   def update
     if params[:started_at].present? && @race.started_at.nil?
-      @race.started_at = Time.at(params[:started_at].to_i/1000)
+      @race.started_at = Time.at(params[:started_at].to_i / 1000)
     end
-    @race.ended_at = Time.at(params[:ended_at].to_i/1000) if params[:ended_at].present?
+    @race.ended_at = Time.at(params[:ended_at].to_i / 1000) if params[:ended_at].present?
     @race.save!
 
     @race.assign_positions if params[:ended_at].present? && @race.ended_at
 
     if params[:started_at].present? && params[:categories].present?
-      start_time = Time.at(params[:started_at].to_i/1000)
+      start_time = Time.at(params[:started_at].to_i / 1000)
       @race.race_results.where(category_id: params[:categories]).update(started_at: start_time)
     end
 
@@ -98,25 +98,27 @@ class RacesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_race
-      if action_name == 'show'
-        @race = Race.includes(race_results: {racer: :club}).find(params[:id])
-      else
-        @race = Race.find(params[:id])
-      end
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def race_params
-      params.require(:race).permit(:name, :date, :laps, :easy_laps, :description_url, :registration_threshold, :categories)
+  def set_race
+    if action_name == 'show'
+      @race = Race.includes(race_results: { racer: :club }).find(params[:id])
+    else
+      @race = Race.find(params[:id])
     end
+  end
 
-    def check_race_result
-      has_race_result = current_user && current_user.racer && current_user.racer.races.include?(@race)
-      @racer_has_race_result = has_race_result
-      if has_race_result
-        @race_result = current_user.racer.race_results.where(race: @race).first
-      end
+  def race_params
+    params.require(:race).permit(
+      :name, :date, :laps, :easy_laps, :description_url,
+      :registration_threshold, :categories, :email_body
+    )
+  end
+
+  def check_race_result
+    has_race_result = current_user && current_user.racer && current_user.racer.races.include?(@race)
+    @racer_has_race_result = has_race_result
+    if has_race_result
+      @race_result = current_user.racer.race_results.where(race: @race).first
     end
+  end
 end

@@ -15,102 +15,102 @@ ActiveRecord::Schema.define(version: 20180520172804) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "categories", force: :cascade do |t|
-    t.integer  "race_id"
-    t.string   "name"
+  create_table "categories", id: :serial, force: :cascade do |t|
+    t.integer "race_id"
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["race_id"], name: "index_categories_on_race_id", using: :btree
+    t.index ["race_id"], name: "index_categories_on_race_id"
   end
 
-  create_table "clubs", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "user_id"
+  create_table "clubs", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_clubs_on_user_id", using: :btree
+    t.index ["user_id"], name: "index_clubs_on_user_id"
   end
 
-  create_table "race_results", force: :cascade do |t|
-    t.integer  "racer_id"
-    t.integer  "race_id"
-    t.integer  "status"
-    t.text     "lap_times",       default: [],                 array: true
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.integer  "points"
-    t.integer  "category_id"
-    t.integer  "position"
+  create_table "race_results", id: :serial, force: :cascade do |t|
+    t.integer "racer_id"
+    t.integer "race_id"
+    t.integer "status"
+    t.text "lap_times", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "points"
+    t.integer "category_id"
+    t.integer "position"
     t.datetime "started_at"
-    t.integer  "start_number_id"
-    t.integer  "signal_strength", default: -1000, null: false
-    t.index ["category_id"], name: "index_race_results_on_category_id", using: :btree
-    t.index ["race_id"], name: "index_race_results_on_race_id", using: :btree
-    t.index ["racer_id"], name: "index_race_results_on_racer_id", using: :btree
-    t.index ["start_number_id"], name: "index_race_results_on_start_number_id", using: :btree
+    t.integer "start_number_id"
+    t.integer "signal_strength", default: -1000, null: false
+    t.index ["category_id"], name: "index_race_results_on_category_id"
+    t.index ["race_id"], name: "index_race_results_on_race_id"
+    t.index ["racer_id"], name: "index_race_results_on_racer_id"
+    t.index ["start_number_id"], name: "index_race_results_on_start_number_id"
   end
 
-  create_table "racers", force: :cascade do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.integer  "year_of_birth"
-    t.integer  "gender"
-    t.string   "email"
-    t.string   "phone_number"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.integer  "user_id"
-    t.integer  "club_id"
-    t.integer  "category"
-    t.string   "address"
-    t.string   "zip_code"
-    t.string   "town"
-    t.integer  "day_of_birth"
-    t.integer  "month_of_birth"
-    t.string   "shirt_size"
-    t.index ["club_id"], name: "index_racers_on_club_id", using: :btree
-    t.index ["user_id"], name: "index_racers_on_user_id", using: :btree
+  create_table "racers", id: :serial, force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.integer "year_of_birth"
+    t.integer "gender"
+    t.string "email"
+    t.string "phone_number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.integer "club_id"
+    t.integer "category"
+    t.string "address"
+    t.string "zip_code"
+    t.string "town"
+    t.integer "day_of_birth"
+    t.integer "month_of_birth"
+    t.string "shirt_size"
+    t.index ["club_id"], name: "index_racers_on_club_id"
+    t.index ["user_id"], name: "index_racers_on_user_id"
   end
 
-  create_table "races", force: :cascade do |t|
-    t.string   "name"
+  create_table "races", id: :serial, force: :cascade do |t|
+    t.string "name"
     t.datetime "date"
-    t.integer  "laps"
-    t.integer  "easy_laps"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer "laps"
+    t.integer "easy_laps"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "started_at"
     t.datetime "ended_at"
-    t.string   "description_url"
+    t.string "description_url"
     t.datetime "registration_threshold"
-    t.text     "email_body"
+    t.text "email_body"
   end
 
-  create_table "start_numbers", force: :cascade do |t|
-    t.string   "value"
-    t.string   "tag_id"
+  create_table "start_numbers", id: :serial, force: :cascade do |t|
+    t.string "value"
+    t.string "tag_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "race_id"
-    t.index ["race_id"], name: "index_start_numbers_on_race_id", using: :btree
+    t.integer "race_id"
+    t.index ["race_id"], name: "index_start_numbers_on_race_id"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
-    t.string   "reset_password_token"
+  create_table "users", id: :serial, force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.inet     "current_sign_in_ip"
-    t.inet     "last_sign_in_ip"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.boolean  "admin"
-    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "admin"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "categories", "races"

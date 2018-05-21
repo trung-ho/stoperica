@@ -45,7 +45,6 @@ class RaceResult < ApplicationRecord
 
   def finish_delta(category)
     reference_race_result = RaceResult.joins(:racer).where(category: category, race: race, status: 3).order('position asc').limit(1).first()
-    # byebug
     if race && lap_times.length > 0
       seconds = Time.at(lap_times.last.to_f) - Time.at(reference_race_result.lap_times.last.to_f)
       Time.at(seconds).utc.strftime("+%H:%M:%S.%L")

@@ -1,22 +1,19 @@
 !!!
 %html
   %head
-    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
     %title Stoperica | MTB Timing
     = csrf_meta_tags
-    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   %body
     .mdl-layout.mdl-js-layout.mdl-layout--fixed-header
       %header.mdl-layout__header
         .mdl-layout__header-row
-          / Title
           %span.mdl-layout-title
             = image_tag 'logo.png', height: 50
-          / Add spacer, to align navigation to the right
           .mdl-layout-spacer
-          / Navigation. We hide it in small screens.
           %nav.mdl-navigation.mdl-layout--large-screen-only
             %a.mdl-navigation__link{:href => "/info"} Info
             %a.mdl-navigation__link{:href => "/racers"} Natjecatelji
@@ -36,7 +33,8 @@
               %a.mdl-navigation__link{:href => "/racers/login"} Login
 
       .mdl-layout__drawer
-        %span.mdl-layout-title Stoperica
+        %span.mdl-layout-title
+          = image_tag 'logo.png', height: 35
         %nav.mdl-navigation
           %a.mdl-navigation__link{:href => "/info"} Info
           %a.mdl-navigation__link{:href => "/racers"} Natjecatelji

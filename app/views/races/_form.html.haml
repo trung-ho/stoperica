@@ -7,7 +7,7 @@
           %li= msg
 
   .field
-    = f.label 'Naslov'
+    = f.label 'Name'
     = f.text_field :name
   .field
     = f.label 'Datum utrke'
@@ -21,6 +21,9 @@
   .field
     = f.label 'URL raspisa'
     = f.text_field :description_url
+  .field
+    = f.label 'Onemoguci odjavu'
+    = f.check_box :lock_race_results
   .field.hidden
     = f.label :email_body
     = f.text_field :email_body

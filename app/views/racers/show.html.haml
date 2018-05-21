@@ -18,9 +18,11 @@
     %br
     %b Mjesto stanovanja:
     = @racer.town
-    %br
-    %b Velicina majice:
-    = @racer.shirt_size || '-'
+
+    - if current_user.admin?
+      %br
+      %b Velicina majice:
+      = @racer.shirt_size || '-'
 
 - if user_signed_in? && (current_user.admin || current_user.racer == @racer)
   %p

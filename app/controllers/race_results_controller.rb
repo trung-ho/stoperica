@@ -1,9 +1,9 @@
 class RaceResultsController < ApplicationController
-  before_action :set_race_result, only: [:show, :edit, :update, :destroy]
-  before_action :only_admin, only: [:from_timing, :destroy_from_timing]
-  before_action :set_start_number, only: [:from_timing, :destroy_from_timing]
+  before_action :set_race_result, only: %i[show edit update destroy]
+  before_action :only_admin, only: %i[from_timing destroy_from_timing]
+  before_action :set_start_number, only: %i[from_timing destroy_from_timing]
 
-  protect_from_forgery :except => [:from_device]
+  protect_from_forgery except: [:from_device]
 
   # GET /race_results
   # GET /race_results.json
@@ -13,8 +13,7 @@ class RaceResultsController < ApplicationController
 
   # GET /race_results/1
   # GET /race_results/1.json
-  def show
-  end
+  def show; end
 
   # GET /race_results/new
   def new
@@ -22,17 +21,13 @@ class RaceResultsController < ApplicationController
   end
 
   # GET /race_results/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /race_results
   # POST /race_results.json
   def create
     @race_result = RaceResult.new(race_result_params)
-    RacerMailer.race_details(
-      @race_result.racer,
-      @race_result.race
-    ).deliver_later if @race_result.race.email_body
+    send_email
 
     respond_to do |format|
       if @race_result.save
@@ -71,7 +66,9 @@ class RaceResultsController < ApplicationController
   # DELETE /race_results/1.json
   def destroy
     race = @race_result.race
+    raise 'Odjave su zakljucane!' unless current_user.admin? || !race.lock_race_results
     @race_result.destroy
+
     respond_to do |format|
       format.html { redirect_to race, notice: 'Odjava je bila uspjesna.' }
       format.json { head :no_content }
@@ -81,7 +78,7 @@ class RaceResultsController < ApplicationController
   # POST /race_results/from_timing
   def from_timing
     race_result = RaceResult.find_by(race_id: params[:race_id], start_number: @start_number)
-    race_result.lap_times << params[:time].to_f/1000 if params[:time]
+    race_result.lap_times << params[:time].to_f / 1000 if params[:time]
     race_result.status = params[:status]
     race_result.save!
     respond_to do |format|
@@ -92,7 +89,7 @@ class RaceResultsController < ApplicationController
   # DELETE /race_results/destroy_from_timing
   def destroy_from_timing
     race_result = RaceResult.find_by(race_id: params[:race_id], start_number: @start_number)
-    race_result.lap_times -= ["#{params[:time].to_f/1000}"]
+    race_result.lap_times -= [(params[:time].to_f / 1000).to_s]
     race_result.save!
     respond_to do |format|
       format.json { render json: race_result }
@@ -125,20 +122,30 @@ class RaceResultsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_race_result
-      @race_result = RaceResult.find(params[:id])
-    end
 
-    def set_start_number
-      if params[:start_number]
-        @start_number = StartNumber.find_by(race_id: params[:race_id], value: params[:start_number])
-        @start_number = StartNumber.find_by(value: params[:start_number]) if @start_number.nil?
-      end
-    end
+  def set_race_result
+    @race_result = RaceResult.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def race_result_params
-      params.require(:race_result).permit(:racer_id, :race_id, :status, :lap_times, :category_id)
+  def set_start_number
+    if params[:start_number]
+      @start_number = StartNumber.find_by(race_id: params[:race_id], value: params[:start_number])
+      @start_number = StartNumber.find_by(value: params[:start_number]) if @start_number.nil?
     end
+  end
+
+  def race_result_params
+    params.require(:race_result).permit(
+      :racer_id, :race_id, :status, :lap_times, :category_id
+    )
+  end
+
+  def send_email
+    if @race_result.race.email_body
+      RacerMailer.race_details(
+        @race_result.racer,
+        @race_result.race
+      ).deliver_later
+    end
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180520172804) do
+ActiveRecord::Schema.define(version: 20180521152039) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20180520172804) do
     t.string "description_url"
     t.datetime "registration_threshold"
     t.text "email_body"
+    t.boolean "lock_race_results"
   end
 
   create_table "start_numbers", id: :serial, force: :cascade do |t|

@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get '/info' => 'dashboard#info'
 
   resources :clubs
+  resources :categories
   resources :race_results do
     collection do
       match :from_device, via: [:get, :post]
@@ -27,6 +28,4 @@ Rails.application.routes.draw do
       post :login
     end
   end
-
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

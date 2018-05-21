@@ -8,8 +8,12 @@
 
 %h4
   Prijave otvorene do:
-  %b
+  %b#raceResultLocked{ class: @race.lock_race_results ? 'shame' : '' }
     = l @race.registration_threshold, format: :short
+  - if @race.lock_race_results
+    .mdl-tooltip.mdl-tooltip--large{for: "raceResultLocked"}
+      %b Napomena:
+      Odjave su onemogućene za ovu utrku.
 
 .race-actions
   = link_to races_path do
@@ -25,7 +29,7 @@
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
         Izmijeni
 
-  - if DateTime.now < @race.registration_threshold
+  - if DateTime.now < @race.registration_threshold && @race.lock_race_results
     - if user_signed_in? && !@racer_has_race_result
       = form_for RaceResult.new do |f|
         = f.hidden_field :racer_id, value: current_user.racer.try(:id)
@@ -35,9 +39,10 @@
         .actions
           = f.submit 'Prijavi se', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
     - elsif user_signed_in? && @racer_has_race_result
-      = form_for @race_result, method: 'DELETE' do |f|
-        .actions
-          = f.submit 'Odjavi se', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+      - unless @race.lock_race_results
+        = form_for @race_result, method: 'DELETE' do |f|
+          .actions
+            = f.submit 'Odjavi se', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
     - else
       = link_to 'Login za prijavu', login_racers_path(redirect: "/races/#{@race.id}"), class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
 
@@ -72,6 +77,7 @@
       - if user_signed_in? && current_user.admin
         %th
         %th
+        %th
   %tbody
     - @race.categories.each_with_index do |category, index|
       %tr{ class: "cat-#{index}" }
@@ -100,7 +106,7 @@
                 = f.hidden_field :status, value: 2
                 .actions
                   = f.submit 'Na startu', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
-          - elsif user_signed_in? && current_user.admin
+          - if user_signed_in? && current_user.admin
             %td
               = form_for race_result, method: :delete do |f|
                 .actions

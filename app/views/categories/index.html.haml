@@ -1,0 +1,24 @@
+%h1 Kategorije
+
+= link_to 'Dodaj', new_category_path, class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+
+%br
+%br
+
+%table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
+  %thead
+    %tr
+      %th Name
+      %th Race
+      %th
+      %th
+      %th
+
+  %tbody
+    - @categories.each do |category|
+      %tr
+        %td= category.name
+        %td= category.race&.name
+        %td= link_to 'Show', category
+        %td= link_to 'Edit', edit_category_path(category)
+        %td= link_to 'Destroy', category, method: :delete, data: { confirm: 'Are you sure?' }

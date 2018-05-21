@@ -30,6 +30,16 @@
   margin: 2em auto;
 }
 
+.field {
+ margin: 2rem;
+}
+
+.field label {
+  margin-right: 1.1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
 .hidden {
   display: none;
 }

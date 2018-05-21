@@ -6,7 +6,8 @@ class RaceStart extends React.Component {
       selectedRaceId: 0,
       raceStarted: false,
       categories: [],
-      selectedCategories: []
+      selectedCategories: [],
+      timestamp: timeSync.timestamp()
     }
   }
 
@@ -96,8 +97,14 @@ class RaceStart extends React.Component {
     this.setState({ selectedCategories })
   }
 
+  componentDidMount() {
+    setInterval(() => {
+      this.setState({ timestamp: timeSync.timestamp() })
+    }, 1000)
+  }
+
   render () {
-    const {races} = this.props;
+    const { races } = this.props;
     return (
       <span>
         <span>
@@ -156,6 +163,9 @@ class RaceStart extends React.Component {
               })
             }
           </ul>
+          <span style={{ marginLeft: '2rem', fontWeight: 'bold' }}>
+            Vrijeme timinga: { this.state.timestamp }
+          </span>
         </span>
         <RaceTime />
         {

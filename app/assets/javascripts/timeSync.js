@@ -17,6 +17,11 @@ class TimeSync {
     return parseInt(this.ts.now().toFixed());
   }
 
+  timestamp() {
+    this.init();
+    return (new Date(this.ts.now())).toLocaleTimeString();
+  }
+
   humanTime(millisec) {
     var seconds = (millisec / 1000).toFixed(0);
     var minutes = Math.floor(seconds / 60);

@@ -3,6 +3,7 @@
 %table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
   %thead
     %tr
+      %th Kategorija
       %th Ime
       %th Broj clanova
       - if user_signed_in? && current_user.admin
@@ -12,6 +13,7 @@
   %tbody
     - @clubs.each do |club|
       %tr
+        %td.is-capitalized= club.category
         %td= link_to club.name, club
         %td= club.racers.count
         - if user_signed_in? && current_user.admin

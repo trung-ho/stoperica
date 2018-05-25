@@ -173,3 +173,7 @@ option {
 .losers {
   color: red;
 }
+
+.is-capitalized {
+  text-transform: capitalize;
+}

@@ -1,9 +1,13 @@
 %h1 Klubovi
 
+- if current_user&.admin
+  = link_to 'Dodaj klub', new_club_path, class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
+  %br
+  %br
+
 %table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
   %thead
     %tr
-      %th Kategorija
       %th Ime
       %th Broj clanova
       - if user_signed_in? && current_user.admin
@@ -11,17 +15,16 @@
         %th
 
   %tbody
-    - @clubs.each do |club|
-      %tr
-        %td.is-capitalized= club.category
-        %td= link_to club.name, club
-        %td= club.racers.count
-        - if user_signed_in? && current_user.admin
-          %td= link_to 'Izmijeni', edit_club_path(club), class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored', style: 'color: white;'
-          %td
-            = form_for club, method: :delete do |f|
-              = f.submit 'Izbrisi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent', style: 'color: white;'
-
-- if user_signed_in? && current_user.admin
-  %br
-  = link_to 'Dodaj klub', new_club_path, class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
+    - Club.categories.each do |category|
+      %tr.has-background-accent
+        %td.is-capitalized{ colspan: current_user&.admin? ? 5 : 3 }
+          %b= category[0]
+      - @clubs.select{ |c| c.category == category[0] }.each do |club|
+        %tr
+          %td= link_to club.name, club
+          %td= club.racers.count
+          - if user_signed_in? && current_user.admin
+            %td= link_to 'Izmijeni', edit_club_path(club), class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored', style: 'color: white;'
+            %td
+              = form_for club, method: :delete do |f|
+                = f.submit 'Izbrisi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent', style: 'color: white;'

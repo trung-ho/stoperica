@@ -24,6 +24,10 @@
       %b Velicina majice:
       = @racer.shirt_size || '-'
 
+      %br
+      %b Personal best 20.1km:
+      = @racer.personal_best || '-'
+
 - if user_signed_in? && (current_user.admin || current_user.racer == @racer)
   %p
     %b Kontakt:

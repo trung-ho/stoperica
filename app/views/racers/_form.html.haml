@@ -50,6 +50,10 @@
         - %w(S M L XL).each do |size|
           %option{ value: size, selected: @racer.shirt_size == size }
             = size
+  .field
+    .mdl-textfield.mdl-js-textfield
+      %input#personal_best.mdl-textfield__input{type: 'text', name: 'racer[personal_best]', value: @racer.personal_best}
+      %label.mdl-textfield__label{for: 'personal_best'} Personal Best 20.1 km
 
   .field
     .mdl-textfield.mdl-js-textfield
@@ -86,7 +90,7 @@
           %option{ value: club.id, selected: @racer.club.try(:id) == club.id, data: { category: club.category } }
             = club.name
   .field
-    = recaptcha_tags
+    -# = recaptcha_tags
 
   %hr
 

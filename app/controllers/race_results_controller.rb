@@ -27,10 +27,10 @@ class RaceResultsController < ApplicationController
   # POST /race_results.json
   def create
     @race_result = RaceResult.new(race_result_params)
-    send_email
 
     respond_to do |format|
       if @race_result.save
+        send_email
         format.html { redirect_to @race_result.race, notice: 'Prijava je zabiljezena.' }
         format.json { render :show, status: :created, location: @race_result }
       else

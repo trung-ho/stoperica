@@ -35,7 +35,7 @@
         = f.hidden_field :racer_id, value: current_user.racer.try(:id)
         = f.hidden_field :race_id, value: @race.id
         = f.hidden_field :status, value: 1
-        = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}
+        = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, { prompt: 'Odaberi kategoriju' }, required: true
         .actions
           = f.submit 'Prijavi se', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
     - elsif user_signed_in? && @racer_has_race_result

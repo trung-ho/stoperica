@@ -32,16 +32,21 @@ class RacersController < ApplicationController
 
     respond_to do |format|
       if @racer.save
-        @racer.update!(user: User.create!(email: @racer.email, password: 'mtb4life'))
-        # RacerMailer.welcome_email(@racer).deliver_later
+        @racer.update!(
+          user: User.create!(
+            email: @racer.email,
+            password: Digest::SHA1.hexdigest(@racer.to_s)
+          )
+        )
+        RacerMailer.welcome(@racer).deliver_later
         if user_signed_in?
-          format.html { redirect_to @racer, notice: 'Racer was successfully created.' }
-          format.json { render :show, status: :created, location: @racer }
+          format.html { redirect_to @racer, notice: 'Racer was created.' }
         else
           sign_in @racer.user
           format.html { redirect_to races_path }
-          format.json { render :show, status: :created, location: @racer }
         end
+
+        format.json { render :show, status: :created, location: @racer }
       else
         format.html { render :new }
         format.json { render json: @racer.errors, status: :unprocessable_entity }
@@ -54,7 +59,7 @@ class RacersController < ApplicationController
   def update
     respond_to do |format|
       if @racer.update(racer_params)
-        format.html { redirect_to @racer, notice: 'Racer was successfully updated.' }
+        format.html { redirect_to @racer, notice: 'Racer was updated.' }
         format.json { render :show, status: :ok, location: @racer }
       else
         format.html { render :edit }
@@ -68,14 +73,17 @@ class RacersController < ApplicationController
   def destroy
     @racer.destroy
     respond_to do |format|
-      format.html { redirect_to racers_url, notice: 'Racer was successfully destroyed.' }
+      format.html { redirect_to racers_url, notice: 'Racer was destroyed.' }
       format.json { head :no_content }
     end
   end
 
   def login
-    filter = {email: racer_params[:email], phone_number: racer_params[:phone_number]}
-    racer = Racer.where(filter).first
+    filter = {
+      email: racer_params[:email],
+      phone_number: racer_params[:phone_number]
+    }
+    racer = Racer.find_by(filter)
     if racer.present?
       sign_in racer.user
       redirect_to(params[:redirect] || races_path)
@@ -85,14 +93,14 @@ class RacersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_racer
-      @racer = Racer.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def racer_params
-      params.require(:racer).permit(:first_name, :last_name, :year_of_birth, :gender, :email, :phone_number, :club_id,
-        :address, :zip_code, :town, :day_of_birth, :month_of_birth, :shirt_size)
-    end
+  def set_racer
+    @racer = Racer.find(params[:id])
+  end
+
+  def racer_params
+    params.require(:racer).permit(:first_name, :last_name, :year_of_birth,
+      :gender, :email, :phone_number, :club_id, :address, :zip_code, :town,
+      :day_of_birth, :month_of_birth, :shirt_size)
+  end
 end

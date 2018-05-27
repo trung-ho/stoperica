@@ -1,0 +1,36 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
+  %body
+    %h1
+      Poštovani #{@racer.first_name},
+    %p
+      upravo ste se registrirali na Stoperica.live stranicu!
+    %p
+      Vaši podaci za prijavu su:
+      %br
+      Korisničko ime: #{@racer.email}
+      %br
+      Zaporka: #{@racer.phone_number}
+
+    %br
+    %hr
+    %br
+
+    %h1
+      Dear #{@racer.first_name},
+    %p
+      you just registered on the Stoperica.live timing site!
+    %p
+      Your login details are:
+      %br
+      Username: #{@racer.email}
+      %br
+      Password: #{@racer.phone_number}
+  %br
+  %hr
+  %br
+
+  %div
+    = image_tag 'logo.png'

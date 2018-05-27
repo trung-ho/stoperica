@@ -1,6 +1,6 @@
 class Racer < ApplicationRecord
-  belongs_to :user, dependent: :delete
-  belongs_to :club
+  belongs_to :user, dependent: :delete, optional: true
+  belongs_to :club, optional: true
   has_many :race_results, dependent: :destroy
   has_many :races, through: :race_results
 
@@ -12,6 +12,6 @@ class Racer < ApplicationRecord
   end
 
   def total_points
-    race_results.sum{|rr| rr.points || 0}
+    race_results.sum { |rr| rr.points || 0 }
   end
 end

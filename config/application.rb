@@ -19,5 +19,6 @@ module MtbTiming
     config.action_dispatch.default_headers = {
      'X-Frame-Options' => 'ALLOWALL'
     }
+    config.action_mailer.asset_host = 'http://stoperica.herokuapp.com'
   end
 end

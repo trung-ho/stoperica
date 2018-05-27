@@ -70,11 +70,20 @@
 
   .field
     .mdl-textfield
-      %select{ name: 'racer[club_id]' }
+      %select#category_select.is-capitalized{ name: 'racer[club_id]' }
+        %option{ disabled: true, value: nil, selected: true}
+          Kategorija kluba
+        - Club.categories.each do |category|
+          %option.is-capitalized{ value: category[0], selected: @racer.club&.category == category }
+            = category[0]
+
+  .field
+    .mdl-textfield
+      %select#club_select{ name: 'racer[club_id]' }
         %option{ disabled: true, selected: @racer.club.nil?, value: 0 }
           Klub
         - Club.all.each do |club|
-          %option{ value: club.id, selected: @racer.club.try(:id) == club.id  }
+          %option{ value: club.id, selected: @racer.club.try(:id) == club.id, data: { category: club.category } }
             = club.name
   .field
     = recaptcha_tags
@@ -83,3 +92,31 @@
 
   .actions
     = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent', style: 'color: white;'
+
+:javascript
+  var categorySelect = document.querySelector('#category_select');
+  var clubSelect = document.querySelector('#club_select');
+  var options = clubSelect.options;
+  var optionsValues = [];
+  for(var i = 1; i < options.length; i++) {
+    optionsValues.push(options[i]);
+  }
+  options.length = 1;
+
+  categorySelect.addEventListener('change', function(event){
+    var category = event.target.value;
+    var filteredOptions = [];
+    options.length = 1;
+
+    for(var i = 0; i < optionsValues.length; i++) {
+      var option = optionsValues[i];
+      if (option.dataset.category === category) {
+        filteredOptions.push(option);
+      }
+    }
+
+    for(var i = 0; i < filteredOptions.length; i++) {
+      options.add(filteredOptions[i]);
+    }
+  });
+

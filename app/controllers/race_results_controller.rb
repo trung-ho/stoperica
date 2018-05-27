@@ -141,7 +141,7 @@ class RaceResultsController < ApplicationController
   end
 
   def send_email
-    if @race_result.race.email_body
+    if @race_result.race.send_email
       RacerMailer.race_details(
         @race_result.racer,
         @race_result.race

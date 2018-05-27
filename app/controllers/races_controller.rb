@@ -109,13 +109,13 @@ class RacesController < ApplicationController
 
   def race_params
     params.require(:race).permit(
-      :name, :date, :laps, :easy_laps, :description_url,
+      :name, :date, :laps, :easy_laps, :description_url, :send_email,
       :registration_threshold, :categories, :email_body, :lock_race_results
     )
   end
 
   def check_race_result
-    has_race_result = current_user && current_user.racer && current_user.racer.races.include?(@race)
+    has_race_result = current_user&.racer&.races&.include?(@race)
     @racer_has_race_result = has_race_result
     if has_race_result
       @race_result = current_user.racer.race_results.where(race: @race).first

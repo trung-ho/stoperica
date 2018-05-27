@@ -24,6 +24,9 @@
   .field
     = f.label 'Onemoguci odjavu'
     = f.check_box :lock_race_results
+  .field
+    = f.label 'Posalji mail'
+    = f.check_box :send_email
   .field.hidden
     = f.label :email_body
     = f.text_field :email_body

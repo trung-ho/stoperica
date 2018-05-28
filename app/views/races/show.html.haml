@@ -29,7 +29,7 @@
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
         Izmijeni
 
-  - if DateTime.now < @race.registration_threshold && @race.lock_race_results
+  - if DateTime.now < @race.registration_threshold
     - if user_signed_in? && !@racer_has_race_result
       = form_for RaceResult.new do |f|
         = f.hidden_field :racer_id, value: current_user.racer.try(:id)

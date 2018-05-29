@@ -89,9 +89,17 @@
         - Club.all.each do |club|
           %option{ value: club.id, selected: @racer.club.try(:id) == club.id, data: { category: club.category } }
             = club.name
-  .field
-    = recaptcha_tags
 
+  .field
+    -# = recaptcha_tags
+
+  .field
+    %label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect{for: 'accept_terms'}
+      %input#accept_terms.mdl-checkbox__input{type: 'checkbox', required: true}
+      %span.mdl-checkbox__label
+        Ovim prihvaćam
+        %a{href: '/terms', target: '_blank'}
+          Izjavu o koristenju podataka
   %hr
 
   .actions

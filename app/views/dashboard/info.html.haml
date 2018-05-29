@@ -6,17 +6,47 @@
   = link_to 'Registracija', new_racer_path
   = '.'
 %p
-  Da biste izvršili predprijavu za utrku potrebno je biti prijavljen na stranicu te u izborniku
+  Da biste izvršili predprijavu za utrku potrebno je biti prijavljen na stranicu
+  te u izborniku
   = link_to 'utrke', races_path
-  odabrati "Prijavi se".
-  Ukoliko ste se odjavili sa stranice, za ponovnu prijavu koristite e-mail adresu i broj mobitela u formatu koji ste unijeli prilikom registracije.
+  odabrati "Prijavi se". Ukoliko ste se odjavili sa stranice, za ponovnu prijavu
+  koristite e-mail adresu i broj mobitela u formatu koji ste unijeli prilikom
+  registracije.
 
 %p
   Za sve probleme, molimo kontaktirajte nas na
-  %a{ href: 'mailto:stoperica@vip.hr' }
-    stoperica(a)vip.hr
+  %a{ href: 'mailto:stoperica.timing@gmail.com' }
+    stoperica.timing(a)gmail.com
 
 %p
   Na mobilnim uređajima stranica se najbolje prikazuje na
   %a{ href: 'https://www.google.com/chrome/browser/mobile/' }
     Google Chrome web pregledniku.
+
+%hr
+
+%h1
+  Information
+
+%p
+  For preregistration on races
+  = link_to 'registration', new_racer_path
+  is required.
+%p
+  To make a preregistration on the race you need to be logged on the page and
+  select the application on the
+  = link_to 'race menu', races_path
+  "Prijavi se / Sign in". If you log out of the site, please use the e-mail
+  address and mobile phone number in the format you entered when registering to
+  re-apply.
+
+%p
+  For any problems, please contact us on email.
+  %a{ href: 'mailto:stoperica.timing@gmail.com' }
+    stoperica.timing(a)gmail.com
+
+%p
+  On mobile devices, the page is best viewed on
+  %a{ href: 'https://www.google.com/chrome/browser/mobile/' }
+    Google Chrome web browser.
+

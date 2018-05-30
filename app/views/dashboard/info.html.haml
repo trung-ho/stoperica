@@ -6,17 +6,22 @@
   = link_to 'Registracija', new_racer_path
   = '.'
 %p
-  Da biste izvršili predprijavu za utrku potrebno je biti prijavljen na stranicu
-  te u izborniku
-  = link_to 'utrke', races_path
-  odabrati "Prijavi se". Ukoliko ste se odjavili sa stranice, za ponovnu prijavu
-  koristite e-mail adresu i broj mobitela u formatu koji ste unijeli prilikom
-  registracije.
+  Da biste izvršili prijavu za utrku potrebno je:
+%ul
+  %li biti prijavljen na stranicu,
+  %li
+    u izborniku
+    = link_to 'utrke', races_path
+    odabrati utrku na koju se želite prijaviti,
+  %li u prijavama utrke odaberite kategoriju, te potvrdite na "Prijavi se".
+
+Ukoliko ste se odjavili sa stranice, za ponovnu prijavu koristite e-mail adresu i broj mobitela u formatu koji ste unijeli prilikom registracije.
+
 
 %p
   Za sve probleme, molimo kontaktirajte nas na
   %a{ href: 'mailto:stoperica.timing@gmail.com' }
-    stoperica.timing(a)gmail.com
+    e-mail.
 
 %p
   Na mobilnim uređajima stranica se najbolje prikazuje na
@@ -33,17 +38,24 @@
   = link_to 'registration', new_racer_path
   is required.
 %p
-  To make a preregistration on the race you need to be logged on the page and
-  select the application on the
-  = link_to 'race menu', races_path
-  "Prijavi se / Sign in". If you log out of the site, please use the e-mail
+  To make a race preregistration you need
+%ul
+  %li to be logged on the page and
+  %li
+    select the race from the
+    = link_to 'race menu', races_path
+  %li
+    choose a category on race details page and confirm your application on the
+    "Prijavi se" button.
+%p
+  If you log out of the site, please use the e-mail
   address and mobile phone number in the format you entered when registering to
   re-apply.
 
 %p
-  For any problems, please contact us on email.
+  For any problems, please contact us on
   %a{ href: 'mailto:stoperica.timing@gmail.com' }
-    stoperica.timing(a)gmail.com
+    email.
 
 %p
   On mobile devices, the page is best viewed on

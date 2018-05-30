@@ -48,7 +48,7 @@
 
 %a{ href: @race.description_url, target: '_blank' }
   %h4
-    RASPIS UTRKE
+    Informacije o utrci
 
 - if user_signed_in? && current_user.admin
   = form_for RaceResult.new do |f|
@@ -62,7 +62,7 @@
   %br
 
 %h4
-  Prijavljeni vozaci
+  Prijavljeni natjecatelji
   = "(#{@race.race_results.count})"
 
 %table#raceResults.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp

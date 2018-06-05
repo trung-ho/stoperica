@@ -50,14 +50,21 @@
   %thead
     %tr
       %th Utrka
-      %th Vrijeme
+      %th Kategorija
       %th Mjesto
+      %th Vrijeme
+      %th Razlika
   %tbody
-    - @racer.race_results.sort{|a, b| b.id <=> a.id}.each do |race_result|
+    - @racer.race_results.sort{ |a, b| b.id <=> a.id }.each do |race_result|
       %tr
         %td= race_result.race.name
+        %td= race_result.category.name
         %td= race_result.finish_time
-        %td= race_result.try(:position)
+        %td= race_result.finish_delta
+        %td
+          = race_result.try(:position)
+          - if (race_result.try(:position) || 0) <= 2 && race_result.status == 3
+            = render partial: '/races/trophy', locals: { index: (race_result.try(:position) || 0) - 1 }
 
 
 %br

@@ -31,23 +31,26 @@ class RaceResult < ApplicationRecord
   end
 
   def finish_time
+    return '- -' unless status == 3
+
     start_time = started_at || race.started_at
 
-    if race && !lap_times.empty? && start_time
+    if !lap_times.empty? && start_time
       ended_at = Time.at(lap_times.last.to_f)
       seconds = ended_at - start_time
 
-      Time.at(seconds).utc.strftime('%H:%M:%S.%L')
+      Time.at(seconds).utc.strftime('%k:%M:%S.%L')
     else
       '- -'
     end
   end
 
-  def finish_delta(category)
+  def finish_delta
+    return '- -' unless status == 3
     reference_race_result = RaceResult.joins(:racer).where(category: category, race: race, status: 3).order('position asc').limit(1).first()
-    if race && lap_times.length > 0
+    if !lap_times.empty?
       seconds = Time.at(lap_times.last.to_f) - Time.at(reference_race_result.lap_times.last.to_f)
-      Time.at(seconds).utc.strftime("+%H:%M:%S.%L")
+      Time.at(seconds).utc.strftime('+%k:%M:%S.%L')
     else
       '- -'
     end
@@ -57,8 +60,11 @@ class RaceResult < ApplicationRecord
     # ['Startni broj', 'Ime', 'Prezime', 'Klub',
     # 'Kategorija', 'Velicina majice',
     # 'Godiste', 'Prebivaliste', 'Email', 'Mobitel', 'Vrijeme', 'Status']
-    return [start_number&.value, racer.first_name, racer.last_name, racer.club.try(:name),
-      category.try(:name), racer.shirt_size,
-      racer.year_of_birth, racer.town, racer.email, racer.phone_number, finish_time, status]
+    [
+      start_number&.value, racer.first_name, racer.last_name,
+      racer.club.try(:name), category.try(:name), racer.shirt_size,
+      racer.year_of_birth, racer.town, racer.email, racer.phone_number,
+      finish_time, status
+    ]
   end
 end

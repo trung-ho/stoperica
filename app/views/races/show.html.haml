@@ -110,10 +110,9 @@
           - else
             - if index.zero?
               %td
-                = race_result.finish_time
             -else
               %td.losers
-                = race_result.finish_delta(category)
+                = race_result.finish_delta
 
           - if user_signed_in? && current_user.admin && race_result.status && race_result.status < 2
             %td

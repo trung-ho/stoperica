@@ -53,7 +53,7 @@
   .field
     .mdl-textfield.mdl-js-textfield
       %input#personal_best.mdl-textfield__input{type: 'text', name: 'racer[personal_best]', value: @racer.personal_best}
-      %label.mdl-textfield__label{for: 'personal_best'} Personal Best 20.1 km
+      %label.mdl-textfield__label{for: 'personal_best'} Personal Best 21.1 km
 
   .field
     .mdl-textfield.mdl-js-textfield
@@ -71,7 +71,10 @@
     .mdl-textfield.mdl-js-textfield{ style: 'width: 175px' }
       %input#town.mdl-textfield__input{type: 'text', name: 'racer[town]', required: true, value: @racer.town}
       %label.mdl-textfield__label{for: 'town'} Mjesto stanovanja
-
+  .field
+    .mdl-textfield.mdl-js-textfield
+      %input#country.mdl-textfield__input{type: 'text', name: 'racer[country]', value: @racer.country}
+      %label.mdl-textfield__label{for: 'country'} Drzava
   .field
     .mdl-textfield
       %select#category_select.is-capitalized{ name: 'racer[club_id]' }

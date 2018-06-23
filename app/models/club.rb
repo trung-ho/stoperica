@@ -3,4 +3,6 @@ class Club < ApplicationRecord
   has_many :racers
 
   enum category: %i[biciklisticki triatlon atletski skole ostali]
+
+  default_scope { order(name: :asc) }
 end

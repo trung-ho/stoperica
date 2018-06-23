@@ -17,10 +17,13 @@
   %tbody
     - Club.categories.each do |category|
       %tr.has-background-accent
-        %td.is-capitalized{ colspan: current_user&.admin? ? 5 : 3 }
+        %td.is-capitalized{ colspan: current_user&.admin? ? 5 : 2 }
           %b= category[0]
+          = "(#{@clubs.select{ |c| c.category == category[0] }.count})"
+          %button.toggle-category{ onclick: 'toggleClubs(this)', data: { category: category[0], show: 'false' } }
+            Pokazi
       - @clubs.select{ |c| c.category == category[0] }.each do |club|
-        %tr
+        %tr{ class: "tr-#{category[0]}", style: 'display: none' }
           %td= link_to club.name, club
           %td= club.racers.count
           - if user_signed_in? && current_user.admin
@@ -28,3 +31,17 @@
             %td
               = form_for club, method: :delete do |f|
                 = f.submit 'Izbrisi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent', style: 'color: white;'
+
+:javascript
+  function toggleClubs(button) {
+    var category = button.dataset.category;
+    var show = button.dataset.show === 'true';
+    var rows = document.querySelectorAll('.tr-' + category);
+
+    for(var i = 0; i < rows.length; i++) {
+      rows[i].style.display = show ? 'none' : 'table-row';
+    }
+
+    button.dataset.show = show ? 'false' : 'true';
+    button.innerHTML = show ? 'Pokazi' : 'Sakrij';
+  }

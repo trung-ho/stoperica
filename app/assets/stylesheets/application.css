@@ -177,3 +177,9 @@ option {
 .is-capitalized {
   text-transform: capitalize;
 }
+
+.emoji {
+  display: inline;
+  margin-right: 0.5rem;
+  font-family: emoji;
+}

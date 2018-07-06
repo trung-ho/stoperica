@@ -73,8 +73,11 @@
       %label.mdl-textfield__label{for: 'town'} Mjesto stanovanja
   .field
     .mdl-textfield.mdl-js-textfield
-      %input#country.mdl-textfield__input{type: 'text', name: 'racer[country]', value: @racer.country}
-      %label.mdl-textfield__label{for: 'country'} Drzava
+      = f.country_select :country, priority_countries: ['HR', 'BA', 'SI', 'HU']
+  .field
+    .mdl-textfield.mdl-js-textfield
+      %input#uci_id.mdl-textfield__input{type: 'text', name: 'racer[uci_id]', value: @racer.uci_id}
+      %label.mdl-textfield__label{for: 'uci_id'} UCI ID
   .field
     .mdl-textfield
       %select#category_select.is-capitalized{ name: 'racer[club_id]' }
@@ -94,7 +97,7 @@
             = club.name
 
   .field
-    = recaptcha_tags
+    -# = recaptcha_tags
 
   .field
     %label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect{for: 'accept_terms'}

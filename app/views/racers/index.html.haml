@@ -17,7 +17,9 @@
   %tbody
     - @racers.each do |racer|
       %tr
-        %td= link_to racer.full_name, racer
+        %td
+          .emoji= Country.new(racer.country).emoji_flag
+          = link_to racer.full_name, racer
         %td= racer.year_of_birth
         %td= racer.club.try(:name) || '- -'
         - if user_signed_in? && current_user.admin

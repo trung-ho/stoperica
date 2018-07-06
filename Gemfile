@@ -29,6 +29,9 @@ gem 'recaptcha', require: 'recaptcha/rails'
 
 gem 'codeclimate-test-reporter', group: :test, require: nil
 
+gem 'countries', :require => 'countries/global'
+gem 'country_select', require: 'country_select_without_sort_alphabetical'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri

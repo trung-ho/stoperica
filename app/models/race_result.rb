@@ -36,10 +36,10 @@ class RaceResult < ApplicationRecord
     start_time = started_at || race.started_at
 
     if !lap_times.empty? && start_time
-      ended_at = Time.at(lap_times.last.to_f)
+      ended_at = Time.at(lap_times.last.to_i)
       seconds = ended_at - start_time
 
-      Time.at(seconds).utc.strftime('%k:%M:%S.%L')
+      Time.at(seconds).utc.strftime('%k:%M:%S')
     else
       '- -'
     end
@@ -49,8 +49,8 @@ class RaceResult < ApplicationRecord
     return '- -' unless status == 3
     reference_race_result = RaceResult.joins(:racer).where(category: category, race: race, status: 3).order('position asc').limit(1).first()
     if !lap_times.empty?
-      seconds = Time.at(lap_times.last.to_f) - Time.at(reference_race_result.lap_times.last.to_f)
-      Time.at(seconds).utc.strftime('+%k:%M:%S.%L')
+      seconds = Time.at(lap_times.last.to_i) - Time.at(reference_race_result.lap_times.last.to_i)
+      Time.at(seconds).utc.strftime('+%k:%M:%S')
     else
       '- -'
     end

@@ -14,4 +14,12 @@ class Racer < ApplicationRecord
   def total_points
     race_results.sum { |rr| rr.points || 0 }
   end
+
+  def country_flag
+    if country.present?
+      Country.new(country).emoji_flag
+    else
+      ''
+    end
+  end
 end

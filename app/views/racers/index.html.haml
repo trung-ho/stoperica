@@ -18,7 +18,7 @@
     - @racers.each do |racer|
       %tr
         %td
-          .emoji= Country.new(racer.country).emoji_flag
+          .emoji= racer.country_flag
           = link_to racer.full_name, racer
         %td= racer.year_of_birth
         %td= racer.club.try(:name) || '- -'

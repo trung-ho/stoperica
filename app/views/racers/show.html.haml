@@ -59,12 +59,12 @@
       %tr
         %td= race_result.race.name
         %td= race_result.category.name
-        %td= race_result.finish_time
-        %td= race_result.finish_delta
         %td
           = race_result.try(:position)
           - if (race_result.try(:position) || 0) <= 2 && race_result.status == 3
             = render partial: '/races/trophy', locals: { index: (race_result.try(:position) || 0) - 1 }
+        %td= race_result.finish_time
+        %td= race_result.finish_delta
 
 
 %br

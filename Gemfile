@@ -26,6 +26,7 @@ gem 'react-flux-rails'
 gem 'sprockets-es6'
 gem 'material_design_lite-rails'
 gem 'recaptcha', require: 'recaptcha/rails'
+gem 'kaminari'
 
 gem 'codeclimate-test-reporter', group: :test, require: nil
 

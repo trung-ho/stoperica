@@ -1,7 +1,8 @@
 %h1
   Natjecatelji
-  = "(#{@racers.count})"
+  = "(#{Racer.all.count})"
 
+= paginate @racers
 %table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
   %thead
     %tr

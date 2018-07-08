@@ -4,7 +4,7 @@ class RacersController < ApplicationController
   # GET /racers
   # GET /racers.json
   def index
-    @racers = Racer.includes(:race_results).order(:created_at)
+    @racers = Racer.includes(:race_results).order(:created_at).page(params[:page])
   end
 
   # GET /racers/1

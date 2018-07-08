@@ -1,0 +1,10 @@
+.pagination {
+  width: 100%;
+  padding: 2rem;
+  text-align: center;
+
+  & > span {
+    padding: .5rem;
+    margin: .5rem;
+  }
+}

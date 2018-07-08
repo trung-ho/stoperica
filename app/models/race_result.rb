@@ -60,12 +60,12 @@ class RaceResult < ApplicationRecord
     # ['Startni broj', 'Ime', 'Prezime', 'Klub',
     # 'Kategorija', 'Velicina majice',
     # 'Godiste', 'Prebivaliste', 'Email', 'Mobitel', 'Vrijeme', 'Status'
-    # 'Personal Best']
+    # 'Personal Best', 'UCI ID']
     [
       start_number&.value, racer.first_name, racer.last_name,
       racer.club.try(:name), category.try(:name), racer.shirt_size,
       racer.year_of_birth, racer.town, racer.email, racer.phone_number,
-      finish_time, status, racer.personal_best
+      finish_time, status, racer.personal_best, racer.uci_id
     ]
   end
 end

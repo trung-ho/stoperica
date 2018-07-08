@@ -110,7 +110,8 @@ class RacesController < ApplicationController
   def race_params
     params.require(:race).permit(
       :name, :date, :laps, :easy_laps, :description_url, :send_email,
-      :registration_threshold, :categories, :email_body, :lock_race_results
+      :registration_threshold, :categories, :email_body, :lock_race_results,
+      :uci_display
     )
   end
 

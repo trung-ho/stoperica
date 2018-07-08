@@ -70,6 +70,8 @@
     %tr
       %th Mjesto
       %th Startni broj
+      - if @race.uci_display?
+        %th UCI ID
       %th Ime i Prezime
       %th Klub
       %th Status
@@ -82,7 +84,7 @@
   %tbody
     - @race.categories.each_with_index do |category, index|
       %tr{ class: "cat-#{index}" }
-        %td{ colspan: user_signed_in? && current_user.admin ? 10 : 7 }
+        %td{ colspan: 20 }
           = category.name.upcase
 
       - (@race.race_results.select{|rr| rr.position.present?}.sort{|x, y| x.position <=> y.position} + @race.race_results.select{|rr| rr.position.nil?}.sort{|x, y| y.status <=> x.status}).select{|rr| rr.category == category}.each_with_index do |race_result, index|
@@ -95,7 +97,12 @@
                 = render partial: 'trophy', locals: { index: index }
 
           %td= race_result.start_number&.value
-          %td= link_to race_result.racer.full_name, race_result.racer
+          - if @race.uci_display?
+            %td= race_result.racer.uci_id
+          %td
+            = link_to race_result.racer do
+              .emoji= race_result.racer.country_flag
+              = race_result.racer.full_name
           %td= race_result.racer.club.try(:name)
           - if @race.ended_at.present? && race_result.status == 1
             .mdl-tooltip.mdl-tooltip--large{for: "raceResult-#{race_result.id}"}

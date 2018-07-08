@@ -102,6 +102,7 @@ class RacersController < ApplicationController
   def racer_params
     params.require(:racer).permit(:first_name, :last_name, :year_of_birth,
       :gender, :email, :phone_number, :club_id, :address, :zip_code, :town,
-      :day_of_birth, :month_of_birth, :shirt_size, :personal_best, :uci_id)
+      :day_of_birth, :month_of_birth, :shirt_size, :personal_best, :uci_id,
+      :country)
   end
 end

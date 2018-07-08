@@ -2,38 +2,44 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.demo-card-event.mdl-card {
-  display: inline-block;
-  background: #efefef;
-  width: 100%;
+.mdl-card {
+  width: 100% !important;
   height: 300px;
-}
-.demo-card-event > .mdl-card__actions {
-  border-color: rgba(255, 255, 255, 0.2);
-}
-.demo-card-event > .mdl-card__title {
-  height: 250px;
-}
-.demo-card-event > .mdl-card__title > h4 {
-  margin: auto;
-  text-decoration: none;
-}
-.demo-card-event > .mdl-card__actions {
-  text-align: center;
-  background: rgb(255,235,59);
-}
-.demo-card-event > .mdl-card__actions > .material-icons {
-  padding-right: 10px;
-}
-.demo-card-event > .mdl-card__title,
-.demo-card-event > .mdl-card__actions,
-.demo-card-event > .mdl-card__actions > .mdl-button {
-  color: #fff;
-}
 
-.demo-card-event {
-  .mdl-button {
-    left: 0;
+  .mdl-card__title {
+    padding: 0 !important;
+    flex-direction: column;
+
+    h4 {
+      margin: 1rem 2rem;
+    }
+
+    h6 {
+      width: 100%;
+      background: rgb(64,196,255);
+      color: white;
+      margin-top: 0;
+      padding: 2rem 0;
+      text-align: center;
+    }
+  }
+
+  .material-icons {
+    vertical-align: bottom;
+  }
+
+  .mdl-card__actions {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding-right: 1.5rem;
+
+    a {
+      text-decoration: none;
+      font-size: 1.4rem;
+    }
   }
 }
 

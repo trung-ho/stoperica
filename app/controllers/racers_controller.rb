@@ -1,5 +1,6 @@
 class RacersController < ApplicationController
-  before_action :set_racer, only: [:show, :edit, :update, :destroy]
+  before_action :set_racer, only: %i[show edit update destroy]
+  before_action :only_admin, only: %i[new edit destroy]
 
   # GET /racers
   # GET /racers.json

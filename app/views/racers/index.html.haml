@@ -9,6 +9,8 @@
       %th Ime i Prezime
       %th Godina rodenja
       %th Klub
+      - if current_user&.admin?
+        %th UCI ID
       - if user_signed_in? && current_user.admin
         %th Email
         %th Broj mobitela
@@ -24,6 +26,7 @@
         %td= racer.year_of_birth
         %td= racer.club.try(:name) || '- -'
         - if user_signed_in? && current_user.admin
+          %td= racer.uci_id
           %td= racer.email
           %td
             %a{href: "tel:#{racer.phone_number}"}

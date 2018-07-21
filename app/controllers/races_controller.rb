@@ -1,7 +1,7 @@
 class RacesController < ApplicationController
-  before_action :set_race, only: [:show, :edit, :update, :destroy, :add_racer]
+  before_action :set_race, only: [:show, :edit, :update, :destroy, :assign_positions]
   before_action :check_race_result, only: [:show]
-  before_action :only_admin, only: [:new, :edit, :destroy]
+  before_action :only_admin, only: [:new, :edit, :destroy, :assign_positions]
 
   # GET /races
   # GET /races.json
@@ -93,8 +93,8 @@ class RacesController < ApplicationController
     end
   end
 
-  def add_racer
-    @race.racers << current_user.racer
+  def assign_positions
+    @race.assign_positions
     redirect_to @race
   end
 

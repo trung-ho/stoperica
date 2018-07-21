@@ -8,13 +8,13 @@
 
   .field
     = f.label :racer
-    = f.text_field :racer
+    = @race_result.racer&.full_name
   .field
     = f.label :race
-    = f.text_field :race
+    = @race_result.race&.name
   .field
     = f.label :status
-    = f.number_field :status
+    = @race_result.pretty_status
   .field
     = f.label :lap_times
     = f.text_area :lap_times

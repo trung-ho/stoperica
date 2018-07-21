@@ -51,14 +51,14 @@ class RaceResultsController < ApplicationController
       @race_result.update!(start_number: start_number)
     end
 
+    if race_result_params[:lap_times]
+      @race_result.update!(lap_times: JSON.parse(race_result_params[:lap_times]))
+      p JSON.parse(race_result_params[:lap_times])
+    end
+
     respond_to do |format|
-      if @race_result.update(race_result_params)
-        format.html { redirect_to @race_result.race, notice: 'Uplata uspjesno zaprimljena.' }
-        format.json { render :show, status: :ok, location: @race_result }
-      else
-        format.html { render :edit }
-        format.json { render json: @race_result.errors, status: :unprocessable_entity }
-      end
+      format.html { redirect_to @race_result.race, notice: 'Uplata uspjesno zaprimljena.' }
+      format.json { render :show, status: :ok, location: @race_result }
     end
   end
 

@@ -132,6 +132,7 @@
                   = f.submit 'Na startu', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
           - if user_signed_in? && current_user.admin
             %td
+              = link_to 'Izmijeni', edit_race_result_path(race_result), class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
               = form_for race_result, method: :delete do |f|
                 .actions
                   = f.submit 'Odjavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect', onclick: "return confirm('Ovo ce izbrisati rezultat iz baze podataka. Molim potvrdi.')"

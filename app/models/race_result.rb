@@ -82,7 +82,7 @@ class RaceResult < ApplicationRecord
         seconds = Time.at(lap_times.last.to_i) - Time.at(reference_race_result.lap_times.last.to_i)
         Time.at(seconds).utc.strftime('+%k:%M:%S')
       else
-        "+ #{lap_diff} #{lap_text(lap_diff)}"
+        "- #{lap_diff} #{lap_text(lap_diff)}"
       end
     else
       '- -'

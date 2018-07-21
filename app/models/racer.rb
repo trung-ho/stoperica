@@ -13,6 +13,10 @@ class Racer < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def uci_name
+    "#{last_name.mb_chars.upcase} #{first_name}"
+  end
+
   def total_points
     race_results.sum { |rr| rr.points || 0 }
   end

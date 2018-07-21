@@ -69,6 +69,7 @@ class RacesController < ApplicationController
     if params[:started_at].present? && params[:categories].present?
       start_time = Time.at(params[:started_at].to_i / 1000)
       @race.race_results.where(category_id: params[:categories]).update(started_at: start_time)
+      @race.update!(ended_at: nil)
     end
 
     respond_to do |format|

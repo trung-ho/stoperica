@@ -102,7 +102,10 @@
           %td
             = link_to race_result.racer do
               .emoji= race_result.racer.country_flag
-              = race_result.racer.full_name
+              - if @race.uci_display?
+                = race_result.racer.uci_name
+              - else
+                = race_result.racer.full_name
           %td= race_result.racer.club.try(:name)
           - if @race.ended_at.present? && race_result.status == 1
             .mdl-tooltip.mdl-tooltip--large{for: "raceResult-#{race_result.id}"}

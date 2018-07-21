@@ -28,8 +28,8 @@ class RaceResult < ApplicationRecord
     end
   end
 
-  def lap_text
-    case lap_times.length
+  def lap_text(length)
+    case length
     when 1
       'krug'
     when 2..4
@@ -46,7 +46,7 @@ class RaceResult < ApplicationRecord
     when 2
       'Na startu'
     when 3
-      "#{ended_text} #{lap_times.length} #{lap_text}"
+      "#{ended_text} #{lap_times.length} #{lap_text(lap_times.length)}"
     when 4
       'DNF'
     when 5
@@ -75,10 +75,15 @@ class RaceResult < ApplicationRecord
 
   def finish_delta
     return '- -' unless status == 3
-    reference_race_result = RaceResult.joins(:racer).where(category: category, race: race, status: 3).order('position asc').limit(1).first()
+    reference_race_result = RaceResult.joins(:racer).where(category: category, race: race, status: 3).order(:position).limit(1).first()
+    lap_diff = reference_race_result.lap_times.length - lap_times.length
     if !lap_times.empty?
-      seconds = Time.at(lap_times.last.to_i) - Time.at(reference_race_result.lap_times.last.to_i)
-      Time.at(seconds).utc.strftime('+%k:%M:%S')
+      if lap_diff == 0
+        seconds = Time.at(lap_times.last.to_i) - Time.at(reference_race_result.lap_times.last.to_i)
+        Time.at(seconds).utc.strftime('+%k:%M:%S')
+      else
+        "+ #{lap_diff} #{lap_text(lap_diff)}"
+      end
     else
       '- -'
     end

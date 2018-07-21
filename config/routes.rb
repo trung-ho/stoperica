@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :start_numbers
   devise_for :users
   root to: 'dashboard#info'
 
@@ -27,6 +26,11 @@ Rails.application.routes.draw do
     collection do
       get :login, to: 'racers#login_form'
       post :login
+    end
+  end
+  resources :start_numbers do
+    collection do
+     get :start_time
     end
   end
 end

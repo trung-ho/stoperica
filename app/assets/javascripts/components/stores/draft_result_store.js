@@ -30,7 +30,6 @@ var DraftResultStore = flux.createStore({
         this.emit('draftResultStore.change');
     },
     removeTempResult: function(time) {
-        console.log(time, this.tempResults);
         this.tempResults.forEach((tempResult, index)=>{
             if(tempResult.time === time) {
                 this.tempResults.splice(index, 1);
@@ -48,6 +47,9 @@ var DraftResultStore = flux.createStore({
         this.emit('draftResultStore.setRace');
     },
     exports: {
+        getRaceId: function () {
+            return this.raceId;
+        },
         getRaceResults: function () {
             return this.raceResults;
         },

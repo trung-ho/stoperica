@@ -26,17 +26,26 @@ class RaceResultForm extends React.Component {
 
     saveResult() {
       const {racerNumber, hours, minutes, seconds} = this.state;
-      let time = DraftResultStore.getRaceStartDate().getTime();
-      time += hours*3600000;
-      time += minutes*60000;
-      time += seconds*1000;
+      const raceId = DraftResultStore.getRaceId();
+      let ajax = new Ajax(
+        `/start_numbers/start_time?race_id=${raceId}&start_number=${racerNumber}`,
+        data => {
+          const startTime = data.start_time;
+          let time = new Date(data.start_time).getTime();
+          time += hours*3600000;
+          time += minutes*60000;
+          time += seconds*1000;
 
-      if(racerNumber && time) {
-        RaceResultActions.newRaceResult(racerNumber, time, 3);
-      }
-      else {
-        alert('Ispuni sva polja!');
-      }
+          if(racerNumber && time) {
+            RaceResultActions.newRaceResult(racerNumber, time, 3);
+          }
+          else {
+            alert('Ispuni sva polja!');
+          }
+        }
+      );
+
+      ajax.get();
     }
 
     updateStartNumber(event) {

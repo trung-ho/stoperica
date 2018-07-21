@@ -1,6 +1,6 @@
 class StartNumbersController < ApplicationController
   before_action :set_start_number, only: [:show, :edit, :update, :destroy]
-  before_action :only_admin
+  before_action :only_admin, except: [:start_time]
 
   # GET /start_numbers
   # GET /start_numbers.json
@@ -60,6 +60,14 @@ class StartNumbersController < ApplicationController
       format.html { redirect_to start_numbers_url, notice: 'Start number was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def start_time
+    race = Race.find params[:race_id]
+    start_number = StartNumber.find_by(value: params[:start_number], race: race)
+    start_number = StartNumber.find_by(value: params[:start_number]) if start_number.nil?
+    start_time = start_number.race_results.find_by(race: race).started_at || race.started_at
+    render json: { start_time: start_time }
   end
 
   private

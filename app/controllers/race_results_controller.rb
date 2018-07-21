@@ -53,7 +53,6 @@ class RaceResultsController < ApplicationController
 
     if race_result_params[:lap_times]
       @race_result.update!(lap_times: JSON.parse(race_result_params[:lap_times]))
-      p JSON.parse(race_result_params[:lap_times])
     end
 
     respond_to do |format|
@@ -102,7 +101,8 @@ class RaceResultsController < ApplicationController
   # "RACEID"=>5
   def from_device
     race = Race.find(params[:RACEID])
-    start_number = StartNumber.find_by!(tag_id: params[:TAGID].strip)
+    start_number = StartNumber.find_by(race: race, tag_id: params[:TAGID].strip)
+    start_number = StartNumber.find_by(tag_id: params[:TAGID].strip) if start_number.nil?
 
     race_result = RaceResult.find_by(race: race, start_number: start_number)
     millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z').to_f

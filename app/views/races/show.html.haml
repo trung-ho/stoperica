@@ -87,7 +87,7 @@
         %td{ colspan: 20 }
           = category.name.upcase
 
-      - (@race.race_results.select{|rr| rr.position.present?}.sort{|x, y| x.position <=> y.position} + @race.race_results.select{|rr| rr.position.nil?}.sort{|x, y| y.status <=> x.status}).select{|rr| rr.category == category}.each_with_index do |race_result, index|
+      - (@race.race_results.where(category: category).where.not(position: nil).order(:position) + @race.race_results.where(category: category).where(position: nil).order(status: :desc)).each_with_index do |race_result, index|
         %tr
           %td
             - if race_result.status == 3

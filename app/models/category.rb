@@ -5,4 +5,8 @@ class Category < ApplicationRecord
   def started?
     race_results.count > 0 && race_results.first.started_at.present?
   end
+
+  def started_at
+    race_results.count > 0 && race_results.first.started_at
+  end
 end

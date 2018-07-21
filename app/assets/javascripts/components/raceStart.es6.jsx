@@ -149,7 +149,7 @@ class RaceStart extends React.Component {
             {
               this.state.categories.map(c => {
                 return (
-                  <li key={c.id}>
+                  <li key={c.id} title={ c.started_at }>
                     <input
                       type="checkbox"
                       value={c.id}

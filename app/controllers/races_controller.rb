@@ -18,7 +18,7 @@ class RacesController < ApplicationController
         render json: @race,
                include: [
                  { race_results: { include: [{ racer: { include: :club } }, :category], methods: [:finish_time] } },
-                 categories: { methods: :started? }
+                 categories: { methods: [:started?, :started_at] }
                ]
       end
       format.csv { send_data @race.to_csv }

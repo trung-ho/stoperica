@@ -12,18 +12,46 @@ class RaceResult < ApplicationRecord
     errors.add(:racer, 'prijava vec postoji!') if RaceResult.exists?(racer: self.racer, race: self.race)
   end
 
-  def pretty_status
-    if status == 1
+  def registered_text
+    if racer.gender == 2
       'Prijavljen'
-    elsif status == 2
+    else
+      'Prijavljena'
+    end
+  end
+
+  def ended_text
+    if racer.gender == 2
+      'Završio'
+    else
+      'Završila'
+    end
+  end
+
+  def lap_text
+    case lap_times.length
+    when 1
+      'krug'
+    when 2..4
+      'kruga'
+    else
+      'krugova'
+    end
+  end
+
+  def pretty_status
+    case status
+    when 1
+      registered_text
+    when 2
       'Na startu'
-    elsif status == 3
-      'Zavrsio'
-    elsif status == 4
+    when 3
+      "#{ended_text} #{lap_times.length} #{lap_text}"
+    when 4
       'DNF'
-    elsif status == 5
+    when 5
       'DSQ'
-    elsif status == 6
+    when 6
       'DNS'
     else
       'Nepoznat'

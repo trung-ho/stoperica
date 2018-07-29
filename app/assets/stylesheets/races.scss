@@ -108,3 +108,32 @@ svg {
     fill: #cd7f32;
   }
 }
+
+@media screen and (max-width: 840px) {
+  .wide_table {
+    margin: 0;
+  }
+
+  .page-content {
+    width: 100% !important;
+    margin: 0 10px !important;
+    padding: 0 !important;
+  }
+
+   table, thead, tbody, tr {
+    display: block;
+  }
+
+  tr {
+    white-space: initial;
+    height: 100px !important;
+    border-bottom: 1px solid #dddddd;
+  }
+
+  th, td {
+    display: inline-block;
+    width: 24%;
+    border: 0 none !important;
+    text-align: left !important;
+  }
+}

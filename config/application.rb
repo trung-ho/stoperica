@@ -20,5 +20,6 @@ module MtbTiming
      'X-Frame-Options' => 'ALLOWALL'
     }
     config.action_mailer.asset_host = 'http://stoperica.herokuapp.com'
+    config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
   end
 end

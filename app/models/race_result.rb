@@ -58,6 +58,26 @@ class RaceResult < ApplicationRecord
     end
   end
 
+  # TODO: refactor this and finish_time into one method
+  def lap_time lap
+    lap_time = lap_times[lap - 1]
+
+    return '- -' if lap_time.nil?
+
+    return '- -' unless status == 3
+
+    start_time = started_at || race.started_at
+
+    if !lap_times.empty? && start_time
+      ended_at = Time.at(lap_time.to_i)
+      seconds = ended_at - start_time
+
+      Time.at(seconds).utc.strftime('%k:%M:%S')
+    else
+      '- -'
+    end
+  end
+
   def finish_time
     return '- -' unless status == 3
 

@@ -79,6 +79,9 @@
       %th Ime i Prezime
       %th Klub
       %th Status
+      - unless @race.laps.nil?
+        - (1..@race.laps).each do |lap|
+          %td= "KT #{lap}"
       %th Vrijeme
       %th Razlika
       - if user_signed_in? && current_user.admin
@@ -118,6 +121,9 @@
               = race_result.pretty_status
           - else
             %td= race_result.pretty_status
+          - unless @race.laps.nil?
+            - (1..@race.laps).each do |lap|
+              %td= race_result.lap_time lap
           %td= race_result.finish_time
           - if @race.ended_at.blank?
             %td= '--'

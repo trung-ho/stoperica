@@ -5,7 +5,7 @@
   %br
   %br
 
-%table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
+%table.clubs_table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
   %thead
     %tr
       %th Ime
@@ -20,6 +20,7 @@
         %td.is-capitalized{ colspan: current_user&.admin? ? 5 : 2 }
           %b= category[0]
           = "(#{@clubs.select{ |c| c.category == category[0] }.count})"
+        %td
           %button.toggle-category{ onclick: 'toggleClubs(this)', data: { category: category[0], show: 'false' } }
             Pokazi
       - @clubs.select{ |c| c.category == category[0] }.each do |club|
@@ -37,9 +38,10 @@
     var category = button.dataset.category;
     var show = button.dataset.show === 'true';
     var rows = document.querySelectorAll('.tr-' + category);
+    var display = window.innerWidth > 840 ? 'table-row' : 'block';
 
     for(var i = 0; i < rows.length; i++) {
-      rows[i].style.display = show ? 'none' : 'table-row';
+      rows[i].style.display = show ? 'none' : display;
     }
 
     button.dataset.show = show ? 'false' : 'true';

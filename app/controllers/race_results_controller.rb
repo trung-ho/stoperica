@@ -1,6 +1,6 @@
 class RaceResultsController < ApplicationController
   before_action :set_race_result, only: %i[show edit update destroy]
-  before_action :only_admin, only: %i[from_timing destroy_from_timing]
+  before_action :only_admin, only: %i[index show new from_timing destroy_from_timing]
   before_action :set_start_number, only: %i[from_timing destroy_from_timing]
 
   protect_from_forgery except: [:from_device]

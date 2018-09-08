@@ -14,7 +14,7 @@ class LiveResults extends React.Component {
       (data) => {
         if(data != null) {
           this.setState({race: data});
-          RaceResultActions.setRace(data.id);
+          RaceResultActions.setRace(data);
           RaceResultActions.startRace(new Date(data.started_at));
         }
         else {

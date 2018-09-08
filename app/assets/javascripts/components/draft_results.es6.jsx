@@ -26,9 +26,7 @@ class DraftResults extends React.Component {
     return (
       <div>
         <h4>Stanje sinkronizacije</h4>
-        <table
-          className="mdl-data-table mdl-js-data-table mdl-shadow--2dp"
-        >
+        <table className="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
           <thead>
             <tr>
               <td>Startni broj</td>

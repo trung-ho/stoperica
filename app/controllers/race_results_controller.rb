@@ -1,9 +1,9 @@
 class RaceResultsController < ApplicationController
   before_action :set_race_result, only: %i[show edit update destroy]
   before_action :only_admin, only: %i[index show new from_timing destroy_from_timing]
-  before_action :set_start_number, only: %i[from_timing destroy_from_timing]
+  before_action :set_start_number, only: %i[from_timing destroy_from_timing from_climbing]
 
-  protect_from_forgery except: [:from_device]
+  protect_from_forgery except: %i[from_device from_climbing]
 
   # GET /race_results
   # GET /race_results.json
@@ -95,6 +95,17 @@ class RaceResultsController < ApplicationController
     end
   end
 
+  def from_climbing
+    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: @start_number)
+    raise 'Not Found' if race_result.nil?
+    race_result.climbs[params[:level]] = {
+      points: params[:points],
+      time: params[:time]
+    }
+    race_result.save!
+    render json: race_result
+  end
+
   # "TAGID"=>" 00 00 00 00 00 00 00 00 00 01 65 19",
   # "RSSI"=>"60",
   # "TIME"=>"14.08.2017 13:07:14.36753 %2B02:00",
@@ -136,7 +147,7 @@ class RaceResultsController < ApplicationController
 
   def race_result_params
     params.require(:race_result).permit(
-      :racer_id, :race_id, :status, :lap_times, :category_id
+      :racer_id, :race_id, :status, :lap_times, :category_id, :climbs
     )
   end
 

@@ -17,7 +17,7 @@ class RacesController < ApplicationController
       format.json do
         render json: @race,
                include: [
-                 { race_results: { include: [{ racer: { include: :club } }, :category], methods: [:finish_time] } },
+                 { race_results: { include: [{ racer: { include: :club } }, :category, :start_number], methods: [:finish_time] } },
                  categories: { methods: [:started?, :started_at] }
                ]
       end
@@ -112,7 +112,7 @@ class RacesController < ApplicationController
     params.require(:race).permit(
       :name, :date, :laps, :easy_laps, :description_url, :send_email,
       :registration_threshold, :categories, :email_body, :lock_race_results,
-      :uci_display
+      :uci_display, :race_type
     )
   end
 

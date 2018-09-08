@@ -3,6 +3,8 @@ class Race < ApplicationRecord
   has_many :categories
   has_many :racers, through: :race_results
 
+  enum race_type: [:mtb, :trcanje, :treking, :duatlon, :triatlon, :penjanje]
+
   def assign_positions
     categories.each do |category|
       results = race_results

@@ -16,7 +16,10 @@
   %tbody
     - (@race.race_results.where.not(position: nil).order(:position) + @race.race_results.where(position: nil)).each do |rr|
       %tr
-        %td= rr.position
+        %td
+          = rr.position
+          - if rr.position && rr.position < 4
+            = render partial: 'trophy', locals: { index: rr.position - 1 }
         %td= rr.start_number&.value
         %td= rr.racer.full_name
         %td= rr.climbs.dig('q1', 'points')

@@ -3,21 +3,20 @@ class ClimbingResults extends React.Component {
     super();
 
     this.state = {
-      race: {},
-      interval: null
+      race: {}
     };
 
     this.loadResults = this.loadResults.bind(this);
+    this.getSortedResults = this.getSortedResults.bind(this);
   }
 
   componentDidMount() {
     this.loadResults();
-    // this.setState({ interval: setInterval(this.loadResults , 10000) });
+    DraftResultStore.on('draftResultStore.change', this.loadResults);
   }
 
   componentWillUnmount() {
-    // clearInterval(this.state.interval);
-    // this.setState({ interval: null });
+    DraftResultStore.off('draftResultStore.change', this.loadResults);
   }
 
   loadResults() {
@@ -30,8 +29,13 @@ class ClimbingResults extends React.Component {
     ajax.get();
   }
 
-  render () {
+  getSortedResults() {
     const { race_results = [] } = this.state.race;
+    return race_results;
+  }
+
+  render () {
+    const race_results = this.getSortedResults();
     return (
       <table className="wide_table mdl-data-table mdl-js-data-table mdl-shadow--2dp">
         <thead>
@@ -62,9 +66,9 @@ class ClimbingResults extends React.Component {
                 <td>{result.climbs.q2 && result.climbs.q2.position}</td>
                 <td>{result.climbs.q && result.climbs.q.points}</td>
                 <td>{result.climbs.q && result.climbs.q.position}</td>
-                <td>{result.climbs.finale && result.climbs.finale.points}</td>
-                <td>{result.climbs.finale && result.climbs.finale.position}</td>
-                <td>{result.climbs.finale && result.climbs.finale.time}</td>
+                <td>{result.climbs.final && result.climbs.final.points}</td>
+                <td>{result.climbs.final && result.climbs.final.position}</td>
+                <td>{result.climbs.final && result.climbs.final.time}</td>
               </tr>
             );
           })

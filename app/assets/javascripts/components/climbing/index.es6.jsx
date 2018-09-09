@@ -22,7 +22,7 @@ class ClimbingTiming extends React.Component {
   uploadResult(data) {
     const ajax = new Ajax(
       '/race_results/from_climbing',
-      data => console.log(data),
+      data => RaceResultActions.newRaceResult(null, null, null),
       (error, status) => console.log(error, status)
     );
     ajax.post(data);
@@ -56,7 +56,7 @@ class ClimbingTiming extends React.Component {
           <select name="level" className="mdl-cell mdl-cell--2-col">
             <option value="q1">Q1</option>
             <option value="q2">Q2</option>
-            <option value="finale">Finale</option>
+            <option value="final">Final</option>
           </select>
           <input name="points" type="text" className="mdl-cell mdl-cell--2-col"/>
           <input name="time" type="text" className="mdl-cell mdl-cell--2-col"/>

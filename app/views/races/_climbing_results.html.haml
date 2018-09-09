@@ -1,0 +1,30 @@
+%table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
+  %thead
+    %tr
+      %th Position
+      %th Start Number
+      %th Climber
+      %th Q1
+      %th RQ1
+      %th Q2
+      %th RQ2
+      %th RQ
+      %th QRank
+      %th RF
+      %th PLF
+      %th FTime
+  %tbody
+    - (@race.race_results.where.not(position: nil).order(:position) + @race.race_results.where(position: nil)).each do |rr|
+      %tr
+        %td= rr.position
+        %td= rr.start_number&.value
+        %td= rr.racer.full_name
+        %td= rr.climbs.dig('q1', 'points')
+        %td= rr.climbs.dig('q1', 'position')
+        %td= rr.climbs.dig('q2', 'points')
+        %td= rr.climbs.dig('q2', 'position')
+        %td= rr.climbs.dig('q', 'points')
+        %td= rr.climbs.dig('q', 'position')
+        %td= rr.climbs.dig('final', 'points')
+        %td= rr.climbs.dig('final', 'position')
+        %td= rr.climbs.dig('final', 'time')

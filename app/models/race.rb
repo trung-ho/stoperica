@@ -5,6 +5,8 @@ class Race < ApplicationRecord
 
   enum race_type: [:mtb, :trcanje, :treking, :duatlon, :triatlon, :penjanje]
 
+  attr_accessor :sorted_results
+
   def assign_positions
     categories.each do |category|
       results = race_results

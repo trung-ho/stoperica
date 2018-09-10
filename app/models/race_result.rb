@@ -125,21 +125,6 @@ class RaceResult < ApplicationRecord
   end
 
   def calculate_climbing_positions
-    # calc quali average points for results that have both quali climbs
-    race
-      .race_results
-      .select { |rr| rr.climbs['q1'] && rr.climbs['q2'] }
-      .each do |rr|
-      climbs = rr.climbs
-      a = climbs['q1']['position']
-      b = climbs['q2']['position']
-      climbs['q'] = {} if climbs['q'].nil?
-      if a && b
-        climbs['q']['points'] = Math.sqrt(a * b).round 2
-        rr.update_column(:climbs, climbs)
-      end
-    end
-
     # calculate positions based on points
     %w[q1 q2 final q].each do |level|
       res = race.race_results
@@ -150,8 +135,10 @@ class RaceResult < ApplicationRecord
         position = index + 1
         peers = res.take(position).select { |r| r.climbs[level]['points'] == rr.climbs[level]['points'] }
         if peers.size > 1
-          positions = peers.collect { |p| p.climbs.dig(level, 'position') }
+          # positions = peers.collect { |p| p.climbs.dig(level, 'position') }
+          positions = position-peers.size..position
           avg = positions.inject(0.0) { |sum, el| sum + (el || position - peers.size + 1) } / positions.size
+          avg = avg.round 2
 
           peers.each do |p|
             climbs = p.climbs
@@ -163,6 +150,21 @@ class RaceResult < ApplicationRecord
         # this is included in peers
         climbs = rr.climbs
         climbs[level]['position'] = avg || position
+        rr.update_column(:climbs, climbs)
+      end
+    end
+
+    # calc quali average points for results that have both quali climbs
+    race
+      .race_results
+      .select { |rr| rr.climbs.dig('q1', 'position') && rr.climbs.dig('q2', 'position') }
+      .each do |rr|
+      climbs = rr.climbs
+      a = climbs['q1']['position']
+      b = climbs['q2']['position']
+      climbs['q'] = {} if climbs['q'].nil?
+      if a && b
+        climbs['q']['points'] = Math.sqrt(a * b).round 2
         rr.update_column(:climbs, climbs)
       end
     end

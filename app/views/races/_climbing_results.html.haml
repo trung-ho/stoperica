@@ -14,7 +14,7 @@
       %th PLF
       %th FTime
   %tbody
-    - (@race.race_results.where.not(position: nil).order(:position) + @race.race_results.where(position: nil)).each do |rr|
+    - @sorted_results.each do |rr|
       %tr
         %td
           = rr.position

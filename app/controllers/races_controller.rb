@@ -12,13 +12,29 @@ class RacesController < ApplicationController
   # GET /races/1
   # GET /races/1.json
   def show
+    if @race.penjanje?
+      fallback = @race.race_results.count
+      @sorted_results = @race.race_results.where.not(position: nil).order(:position)
+      rest = @race.race_results.where(position: nil)
+      rest = rest.sort_by do |r|
+        [
+          r.climbs.dig('final', 'position') || fallback,
+          r.climbs.dig('q', 'position') || fallback,
+          r.climbs.dig('q2', 'position') || fallback,
+          r.climbs.dig('q1', 'position') || fallback
+        ]
+      end
+      @sorted_results += rest
+      @race.sorted_results = @sorted_results
+    end
     respond_to do |format|
       format.html { render :show }
       format.json do
         render json: @race,
                include: [
-                 { race_results: { include: [{ racer: { include: :club } }, :category, :start_number], methods: [:finish_time] } },
-                 categories: { methods: [:started?, :started_at] }
+                { sorted_results: { include: [{ racer: { include: :club } }, :category, :start_number], methods: [:finish_time] } },
+                { race_results: { include: [{ racer: { include: :club } }, :category, :start_number], methods: [:finish_time] } },
+                categories: { methods: [:started?, :started_at] }
                ]
       end
       format.csv { send_data @race.to_csv }

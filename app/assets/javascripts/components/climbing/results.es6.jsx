@@ -30,8 +30,8 @@ class ClimbingResults extends React.Component {
   }
 
   getSortedResults() {
-    const { race_results = [] } = this.state.race;
-    return race_results;
+    const { sorted_results = [] } = this.state.race;
+    return sorted_results;
   }
 
   render () {
@@ -40,6 +40,7 @@ class ClimbingResults extends React.Component {
       <table className="wide_table mdl-data-table mdl-js-data-table mdl-shadow--2dp">
         <thead>
           <tr>
+            <th>Rank</th>
             <th>Start Number</th>
             <th>Climber</th>
             <th>Q1</th>
@@ -58,6 +59,7 @@ class ClimbingResults extends React.Component {
           race_results.map(result => {
             return (
               <tr key={result.id}>
+                <td>{result.position}</td>
                 <td>{result.start_number && result.start_number.value}</td>
                 <td>{result.racer.first_name} {result.racer.last_name}</td>
                 <td>{result.climbs.q1 && result.climbs.q1.points}</td>

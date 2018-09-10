@@ -2,6 +2,30 @@
   Natjecatelji
   = "(#{Racer.all.count})"
 
+%input#serach{ type: 'text', placeholder: 'serach' }
+
+:javascript
+  var choices = #{@racers.collect{|r| [r.full_name, r.id]}.inspect.html_safe};
+  new autoComplete({
+    selector: '#serach',
+    minChars: 2,
+    source: function(term, suggest){
+      term = term.toLowerCase();
+      var matches = [];
+      for (i=0; i<choices.length; i++)
+          if (~choices[i][0].toLowerCase().indexOf(term)) matches.push(choices[i]);
+      suggest(matches);
+    },
+    renderItem: function (item, search){
+      search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+      var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+      return '<div class="autocomplete-suggestion" data-val="' + item[1] + '">' + item[0].replace(re, "<b>$1</b>") + '</div>';
+    },
+    onSelect: function (event, term, item) {
+      console.log(event, term, item);
+    }
+  });
+
 = paginate @racers
 %table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
   %thead

@@ -58,7 +58,7 @@ class ClimbingResults extends React.Component {
         <tbody>
         {
           categories.map((category, index) => {
-            const categoryRow = [(<tr className={`cat-${index}`}><td colspan="12">{category.name}</td></tr>)];
+            const categoryRow = [(<tr className={`cat-${index}`}><td colSpan="12">{category.name}</td></tr>)];
             return categoryRow.concat(race_results
               .filter(rr => rr.category_id === category.id)
               .map(result => {

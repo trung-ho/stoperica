@@ -43,13 +43,7 @@
               - else
                 = race_result.racer.full_name
           %td= race_result.racer.club.try(:name)
-          - if @race.ended_at.present? && race_result.status == 1
-            .mdl-tooltip.mdl-tooltip--large{for: "raceResult-#{race_result.id}"}
-              Na iducem startu placa dodatnih 10 kn.
-            %td.shame{id: "raceResult-#{race_result.id}"}
-              = race_result.pretty_status
-          - else
-            %td= race_result.pretty_status
+          %td= race_result.pretty_status
           - unless @race.laps.nil?
             - (1..@race.laps).each do |lap|
               %td= race_result.lap_time lap

@@ -14,20 +14,24 @@
       %th PLF
       %th FTime
   %tbody
-    - @sorted_results.each do |rr|
-      %tr
-        %td
-          = rr.position
-          - if rr.position && rr.position < 4
-            = render partial: 'trophy', locals: { index: rr.position - 1 }
-        %td= rr.start_number&.value
-        %td= rr.racer.full_name
-        %td= rr.climbs.dig('q1', 'points')
-        %td= rr.climbs.dig('q1', 'position')
-        %td= rr.climbs.dig('q2', 'points')
-        %td= rr.climbs.dig('q2', 'position')
-        %td= rr.climbs.dig('q', 'points')
-        %td= rr.climbs.dig('q', 'position')
-        %td= rr.climbs.dig('final', 'points')
-        %td= rr.climbs.dig('final', 'position')
-        %td= rr.climbs.dig('final', 'time')
+    - @race.categories.each_with_index do |category, index|
+      %tr{ class: "cat-#{index}" }
+        %td{ colspan: 20 }
+          = category.name.upcase
+      - @sorted_results.select{ |rr| rr.category == category }.each do |rr|
+        %tr
+          %td
+            = rr.position
+            - if rr.position && rr.position < 4
+              = render partial: 'trophy', locals: { index: rr.position - 1 }
+          %td= rr.start_number&.value
+          %td= rr.racer.full_name
+          %td= rr.climbs.dig('q1', 'points')
+          %td= rr.climbs.dig('q1', 'position')
+          %td= rr.climbs.dig('q2', 'points')
+          %td= rr.climbs.dig('q2', 'position')
+          %td= rr.climbs.dig('q', 'points')
+          %td= rr.climbs.dig('q', 'position')
+          %td= rr.climbs.dig('final', 'points')
+          %td= rr.climbs.dig('final', 'position')
+          %td= rr.climbs.dig('final', 'time')

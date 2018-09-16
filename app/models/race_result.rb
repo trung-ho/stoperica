@@ -8,6 +8,7 @@ class RaceResult < ApplicationRecord
   validate :disallow_duplicates
   # TODO: don't do this for other races
   after_save :calculate_climbing_positions
+  after_commit :calculate_climbing_scores
 
   def disallow_duplicates
     return if self.id
@@ -128,14 +129,14 @@ class RaceResult < ApplicationRecord
     # calculate positions based on points
     %w[q1 q2 final q].each do |level|
       res = race.race_results
-                .select { |rr| rr.climbs[level] && rr.climbs[level]['points'] }
-                .sort_by { |rr| [rr.climbs[level]['points']] }
+                .select { |rr| rr.climbs.dig(level, 'points') }
+                .sort_by { |rr| [-rr.climbs.dig(level, 'points')] }
+                .reverse
 
       res.each_with_index do |rr, index|
         position = index + 1
         peers = res.take(position).select { |r| r.climbs[level]['points'] == rr.climbs[level]['points'] }
         if peers.size > 1
-          # positions = peers.collect { |p| p.climbs.dig(level, 'position') }
           positions = position-peers.size..position
           avg = positions.inject(0.0) { |sum, el| sum + (el || position - peers.size + 1) } / positions.size
           avg = avg.round 2
@@ -153,7 +154,9 @@ class RaceResult < ApplicationRecord
         rr.update_column(:climbs, climbs)
       end
     end
+  end
 
+  def calculate_climbing_scores
     # calc quali average points for results that have both quali climbs
     race
       .race_results

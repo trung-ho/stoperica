@@ -36,6 +36,7 @@ class ClimbingResults extends React.Component {
 
   render () {
     const race_results = this.getSortedResults();
+    const { race: { categories = [] } } = this.state;
     return (
       <table className="wide_table mdl-data-table mdl-js-data-table mdl-shadow--2dp">
         <thead>
@@ -56,23 +57,28 @@ class ClimbingResults extends React.Component {
         </thead>
         <tbody>
         {
-          race_results.map(result => {
-            return (
-              <tr key={result.id}>
-                <td>{result.position}</td>
-                <td>{result.start_number && result.start_number.value}</td>
-                <td>{result.racer.first_name} {result.racer.last_name}</td>
-                <td>{result.climbs.q1 && result.climbs.q1.points}</td>
-                <td>{result.climbs.q1 && result.climbs.q1.position}</td>
-                <td>{result.climbs.q2 && result.climbs.q2.points}</td>
-                <td>{result.climbs.q2 && result.climbs.q2.position}</td>
-                <td>{result.climbs.q && result.climbs.q.points}</td>
-                <td>{result.climbs.q && result.climbs.q.position}</td>
-                <td>{result.climbs.final && result.climbs.final.points}</td>
-                <td>{result.climbs.final && result.climbs.final.position}</td>
-                <td>{result.climbs.final && result.climbs.final.time}</td>
-              </tr>
-            );
+          categories.map((category, index) => {
+            const categoryRow = [(<tr className={`cat-${index}`}><td colspan="12">{category.name}</td></tr>)];
+            return categoryRow.concat(race_results
+              .filter(rr => rr.category_id === category.id)
+              .map(result => {
+              return (
+                <tr key={result.id}>
+                  <td>{result.position}</td>
+                  <td>{result.start_number && result.start_number.value}</td>
+                  <td>{result.racer.first_name} {result.racer.last_name}</td>
+                  <td>{result.climbs.q1 && result.climbs.q1.points}</td>
+                  <td>{result.climbs.q1 && result.climbs.q1.position}</td>
+                  <td>{result.climbs.q2 && result.climbs.q2.points}</td>
+                  <td>{result.climbs.q2 && result.climbs.q2.position}</td>
+                  <td>{result.climbs.q && result.climbs.q.points}</td>
+                  <td>{result.climbs.q && result.climbs.q.position}</td>
+                  <td>{result.climbs.final && result.climbs.final.points}</td>
+                  <td>{result.climbs.final && result.climbs.final.position}</td>
+                  <td>{result.climbs.final && result.climbs.final.time}</td>
+                </tr>
+              );
+            }));
           })
         }
         </tbody>

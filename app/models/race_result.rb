@@ -129,7 +129,7 @@ class RaceResult < ApplicationRecord
     # calculate positions based on points
     %w[q1 q2 final q].each do |level|
       res = race.race_results
-                .select { |rr| rr.climbs.dig(level, 'points') }
+                .select { |rr| rr.climbs.dig(level, 'points') && rr.category == category }
                 .sort_by { |rr| [-rr.climbs.dig(level, 'points')] }
                 .reverse
 
@@ -160,6 +160,7 @@ class RaceResult < ApplicationRecord
     # calc quali average points for results that have both quali climbs
     race
       .race_results
+      .select{ |rr| rr.category == category }
       .select { |rr| rr.climbs.dig('q1', 'position') && rr.climbs.dig('q2', 'position') }
       .each do |rr|
       climbs = rr.climbs
@@ -175,6 +176,7 @@ class RaceResult < ApplicationRecord
     # calculate positions in finals
     res = race
       .race_results
+      .select{ |rr| rr.category == category }
       .select { |rr| rr.climbs.dig('final', 'position') }
     res.sort_by { |rr| [rr.climbs['final']['position'], rr.climbs['final']['time']] }
       .each_with_index do |rr, index|

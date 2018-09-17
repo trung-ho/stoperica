@@ -130,7 +130,13 @@ class RaceResult < ApplicationRecord
     %w[q1 q2 final q].each do |level|
       res = race.race_results
                 .select { |rr| rr.climbs.dig(level, 'points') && rr.category == category }
-                .sort_by { |rr| [-rr.climbs.dig(level, 'points')] }
+                .sort_by { |rr|
+                  points = rr.climbs.dig(level, 'points')
+                  if points.to_s.length == 1 || points.to_s.chomp('+').length == 1
+                    points = "0#{points}"
+                  end
+                  [-points]
+                }
                 .reverse
 
       res.each_with_index do |rr, index|

@@ -1,9 +1,10 @@
 %table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
   %thead
     %tr
-      %th Position
-      %th Start Number
-      %th Climber
+      %th Mjesto
+      %th Startni Broj
+      %th Natjecatelj
+      %th Klub
       %th Q1
       %th RQ1
       %th Q2
@@ -27,7 +28,11 @@
             - if rr.position && rr.position < 4
               = render partial: 'trophy', locals: { index: rr.position - 1 }
           %td= rr.start_number&.value
-          %td= rr.racer.full_name
+          %td
+            = link_to rr.racer do
+              .emoji= rr.racer.country_flag
+              = rr.racer.full_name
+          %td= rr.racer.club&.name
           %td= rr.climbs.dig('q1', 'points')
           %td= rr.climbs.dig('q1', 'position')
           %td= rr.climbs.dig('q2', 'points')

@@ -12,7 +12,8 @@ namespace :db do
         first_name: name.split[0],
         last_name: name.split[1],
         phone_number: Faker::PhoneNumber.cell_phone,
-        email: Faker::Internet.email
+        email: Faker::Internet.email,
+        country: Faker::Address.country_code
       )
       start_number = StartNumber.create!(value: index, race: race)
       RaceResult.create!(race: race, racer: racer, category: (index % 2).zero? ? c_one : c_two, start_number: start_number)

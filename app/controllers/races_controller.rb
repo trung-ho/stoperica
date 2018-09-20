@@ -26,6 +26,17 @@ class RacesController < ApplicationController
       end
       @sorted_results += rest
       @race.sorted_results = @sorted_results
+    else
+      @sorted_results = {}
+      @race.categories.each do |category|
+        category_results = @race.race_results.where(category: category)
+        if @race.started_at.nil?
+          @sorted_results[category] = category_results.order(created_at: :desc)
+        else
+          @sorted_results[category] = category_results.where.not(position: nil).order(:position) +
+            category_results.where(position: nil).order(status: :desc)
+        end
+      end
     end
     respond_to do |format|
       format.html { render :show }

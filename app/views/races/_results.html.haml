@@ -23,7 +23,7 @@
         %td{ colspan: 20 }
           = category.name.upcase
 
-      - (@race.race_results.where(category: category).where.not(position: nil).order(:position) + @race.race_results.where(category: category).where(position: nil).order(status: :desc)).each_with_index do |race_result, index|
+      - @sorted_results[category].each_with_index do |race_result, index|
         %tr
           %td
             - if race_result.status == 3

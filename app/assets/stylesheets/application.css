@@ -129,25 +129,76 @@ option {
 
 /* category colors */
 .cat-0 {
-  background-color: powderblue;
+  background-color: #29B6F6;
 }
 .cat-1 {
-  background-color: pink;
+  background-color: #EC407A;
 }
 .cat-2 {
-  background-color: cyan;
+  background-color: #26A69A;
 }
 .cat-3 {
-  background-color: lightgreen;
+  background-color: #66BB6A;
 }
 .cat-4 {
-  background-color: lightyellow;
+  background-color: #D4E157;
 }
 .cat-5 {
-  background-color: lavender;
+  background-color: #7E57C2;
 }
 .cat-6 {
-  background-color: mediumorchid;
+  background-color: #EF5350;
+}
+.cat-7 {
+  background-color: #FFA726;
+}
+.cat-8 {
+  background-color: #FF7043;
+}
+.cat-9 {
+  background-color: #8D6E63;
+}
+.cat-10 {
+  background-color: #5C6BC0;
+}
+.cat-11 {
+  background-color: #42A5F5;
+}
+.cat-12 {
+  background-color: #AB47BC;
+}
+.cat-13 {
+  background-color: #26C6DA;
+}
+.cat-14 {
+  background-color: #9CCC65;
+}
+.cat-15 {
+  background-color: #BDBDBD;
+}
+.cat-16 {
+  background-color: #FFEE58;
+}
+.cat-17 {
+  background-color: #78909C;
+}
+.cat-18 {
+  background-color: #FFCA28;
+}
+.cat-19 {
+  background-color: #FF4081;
+}
+.cat-20 {
+  background-color: #84FFFF;
+}
+.cat-21 {
+  background-color: #69F0AE;
+}
+.cat-22 {
+  background-color: #EEFF41;
+}
+.cat-23 {
+  background-color: #7C4DFF;
 }
 
 .shame {

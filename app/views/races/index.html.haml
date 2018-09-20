@@ -9,4 +9,4 @@
           %h4.text-center
             = race.name
         .mdl-card__actions.mdl-card--border
-          = link_to 'PRIJAVE', race
+          = link_to race.ended_at.present? ? 'REZULTATI' : 'PRIJAVE', race

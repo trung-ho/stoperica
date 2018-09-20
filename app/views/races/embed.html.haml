@@ -1,0 +1,15 @@
+- if @race.penjanje?
+  = render 'climbing_results'
+- else
+  = render 'results'
+
+:css
+  header.mdl-layout__header.is-casting-shadow {
+    display: none;
+  }
+
+  .page-content {
+    width: 100%;
+    margin: 0;
+    margin-top: -1rem;
+  }

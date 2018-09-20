@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     end
     member do
       get :assign_positions
+      get :embed
     end
   end
   resources :racers do

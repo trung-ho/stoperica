@@ -117,6 +117,15 @@ class RaceResultsController < ApplicationController
     start_number = StartNumber.find_by(race: race, tag_id: params[:TAGID].strip)
     start_number = StartNumber.find_by(tag_id: params[:TAGID].strip) if start_number.nil?
 
+    if start_number.nil?
+      data = {
+        error: 'Tag not in database',
+        tag_id: params[:TAGID],
+        race_id: params[:RACEID]
+      }
+      return render json: data, status: 404
+    end
+
     race_result = RaceResult.find_by(race: race, start_number: start_number)
     millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z').to_f
 

@@ -14,7 +14,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'bcrypt', '~> 3.1.7'
 
 # Auth
-gem 'devise'
+gem 'devise', '~> 4.4.0'
 
 # Heroku stuff
 gem 'rack-zippy'

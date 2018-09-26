@@ -44,11 +44,16 @@ class RaceResultsController < ApplicationController
   # PATCH/PUT /race_results/1.json
   def update
     start_number_val = params[:race_result][:start_number]
-    if start_number_val
+    category_id = params[:race_result][:category_id]
+    if start_number_val.present?
       start_number = StartNumber.find_by(value: start_number_val, race: @race_result.race)
       start_number = StartNumber.find_by(value: start_number_val) if start_number.nil?
       raise 'Start number not found' if start_number.nil?
       @race_result.update!(start_number: start_number)
+    end
+
+    if category_id.present?
+      @race_result.update!(category_id: category_id)
     end
 
     if race_result_params[:lap_times]

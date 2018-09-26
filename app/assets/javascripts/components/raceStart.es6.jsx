@@ -3,7 +3,7 @@ class RaceStart extends React.Component {
     super();
 
     this.state = {
-      selectedRaceId: 0,
+      selectedRace: {},
       raceStarted: false,
       categories: [],
       selectedCategories: [],
@@ -20,9 +20,9 @@ class RaceStart extends React.Component {
           RaceResultActions.startRace(new Date(data.started_at));
           this.setState({ raceStarted: true });
         }
-        RaceResultActions.setRace(raceId);
+        RaceResultActions.setRace(data);
         this.setState({
-          selectedRaceId: raceId,
+          selectedRace: data,
           categories: data.categories
         });
       },
@@ -35,13 +35,13 @@ class RaceStart extends React.Component {
   }
 
   startRace() {
-    const { selectedCategories, selectedRaceId, categories } = this.state;
+    const { selectedCategories, selectedRace, categories } = this.state;
     let data = {
       started_at: timeSync.now(),
       categories: selectedCategories
     }
     let ajax = new Ajax(
-      `/races/${selectedRaceId}`,
+      `/races/${selectedRace.id}`,
       data => {
         const updatedCategories = categories.map(c => {
           if (selectedCategories.indexOf(c.id.toString()) > -1) {
@@ -55,7 +55,7 @@ class RaceStart extends React.Component {
           categories: updatedCategories
         });
         RaceResultActions.startRace(new Date(data.started_at));
-        RaceResultActions.setRace(selectedRaceId);
+        RaceResultActions.setRace(selectedRace);
         const startedCategories = categories.map(c => {
           if (selectedCategories.includes(c.id.toString())) return c.name;
         });
@@ -74,9 +74,9 @@ class RaceStart extends React.Component {
       ended_at: timeSync.now()
     }
     let ajax = new Ajax(
-      `/races/${this.state.selectedRaceId}`,
+      `/races/${this.state.selectedRace.id}`,
       (data) => {
-        window.location = `/races/${this.state.selectedRaceId}`;
+        window.location = `/races/${this.state.selectedRace.id}`;
       },
       (error, status) => {
         console.log(error, status);
@@ -105,6 +105,9 @@ class RaceStart extends React.Component {
 
   render () {
     const { races } = this.props;
+    if (this.state.selectedRace.race_type === 'penjanje') {
+      return (<ClimbingTiming />);
+    }
     return (
       <span>
         <span>
@@ -122,7 +125,7 @@ class RaceStart extends React.Component {
             }
           </select>
           {
-            this.state.selectedRaceId ?
+            this.state.selectedRace.id ?
             <button
               className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
               onClick={ this.endRace.bind(this) }
@@ -133,7 +136,7 @@ class RaceStart extends React.Component {
             null
           }
           {
-            this.state.selectedRaceId ?
+            this.state.selectedRace.id ?
             (
               <button
                 className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect"

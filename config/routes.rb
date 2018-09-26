@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     collection do
       match :from_device, via: [:get, :post]
       post :from_timing
+      post :from_climbing
       delete :destroy_from_timing
     end
   end
@@ -23,6 +24,7 @@ Rails.application.routes.draw do
     end
     member do
       get :assign_positions
+      get :embed
     end
   end
   resources :racers do

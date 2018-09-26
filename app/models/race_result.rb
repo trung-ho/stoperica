@@ -6,6 +6,8 @@ class RaceResult < ApplicationRecord
   attr_accessor :racer_start_number
 
   validate :disallow_duplicates
+  after_save :calculate_climbing_positions, if: :climbs_changed?
+  after_commit :calculate_climbing_scores, if: :climbs_changed?
 
   def disallow_duplicates
     return if self.id
@@ -120,5 +122,70 @@ class RaceResult < ApplicationRecord
       racer.year_of_birth, racer.town, racer.email, racer.phone_number,
       finish_time, finish_delta, status, racer.personal_best, racer.uci_id
     ]
+  end
+
+  def calculate_climbing_positions
+    # calculate positions based on points
+    %w[q1 q2 final q].each do |level|
+      res = race.race_results
+                .select { |rr| rr.climbs.dig(level, 'points') && rr.category == category }
+                .sort_by { |rr|
+                  points = rr.climbs.dig(level, 'points')
+                  if points.to_s.length == 1 || points.to_s.chomp('+').length == 1
+                    points = "0#{points}"
+                  end
+                  [-points]
+                }
+                .reverse
+
+      res.each_with_index do |rr, index|
+        position = index + 1
+        peers = res.take(position).select { |r| r.climbs[level]['points'] == rr.climbs[level]['points'] }
+        if peers.size > 1
+          positions = position-peers.size..position
+          avg = positions.inject(0.0) { |sum, el| sum + (el || position - peers.size + 1) } / positions.size
+          avg = avg.round 2
+
+          peers.each do |p|
+            climbs = p.climbs
+            climbs[level]['position'] = avg
+            p.update_column(:climbs, climbs)
+          end
+        end
+
+        # this is included in peers
+        climbs = rr.climbs
+        climbs[level]['position'] = avg || position
+        rr.update_column(:climbs, climbs)
+      end
+    end
+  end
+
+  def calculate_climbing_scores
+    # calc quali average points for results that have both quali climbs
+    race
+      .race_results
+      .select{ |rr| rr.category == category }
+      .select { |rr| rr.climbs.dig('q1', 'position') && rr.climbs.dig('q2', 'position') }
+      .each do |rr|
+      climbs = rr.climbs
+      a = climbs['q1']['position']
+      b = climbs['q2']['position']
+      climbs['q'] = {} if climbs['q'].nil?
+      if a && b
+        climbs['q']['points'] = Math.sqrt(a * b).round 2
+        rr.update_column(:climbs, climbs)
+      end
+    end
+
+    # calculate positions in finals
+    res = race
+      .race_results
+      .select{ |rr| rr.category == category }
+      .select { |rr| rr.climbs.dig('final', 'position') }
+    res.sort_by { |rr| [rr.climbs['final']['position'], rr.climbs['final']['time']] }
+      .each_with_index do |rr, index|
+      rr.update_column(:position, index + 1)
+    end
   end
 end

@@ -10,7 +10,8 @@ class TimingDashboard extends React.Component {
   }
 
   onChange() {
-    this.setState({show: DraftResultStore.getRaceId()})
+    const show = DraftResultStore.getRaceId() && DraftResultStore.getRaceType() !== 'penjanje';
+    this.setState({ show })
   }
 
   componentDidMount() {
@@ -80,7 +81,7 @@ class TimingDashboard extends React.Component {
         {
           this.state.show ?
           (<div className="mdl-cell mdl-cell--12-col">
-            <RaceResults raceId={this.state.show} />
+            <RaceResults raceId={DraftResultStore.getRaceId()} />
           </div>)
           :
           null

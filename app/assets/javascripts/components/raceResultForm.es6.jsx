@@ -7,12 +7,14 @@ class RaceResultForm extends React.Component {
         this.updateHours = this.updateHours.bind(this);
         this.updateMinutes = this.updateMinutes.bind(this);
         this.updateSeconds = this.updateSeconds.bind(this);
+        this.updateMillis = this.updateMillis.bind(this);
 
         this.state = {
           racerNumber: undefined,
           hours: 0,
           minutes: 0,
-          seconds: 0
+          seconds: 0,
+          millis: 0
         }
     }
 
@@ -35,6 +37,7 @@ class RaceResultForm extends React.Component {
           time += hours*3600000;
           time += minutes*60000;
           time += seconds*1000;
+          time += millis;
 
           if(racerNumber && time) {
             RaceResultActions.newRaceResult(racerNumber, time, 3);
@@ -62,6 +65,10 @@ class RaceResultForm extends React.Component {
 
     updateSeconds(event) {
       this.setState({seconds: event.target.value});
+    }
+
+    updateMillis(event) {
+      this.setState({millis: event.target.value});
     }
 
     render() {
@@ -94,6 +101,14 @@ class RaceResultForm extends React.Component {
                   onChange={ this.updateSeconds }
                 >
                   {this.getOptions(60, 'seconds')}
+                </select>
+                <select
+                  name="raceResultMillis"
+                  id="raceResultMillis"
+                  className="tiny"
+                  onChange={ this.updateMillis }
+                >
+                  {this.getOptions(1000, 'ms')}
                 </select>
               </p>
               <div>

@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/stympy/faker.git
+  revision: bb7b836e3b7c301b65c2d5f91c7e474a2ca6b2f4
+  branch: master
+  specs:
+    faker (1.9.1)
+      i18n (>= 0.7)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -262,6 +270,7 @@ DEPENDENCIES
   countries
   country_select
   devise
+  faker!
   haml-rails
   jbuilder (~> 2.5)
   kaminari
@@ -287,4 +296,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.16.1
+   1.16.2

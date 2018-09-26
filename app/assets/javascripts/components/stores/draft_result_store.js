@@ -3,7 +3,7 @@ var DraftResultStore = flux.createStore({
     uploadedResults: [],
     tempResults: [],
     raceStartDate: undefined,
-    raceId: undefined,
+    race: {},
     actions: [
       RaceResultActions.newRaceResult,
       RaceResultActions.newTempResult,
@@ -17,7 +17,7 @@ var DraftResultStore = flux.createStore({
         this.emit('draftResultStore.change');
     },
     newTempResult: function(time) {
-        this.tempResults.push({time});
+        this.tempResults.push({ time });
         this.emit('draftResultStore.newTempResult');
     },
     removeRaceResult: function(racerNumber) {
@@ -42,13 +42,16 @@ var DraftResultStore = flux.createStore({
         this.raceStartDate = raceStartDate;
         this.emit('draftResultStore.startRace');
     },
-    setRace: function(raceId) {
-        this.raceId = raceId;
+    setRace: function(race) {
+        this.race = race;
         this.emit('draftResultStore.setRace');
     },
     exports: {
         getRaceId: function () {
-            return this.raceId;
+            return this.race && this.race.id;
+        },
+        getRaceType: function () {
+            return this.race && this.race.race_type;
         },
         getRaceResults: function () {
             return this.raceResults;
@@ -61,9 +64,6 @@ var DraftResultStore = flux.createStore({
         },
         getRaceStartDate: function() {
           return this.raceStartDate;
-        },
-        getRaceId: function() {
-          return this.raceId;
         }
     }
 });

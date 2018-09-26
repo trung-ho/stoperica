@@ -1,9 +1,9 @@
 class RaceResultsController < ApplicationController
   before_action :set_race_result, only: %i[show edit update destroy]
   before_action :only_admin, only: %i[index show new from_timing destroy_from_timing]
-  before_action :set_start_number, only: %i[from_timing destroy_from_timing]
+  before_action :set_start_number, only: %i[from_timing destroy_from_timing from_climbing]
 
-  protect_from_forgery except: [:from_device]
+  protect_from_forgery except: %i[from_device from_climbing]
 
   # GET /race_results
   # GET /race_results.json
@@ -95,6 +95,19 @@ class RaceResultsController < ApplicationController
     end
   end
 
+  def from_climbing
+    raise 'Not Found' if @start_number.nil?
+    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: @start_number)
+    raise 'Not Found' if race_result.nil?
+    climbs = race_result.climbs
+    climbs[params[:level]] = {
+      points: params[:points],
+      time: params[:time]
+    }
+    race_result.update!(climbs: climbs)
+    render json: race_result
+  end
+
   # "TAGID"=>" 00 00 00 00 00 00 00 00 00 01 65 19",
   # "RSSI"=>"60",
   # "TIME"=>"14.08.2017 13:07:14.36753 %2B02:00",
@@ -103,6 +116,15 @@ class RaceResultsController < ApplicationController
     race = Race.find(params[:RACEID])
     start_number = StartNumber.find_by(race: race, tag_id: params[:TAGID].strip)
     start_number = StartNumber.find_by(tag_id: params[:TAGID].strip) if start_number.nil?
+
+    if start_number.nil?
+      data = {
+        error: 'Tag not in database',
+        tag_id: params[:TAGID],
+        race_id: params[:RACEID]
+      }
+      return render json: data, status: 404
+    end
 
     race_result = RaceResult.find_by(race: race, start_number: start_number)
     millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z').to_f
@@ -136,7 +158,7 @@ class RaceResultsController < ApplicationController
 
   def race_result_params
     params.require(:race_result).permit(
-      :racer_id, :race_id, :status, :lap_times, :category_id
+      :racer_id, :race_id, :status, :lap_times, :category_id, :climbs
     )
   end
 

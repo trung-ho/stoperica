@@ -21,7 +21,7 @@
         %th Broj mobitela
 
   %tbody
-    - @club.racers.each do |racer|
+    - @club.racers.order(first_name: :asc).each do |racer|
       %tr
         %td= link_to racer.full_name, racer
         %td.mdl-data-table__cell--non-numeric= racer.year_of_birth

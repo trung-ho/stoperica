@@ -5,7 +5,7 @@ class StartNumbersController < ApplicationController
   # GET /start_numbers
   # GET /start_numbers.json
   def index
-    @start_numbers = StartNumber.all
+    @start_numbers = StartNumber.all.sort_by{|sn| [-sn.race_id, sn.value.to_i]}
   end
 
   # GET /start_numbers/1

@@ -2,27 +2,37 @@
   Natjecatelji
   = "(#{Racer.all.count})"
 
-%input#serach{ type: 'text', placeholder: 'serach' }
+/ %input#search{ type: 'text', placeholder: 'Pretraži...' }
+
+.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.mdl-js-textfield--accent
+  %input#search.mdl-textfield__input{ type: 'text' }
+  %label.mdl-textfield__label{ for: 'search' } Pretraži...
+
 
 :javascript
-  var choices = #{@racers.collect{|r| [r.full_name, r.id]}.inspect.html_safe};
+  var choices = #{@racers.collect{|r| [r.full_name, r.id, r.email]}.inspect.html_safe};
   new autoComplete({
-    selector: '#serach',
+    selector: '#search',
     minChars: 2,
     source: function(term, suggest){
       term = term.toLowerCase();
       var matches = [];
-      for (i=0; i<choices.length; i++)
-          if (~choices[i][0].toLowerCase().indexOf(term)) matches.push(choices[i]);
+      for (i=0; i<choices.length; i++) {
+        var matchesName = ~choices[i][0].toLowerCase().indexOf(term);
+        var matchesEmail = ~choices[i][2].toLowerCase().indexOf(term);
+        if (matchesName || matchesEmail) {
+          matches.push(choices[i]);
+        }
+      }
       suggest(matches);
     },
     renderItem: function (item, search){
       search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
       var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
-      return '<div class="autocomplete-suggestion" data-val="' + item[1] + '">' + item[0].replace(re, "<b>$1</b>") + '</div>';
+      return '<div class="autocomplete-suggestion" data-val="' + item[0] + '" data-id="' + item[1] + '">' + item[0].replace(re, "<b>$1</b>") + '</div>';
     },
     onSelect: function (event, term, item) {
-      console.log(event, term, item);
+      Turbolinks.visit('/racers/' + item.dataset.id);
     }
   });
 

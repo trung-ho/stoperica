@@ -1,5 +1,6 @@
 class RacesController < ApplicationController
-  before_action :set_race, only: [:show, :edit, :update, :destroy, :assign_positions]
+  before_action :set_race, only: [:show, :embed, :edit, :update, :destroy, :assign_positions]
+  before_action :sort_results, only: [:show, :embed]
   before_action :check_race_result, only: [:show]
   before_action :only_admin, only: [:new, :edit, :destroy, :assign_positions]
 
@@ -17,13 +18,16 @@ class RacesController < ApplicationController
       format.json do
         render json: @race,
                include: [
-                 { race_results: { include: [{ racer: { include: :club } }, :category], methods: [:finish_time] } },
-                 categories: { methods: [:started?, :started_at] }
+                { sorted_results: { include: [{ racer: { include: :club } }, :category, :start_number], methods: [:finish_time] } },
+                { race_results: { include: [{ racer: { include: :club } }, :category, :start_number], methods: [:finish_time] } },
+                categories: { methods: [:started?, :started_at] }
                ]
       end
       format.csv { send_data @race.to_csv }
     end
   end
+
+  def embed; end
 
   def get_live
     race = Race.where.not(started_at: nil).where(ended_at: nil).first
@@ -112,7 +116,7 @@ class RacesController < ApplicationController
     params.require(:race).permit(
       :name, :date, :laps, :easy_laps, :description_url, :send_email,
       :registration_threshold, :categories, :email_body, :lock_race_results,
-      :uci_display
+      :uci_display, :race_type
     )
   end
 
@@ -121,6 +125,35 @@ class RacesController < ApplicationController
     @racer_has_race_result = has_race_result
     if has_race_result
       @race_result = current_user.racer.race_results.where(race: @race).first
+    end
+  end
+
+  def sort_results
+    if @race.penjanje?
+      fallback = @race.race_results.count
+      @sorted_results = @race.race_results.where.not(position: nil).order(:position)
+      rest = @race.race_results.where(position: nil)
+      rest = rest.sort_by do |r|
+        [
+          r.climbs.dig('final', 'position') || fallback,
+          r.climbs.dig('q', 'position') || fallback,
+          r.climbs.dig('q2', 'position') || fallback,
+          r.climbs.dig('q1', 'position') || fallback
+        ]
+      end
+      @sorted_results += rest
+      @race.sorted_results = @sorted_results
+    else
+      @sorted_results = {}
+      @race.categories.each do |category|
+        category_results = @race.race_results.where(category: category)
+        if @race.started_at.nil?
+          @sorted_results[category] = category_results.order(created_at: :desc)
+        else
+          @sorted_results[category] = category_results.where.not(position: nil).order(:position) +
+            category_results.where(position: nil).order(status: :desc)
+        end
+      end
     end
   end
 end

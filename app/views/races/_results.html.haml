@@ -1,0 +1,77 @@
+%table#raceResults.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
+  %thead
+    %tr
+      %th Mjesto
+      %th Startni broj
+      - if @race.uci_display?
+        %th UCI ID
+      %th Ime i Prezime
+      %th Klub
+      %th Status
+      - unless @race.laps.nil?
+        - (1..@race.laps).each do |lap|
+          %td= "KT #{lap}"
+      %th Vrijeme
+      %th Razlika
+      - if user_signed_in? && current_user.admin
+        %th
+        %th
+        %th
+  %tbody
+    - @race.categories.each_with_index do |category, index|
+      %tr{ class: "cat-#{index}" }
+        %td{ colspan: 20 }
+          = category.name.upcase
+
+      - @sorted_results[category].each_with_index do |race_result, index|
+        %tr
+          %td
+            - if race_result.status == 3 && @race.ended_at.present?
+              = race_result.position
+
+              - if index <= 2
+                = render partial: 'trophy', locals: { index: index }
+
+          %td= race_result.start_number&.value
+          - if @race.uci_display?
+            %td= race_result.racer.uci_id
+          %td
+            = link_to race_result.racer do
+              .emoji= race_result.racer.country_flag
+              - if @race.uci_display?
+                = race_result.racer.uci_name
+              - else
+                = race_result.racer.full_name
+          %td= race_result.racer.club.try(:name)
+          %td= race_result.pretty_status
+          - unless @race.laps.nil?
+            - (1..@race.laps).each do |lap|
+              %td= race_result.lap_time lap
+          %td= race_result.finish_time
+          - if @race.ended_at.blank?
+            %td= '--'
+          - else
+            - if index.zero?
+              %td
+            -else
+              %td.losers
+                = race_result.finish_delta
+
+          - if user_signed_in? && current_user.admin && race_result.status && race_result.status < 2
+            %td
+              = form_for race_result do |f|
+                = f.hidden_field :status, value: 2
+                .actions
+                  = f.submit 'Na startu', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+          - if user_signed_in? && current_user.admin
+            %td
+              = link_to 'Izmijeni', edit_race_result_path(race_result), class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+              = form_for race_result, method: :delete do |f|
+                .actions
+                  = f.submit 'Odjavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect', onclick: "return confirm('Ovo ce izbrisati rezultat iz baze podataka. Molim potvrdi.')"
+          - if user_signed_in? && current_user.admin
+            %td#adminFormContainer
+              = form_for race_result do |f|
+                = f.text_field :start_number, value: race_result.start_number&.value, placeholder: 'Startni broj', autocomplete: 'off'
+                = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: race_result.category_id
+                = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'

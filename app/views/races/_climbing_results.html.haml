@@ -1,0 +1,64 @@
+%table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
+  %thead
+    %tr
+      %th Mjesto
+      %th Startni Broj
+      %th Natjecatelj
+      %th Klub
+      %th Q1
+      %th RQ1
+      %th Q2
+      %th RQ2
+      %th RQ
+      %th QRank
+      %th RF
+      %th PLF
+      %th FTime
+      - if user_signed_in? && current_user.admin
+        %th{ colspan: 6 } Admin
+  %tbody
+    - @race.categories.each_with_index do |category, index|
+      %tr{ class: "cat-#{index}" }
+        %td{ colspan: 20 }
+          = category.name.upcase
+      - @sorted_results.select{ |rr| rr.category == category }.each do |rr|
+        %tr
+          %td
+            = rr.position
+            - if rr.position && rr.position < 4
+              = render partial: 'trophy', locals: { index: rr.position - 1 }
+          %td= rr.start_number&.value
+          %td
+            = link_to rr.racer do
+              .emoji= rr.racer.country_flag
+              = rr.racer.full_name
+          %td= rr.racer.club&.name
+          %td= rr.climbs.dig('q1', 'points')
+          %td= rr.climbs.dig('q1', 'position')
+          %td= rr.climbs.dig('q2', 'points')
+          %td= rr.climbs.dig('q2', 'position')
+          %td= rr.climbs.dig('q', 'points')
+          %td= rr.climbs.dig('q', 'position')
+          %td= rr.climbs.dig('final', 'points')
+          %td= rr.climbs.dig('final', 'position')
+          %td= rr.climbs.dig('final', 'time')
+          - if user_signed_in? && current_user.admin && rr.status && rr.status < 2
+            %td
+              = form_for rr do |f|
+                = f.hidden_field :status, value: 2
+                .actions
+                  = f.submit 'Na startu', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+          - if user_signed_in? && current_user.admin
+            %td
+              = link_to 'Izmijeni', edit_race_result_path(rr), class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+            %td
+              = form_for rr, method: :delete do |f|
+                .actions
+                  = f.submit 'Odjavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect', onclick: "return confirm('Ovo ce izbrisati rezultat iz baze podataka. Molim potvrdi.')"
+          - if user_signed_in? && current_user.admin
+            %td#adminFormContainer
+              = form_for rr do |f|
+                = f.text_field :start_number, value: rr.start_number&.value, placeholder: 'Startni broj', autocomplete: 'off'
+                = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: rr.category_id
+                = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+

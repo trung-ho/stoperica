@@ -26,7 +26,7 @@
       - @sorted_results[category].each_with_index do |race_result, index|
         %tr
           %td
-            - if race_result.status == 3
+            - if race_result.status == 3 && @race.ended_at.present?
               = race_result.position
 
               - if index <= 2

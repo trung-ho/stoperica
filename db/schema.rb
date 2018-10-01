@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181001160837) do
+ActiveRecord::Schema.define(version: 20181001162147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,6 +99,8 @@ ActiveRecord::Schema.define(version: 20181001160837) do
     t.boolean "send_email"
     t.boolean "uci_display"
     t.integer "race_type", default: 0
+    t.bigint "pool_id"
+    t.index ["pool_id"], name: "index_races_on_pool_id"
   end
 
   create_table "start_numbers", id: :serial, force: :cascade do |t|
@@ -136,6 +138,7 @@ ActiveRecord::Schema.define(version: 20181001160837) do
   add_foreign_key "race_results", "races"
   add_foreign_key "racers", "clubs"
   add_foreign_key "racers", "users"
+  add_foreign_key "races", "pools"
   add_foreign_key "start_numbers", "pools"
   add_foreign_key "start_numbers", "races"
 end

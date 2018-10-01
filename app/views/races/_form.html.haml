@@ -13,6 +13,9 @@
     = f.label 'Kategorija'
     = f.select :race_type, options_for_select(Race.race_types.collect { |s| [s[0].humanize, s[0]] }, selected: @race.race_type), {}
   .field
+    = f.label :pool
+    = f.select(:pool_id, options_for_select(Pool.all.collect {|r| [ r.name, r.id ] }))
+  .field
     = f.label 'Datum utrke'
     = f.datetime_select :date
   .field

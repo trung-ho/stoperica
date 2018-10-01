@@ -4,6 +4,9 @@
   %b Race:
   = @start_number.race&.name
 %p
+  %b Pool:
+  = link_to @start_number.pool&.name, pool_path(@start_number.pool)
+%p
   %b Value:
   = @start_number.value
 %p

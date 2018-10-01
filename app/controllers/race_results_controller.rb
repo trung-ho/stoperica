@@ -154,10 +154,8 @@ class RaceResultsController < ApplicationController
   end
 
   def set_start_number
-    if params[:start_number]
-      @race = Race.find(params[:race_id])
-      @race.pool.start_numbers.find_by(value: params[:start_number])
-    end
+    @race = Race.find(params[:race_id])
+    @race.pool.start_numbers.find_by!(value: params[:start_number])
   end
 
   def race_result_params

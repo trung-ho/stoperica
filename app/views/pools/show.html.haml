@@ -1,0 +1,35 @@
+%p#notice= notice
+
+%p
+  %b Name
+  = @pool.name
+
+%br
+= link_to 'New Start number', new_start_number_path
+%br
+= link_to 'Edit', edit_pool_path(@pool)
+%br
+= link_to 'Back', pools_path
+
+%h1 Start Numbers
+
+%table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
+  %thead
+    %tr
+      %th Race
+      %th Value
+      %th Tag
+      %th
+      %th
+      %th
+
+  %tbody
+    - @pool.start_numbers.sort_by{|sn| [sn.value.to_i]}.each do |start_number|
+      %tr
+        %td= start_number.race&.name
+        %td= start_number.value
+        %td= start_number.tag_id
+        %td= link_to 'Show', start_number
+        %td= link_to 'Edit', edit_start_number_path(start_number)
+        %td TODO DESTROY
+

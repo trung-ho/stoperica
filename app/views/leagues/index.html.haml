@@ -1,0 +1,20 @@
+%p#notice= notice
+
+%h1 Leagues
+
+%table
+  %thead
+    %tr
+      %th
+        %h3 Name
+      %th{colspan: 2}
+  %tbody
+    - @leagues.each do |league|
+      %tr
+        %td
+          %h4= league.name
+        %td= link_to 'Show', league
+        %td= link_to 'Edit', edit_league_path(league)
+%br
+
+= link_to 'New league', new_league_path

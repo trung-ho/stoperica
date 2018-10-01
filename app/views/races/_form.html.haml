@@ -16,6 +16,9 @@
     = f.label :pool
     = f.select(:pool_id, options_for_select(Pool.all.collect {|r| [ r.name, r.id ] }))
   .field
+    = f.label :league
+    = f.select(:league_id, options_for_select(League.all.collect {|r| [ r.name, r.id ] }), { include_blank: true })
+  .field
     = f.label 'Datum utrke'
     = f.datetime_select :date
   .field

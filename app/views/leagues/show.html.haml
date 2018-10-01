@@ -1,0 +1,29 @@
+%p#notice= notice
+
+%p
+  %b Name
+  = @league.name
+
+%br
+= link_to 'New Start number', new_start_number_path
+%br
+= link_to 'Edit', edit_league_path(@league)
+%br
+= link_to 'Back', leagues_path
+
+%h1 Races
+
+%table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
+  %thead
+    %tr
+      %th Race
+      %th Date
+      %th
+
+  %tbody
+    - @league.races.order(date: :desc).each do |race|
+      %tr
+        %td= race&.name
+        %td= race&.date
+        %td= link_to 'Show', race
+

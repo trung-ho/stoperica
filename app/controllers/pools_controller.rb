@@ -1,4 +1,5 @@
 class PoolsController < ApplicationController
+  before_action :only_admin
   before_action :set_pool, only: [:show, :edit, :update, :destroy]
 
   # GET /pools

@@ -1,20 +1,17 @@
-%p#notice= notice
+- if current_user&.admin?
+  = link_to 'Dodaj natjecanje', new_league_path
 
-%h1 Leagues
+- @leagues.each do |league|
+  %h3= league.name
+  %hr
 
-%table
-  %thead
-    %tr
-      %th
-        %h3 Name
-      %th{colspan: 2}
-  %tbody
-    - @leagues.each do |league|
+  %table.mdl-data-table.mdl-shadow--2dp
+    %thead
       %tr
-        %td
-          %h4= league.name
-        %td= link_to 'Show', league
-        %td= link_to 'Edit', edit_league_path(league)
-%br
-
-= link_to 'New league', new_league_path
+        %th Utrka
+        %th Datum
+    %tbody
+      - league.races.order(date: :desc).each do |race|
+        %tr
+          %td= race.name
+          %td= l race.date, format: :short

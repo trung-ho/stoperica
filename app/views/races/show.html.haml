@@ -15,6 +15,11 @@
       %b Napomena:
       Odjave su onemogućene za ovu utrku.
 
+- if user_signed_in? && current_user.admin?
+  %h4
+    Baza brojeva:
+    = link_to @race.pool&.name, pool_path(@race.pool)
+
 .race-actions
   = link_to races_path do
     .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect

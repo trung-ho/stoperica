@@ -119,8 +119,7 @@ class RaceResultsController < ApplicationController
   # "RACEID"=>5
   def from_device
     race = Race.find(params[:RACEID])
-    start_number = StartNumber.find_by(race: race, tag_id: params[:TAGID].strip)
-    start_number = StartNumber.find_by(tag_id: params[:TAGID].strip) if start_number.nil?
+    race.pool.start_numbers.find_by(tag_id: params[:TAGID].strip)
 
     if start_number.nil?
       data = {
@@ -156,8 +155,8 @@ class RaceResultsController < ApplicationController
 
   def set_start_number
     if params[:start_number]
-      @start_number = StartNumber.find_by(race_id: params[:race_id], value: params[:start_number])
-      @start_number = StartNumber.find_by(value: params[:start_number]) if @start_number.nil?
+      @race = Race.find(params[:race_id])
+      @race.pool.start_numbers.find_by(value: params[:start_number])
     end
   end
 

@@ -62,6 +62,7 @@ class RacesController < ApplicationController
   # PATCH/PUT /races/1
   # PATCH/PUT /races/1.json
   def update
+    @race.update!(race_params)
     if params[:started_at].present? && @race.started_at.nil?
       @race.started_at = Time.at(params[:started_at].to_i / 1000)
     end
@@ -77,13 +78,8 @@ class RacesController < ApplicationController
     end
 
     respond_to do |format|
-      if @race.update(race_params)
-        format.html { redirect_to @race, notice: 'Race was successfully updated.' }
-        format.json { render :show, status: :ok, location: @race }
-      else
-        format.html { render :edit }
-        format.json { render json: @race.errors, status: :unprocessable_entity }
-      end
+      format.html { redirect_to @race, notice: 'Race was successfully updated.' }
+      format.json { render :show, status: :ok, location: @race }
     end
   end
 

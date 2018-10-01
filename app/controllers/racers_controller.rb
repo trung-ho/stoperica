@@ -8,6 +8,14 @@ class RacersController < ApplicationController
     @racers = Racer.includes(:race_results).order(:created_at).page(params[:page])
   end
 
+  # GET /racers
+  # GET /racers.json
+  def search
+    term = "%#{params['term']}%"
+    @racers = Racer.where('first_name LIKE :term OR last_name LIKE :term OR email LIKE :term', term: term)
+    render json: @racers.collect{|r| { id: r.id, full_name: r.full_name } }
+  end
+
   # GET /racers/1
   # GET /racers/1.json
   def show

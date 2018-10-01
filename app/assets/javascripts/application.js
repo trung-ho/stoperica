@@ -12,6 +12,7 @@
 //
 //= require turbolinks
 //= require material
+//= require vendor/autocomplete.min
 //= require vendor/quill.min
 //= require vendor/timesync
 //= require react

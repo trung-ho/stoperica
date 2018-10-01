@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.3.1'
+ruby '2.5.1'
 
 gem 'rails', '>= 5.0'
 gem 'pg'
@@ -14,13 +14,13 @@ gem 'jbuilder', '~> 2.5'
 gem 'bcrypt', '~> 3.1.7'
 
 # Auth
-gem 'devise'
+gem 'devise', '~> 4.4.0'
 
 # Heroku stuff
 gem 'rack-zippy'
 
 # Frontend
-gem 'haml-rails'
+gem 'haml', '~> 5.0.4'
 gem 'react-rails'
 gem 'react-flux-rails'
 gem 'sprockets-es6'

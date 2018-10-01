@@ -9,7 +9,6 @@
   %thead
     %tr
       %th Ime
-      %th Broj clanova
       - if user_signed_in? && current_user.admin
         %th
         %th
@@ -26,7 +25,6 @@
       - @clubs.select{ |c| c.category == category[0] }.each do |club|
         %tr{ class: "tr-#{category[0]}", style: 'display: none' }
           %td= link_to club.name, club
-          %td= club.racers.count
           - if user_signed_in? && current_user.admin
             %td= link_to 'Izmijeni', edit_club_path(club), class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored', style: 'color: white;'
             %td

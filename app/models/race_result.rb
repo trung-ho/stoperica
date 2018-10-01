@@ -6,8 +6,7 @@ class RaceResult < ApplicationRecord
   attr_accessor :racer_start_number
 
   validate :disallow_duplicates
-  after_save :calculate_climbing_positions, if: :climbs_changed?
-  after_commit :calculate_climbing_scores, if: :climbs_changed?
+  after_save :calculate_climbing_positions, if: :saved_change_to_climbs?
 
   def disallow_duplicates
     return if self.id
@@ -159,6 +158,8 @@ class RaceResult < ApplicationRecord
         rr.update_column(:climbs, climbs)
       end
     end
+
+    calculate_climbing_scores
   end
 
   def calculate_climbing_scores

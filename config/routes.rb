@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     collection do
       get :login, to: 'racers#login_form'
       post :login
+      get :search
     end
   end
   resources :start_numbers do

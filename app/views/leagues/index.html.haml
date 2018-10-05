@@ -1,0 +1,27 @@
+- if current_user&.admin?
+  = link_to 'Dodaj natjecanje', new_league_path
+
+- @leagues.each do |league|
+  %h3.league_heading= league.name
+  - if current_user&.admin?
+    = link_to 'Izmijeni', edit_league_path(league)
+  %hr
+
+  %table.mdl-data-table.mdl-shadow--2dp.wide_table
+    %thead
+      %tr
+        %th Utrka
+        %th Datum
+        %th Prijave do
+        %th Prijave/Rezultati
+        / TODO: add personal notification if I'm attending the race
+
+    %tbody
+      - league.races.order(date: :desc).each do |race|
+        %tr
+          %td= race.name
+          %td= l race.date, format: :short
+          %td= l race.registration_threshold, format: :short
+          %td= link_to race.ended_at.present? ? 'REZULTATI' : 'PRIJAVE', race
+
+

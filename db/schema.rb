@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180907113846) do
+ActiveRecord::Schema.define(version: 20181005161136) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,19 @@ ActiveRecord::Schema.define(version: 20180907113846) do
     t.datetime "updated_at", null: false
     t.integer "category", default: 0
     t.index ["user_id"], name: "index_clubs_on_user_id"
+  end
+
+  create_table "leagues", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "league_type"
+  end
+
+  create_table "pools", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "race_results", id: :serial, force: :cascade do |t|
@@ -93,6 +106,10 @@ ActiveRecord::Schema.define(version: 20180907113846) do
     t.boolean "send_email"
     t.boolean "uci_display"
     t.integer "race_type", default: 0
+    t.bigint "pool_id"
+    t.bigint "league_id"
+    t.index ["league_id"], name: "index_races_on_league_id"
+    t.index ["pool_id"], name: "index_races_on_pool_id"
   end
 
   create_table "start_numbers", id: :serial, force: :cascade do |t|
@@ -101,6 +118,8 @@ ActiveRecord::Schema.define(version: 20180907113846) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "race_id"
+    t.bigint "pool_id"
+    t.index ["pool_id"], name: "index_start_numbers_on_pool_id"
     t.index ["race_id"], name: "index_start_numbers_on_race_id"
   end
 
@@ -128,5 +147,8 @@ ActiveRecord::Schema.define(version: 20180907113846) do
   add_foreign_key "race_results", "races"
   add_foreign_key "racers", "clubs"
   add_foreign_key "racers", "users"
+  add_foreign_key "races", "leagues"
+  add_foreign_key "races", "pools"
+  add_foreign_key "start_numbers", "pools"
   add_foreign_key "start_numbers", "races"
 end

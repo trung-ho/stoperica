@@ -1,0 +1,20 @@
+%p#notice= notice
+
+%h1 Pools
+
+%table
+  %thead
+    %tr
+      %th
+        %h3 Name
+      %th{colspan: 2}
+  %tbody
+    - @pools.each do |pool|
+      %tr
+        %td
+          %h4= pool.name
+        %td= link_to 'Show', pool
+        %td= link_to 'Edit', edit_pool_path(pool)
+%br
+
+= link_to 'New Pool', new_pool_path

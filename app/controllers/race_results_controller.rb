@@ -46,8 +46,7 @@ class RaceResultsController < ApplicationController
     start_number_val = params[:race_result][:start_number]
     category_id = params[:race_result][:category_id]
     if start_number_val.present?
-      start_number = StartNumber.find_by(value: start_number_val, race: @race_result.race)
-      start_number = StartNumber.find_by(value: start_number_val) if start_number.nil?
+      start_number = @race_result.race.pool.start_numbers.find_by!(value: start_number_val)
       raise 'Start number not found' if start_number.nil?
       @race_result.update!(start_number: start_number)
     end
@@ -119,8 +118,7 @@ class RaceResultsController < ApplicationController
   # "RACEID"=>5
   def from_device
     race = Race.find(params[:RACEID])
-    start_number = StartNumber.find_by(race: race, tag_id: params[:TAGID].strip)
-    start_number = StartNumber.find_by(tag_id: params[:TAGID].strip) if start_number.nil?
+    start_number = race.pool.start_numbers.find_by(tag_id: params[:TAGID].strip)
 
     if start_number.nil?
       data = {
@@ -128,7 +126,7 @@ class RaceResultsController < ApplicationController
         tag_id: params[:TAGID],
         race_id: params[:RACEID]
       }
-      return render json: data, status: 404
+      return render json: data
     end
 
     race_result = RaceResult.find_by(race: race, start_number: start_number)
@@ -155,10 +153,8 @@ class RaceResultsController < ApplicationController
   end
 
   def set_start_number
-    if params[:start_number]
-      @start_number = StartNumber.find_by(race_id: params[:race_id], value: params[:start_number])
-      @start_number = StartNumber.find_by(value: params[:start_number]) if @start_number.nil?
-    end
+    @race = Race.find(params[:race_id])
+    @race.pool.start_numbers.find_by!(value: params[:start_number])
   end
 
   def race_result_params

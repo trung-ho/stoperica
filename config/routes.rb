@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   post '/timesync' => 'dashboard#timesync'
   get '/info' => 'dashboard#info'
   get '/terms' => 'dashboard#terms'
+  get '/izjava' => 'dashboard#waiver'
 
   resources :clubs
   resources :categories

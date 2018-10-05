@@ -45,6 +45,11 @@
         = f.hidden_field :race_id, value: @race.id
         = f.hidden_field :status, value: 1
         = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, { prompt: 'Odaberi kategoriju' }, required: true
+        - if @race.league&.xczld?
+          .waiver
+            %input{ type: 'checkbox', required: true }
+            Ovim potvrđujem da sam pročitao i da se slažem s
+            = link_to 'Izjavom o oslobađanju organizatora od odgovornosti', izjava_path, target: '_blank'
         .actions
           = f.submit 'Prijavi se', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
     - elsif user_signed_in? && @racer_has_race_result

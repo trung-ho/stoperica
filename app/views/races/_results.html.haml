@@ -36,6 +36,8 @@
           - if @race.uci_display?
             %td= race_result.racer.uci_id
           %td
+            - if user_signed_in? && current_user.admin?
+              = race_result.racer.year_of_birth
             = link_to race_result.racer do
               .emoji= race_result.racer.country_flag
               - if @race.uci_display?

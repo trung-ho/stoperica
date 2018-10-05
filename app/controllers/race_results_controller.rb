@@ -126,7 +126,7 @@ class RaceResultsController < ApplicationController
         tag_id: params[:TAGID],
         race_id: params[:RACEID]
       }
-      return render json: data, status: 404
+      return render json: data
     end
 
     race_result = RaceResult.find_by(race: race, start_number: start_number)

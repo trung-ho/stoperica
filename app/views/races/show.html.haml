@@ -15,7 +15,7 @@
       %b Napomena:
       Odjave su onemogućene za ovu utrku.
 
-- if user_signed_in? && current_user.admin?
+- if user_signed_in? && current_user.admin? && @race.pool
   %h4
     Baza brojeva:
     = link_to @race.pool&.name, pool_path(@race.pool)

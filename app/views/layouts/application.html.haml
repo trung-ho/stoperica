@@ -66,3 +66,9 @@
           %p.notice
             = notice
           = yield
+
+:javascript
+  document.querySelectorAll('.mdl-navigation__link').forEach(a => {
+    a.classList.remove('is-active');
+    if (window.location.href.includes(a.href)) a.classList.add('is-active');
+  });

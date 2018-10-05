@@ -1,8 +1,12 @@
 %p#notice= notice
 
 %p
-  %b Name
+  %b Ime
   = @league.name
+
+%p
+  %b Tip
+  = @league.league_type
 
 %br
 = link_to 'New Start number', new_start_number_path

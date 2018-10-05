@@ -10,5 +10,8 @@
   .field
     = form.label :name
     = form.text_field :name, id: :league_name
+  .field
+    = form.label 'Tip'
+    = form.select :league_type, options_for_select(League.league_types.collect { |s| [s[0].humanize, s[0]] }, selected: @league.league_type), { include_blank: true}
   .actions
     = form.submit

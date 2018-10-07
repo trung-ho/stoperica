@@ -27,7 +27,7 @@ class Race < ApplicationRecord
     CSV.generate() do |csv|
       csv << ['Startni broj', 'Pozicija', 'Ime', 'Prezime', 'Klub', 'Kategorija',
         'Velicina majice', 'Godiste', 'Prebivaliste', 'Email', 'Mobitel',
-        'Vrijeme', 'Razlika', 'Status', 'Personal Best 21.1 km', 'UCI ID']
+        'Vrijeme', 'Zaostatak', 'Status', 'Personal Best 21.1 km', 'UCI ID']
       race_results.each do |race_result|
         csv << race_result.to_csv
       end

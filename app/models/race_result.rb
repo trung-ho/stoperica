@@ -117,7 +117,7 @@ class RaceResult < ApplicationRecord
   def to_csv
     # ['Startni broj', 'Pozicija', 'Ime', 'Prezime', 'Klub',
     # 'Kategorija', 'Velicina majice',
-    # 'Godiste', 'Prebivaliste', 'Email', 'Mobitel', 'Vrijeme', 'Razlika',
+    # 'Godiste', 'Prebivaliste', 'Email', 'Mobitel', 'Vrijeme', 'Zaostatak',
     # 'Status', 'Personal Best', 'UCI ID']
     [
       start_number&.value, position, racer.first_name, racer.last_name,

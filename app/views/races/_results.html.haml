@@ -12,7 +12,7 @@
       - (1..@race.laps).each do |lap|
         .mdl-cell.mdl-cell--1-col= "KT #{lap}"
     .mdl-cell.mdl-cell--1-col Vrijeme
-    .mdl-cell.mdl-cell--1-col Razlika
+    .mdl-cell.mdl-cell--1-col Zaostatak
 
   - @race.categories.order(id: :asc).each_with_index do |category, index|
     .mdl-grid{ class: "cat-#{index}" }

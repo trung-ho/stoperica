@@ -1,79 +1,77 @@
 #raceResults
-.mdl-grid.is-heading
-  .mdl-cell.mdl-cell--1-col Mjesto
-  .mdl-cell.mdl-cell--1-col Startni broj
-  .mdl-cell.mdl-cell--1-col
-    - if @race.uci_display?
-      UCI ID
-  .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone Ime i Prezime
-  .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Klub
-  .mdl-cell.mdl-cell--1-col Status
-  - unless @race.laps.nil?
-    - (1..@race.laps).each do |lap|
-      .mdl-cell.mdl-cell--1-col= "KT #{lap}"
-  .mdl-cell.mdl-cell--1-col Vrijeme
-  .mdl-cell.mdl-cell--1-col Razlika
-  - if @is_admin
+  .mdl-grid.is-heading
+    .mdl-cell.mdl-cell--1-col Mjesto
+    .mdl-cell.mdl-cell--1-col Startni broj
     .mdl-cell.mdl-cell--2-col
+      - if @race.uci_display?
+        UCI ID
+    .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone Ime i Prezime
+    .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Klub
+    .mdl-cell.mdl-cell--1-col Status
+    - unless @race.laps.nil?
+      - (1..@race.laps).each do |lap|
+        .mdl-cell.mdl-cell--1-col= "KT #{lap}"
+    .mdl-cell.mdl-cell--1-col Vrijeme
+    .mdl-cell.mdl-cell--1-col Razlika
 
-- @race.categories.order(id: :asc).each_with_index do |category, index|
-  .mdl-grid{ class: "cat-#{index}" }
-    .mdl-cell.mdl-cell--2-col
-      = category.name.upcase
+  - @race.categories.order(id: :asc).each_with_index do |category, index|
+    .mdl-grid{ class: "cat-#{index}" }
+      .mdl-cell.mdl-cell--2-col
+        = category.name.upcase
 
-  - @sorted_results[category].each_with_index do |race_result, index|
-    .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
-      .mdl-cell.mdl-cell--1-col
-        - if race_result.status == 3 && @race.ended_at.present?
-          = race_result.position
+    - @sorted_results[category].each_with_index do |race_result, index|
+      .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
+        .mdl-cell.mdl-cell--1-col
+          - if race_result.status == 3 && @race.ended_at.present?
+            = race_result.position
 
-          - if index <= 2
-            = render partial: 'trophy', locals: { index: index }
+            - if index <= 2
+              = render partial: 'trophy', locals: { index: index }
 
-      .mdl-cell.mdl-cell--1-col= race_result.start_number&.value
-      .mdl-cell.mdl-cell--1-col
-        - if @race.uci_display?
-          = race_result.racer.uci_id
-      .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone
-        - if @is_admin
-          = race_result.racer.year_of_birth
-        = link_to race_result.racer do
-          .emoji= race_result.racer.country_flag
+        .mdl-cell.mdl-cell--1-col= race_result.start_number&.value
+        .mdl-cell.mdl-cell--2-col
           - if @race.uci_display?
-            = race_result.racer.uci_name
-          - else
-            = race_result.racer.full_name
-      .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
-        = race_result.racer.club.try(:name)
-      .mdl-cell.mdl-cell--1-col= race_result.pretty_status
-      - unless @race.laps.nil?
-        - (1..@race.laps).each do |lap|
-          .mdl-cell.mdl-cell--1-col= race_result.lap_time lap
-      .mdl-cell.mdl-cell--1-col= race_result.finish_time
-      - if @race.ended_at.blank?
-        .mdl-cell.mdl-cell--1-col= '--'
-      - else
-        - if index.zero?
-          .mdl-cell.mdl-cell--1-col
-        -else
-          .mdl-cell.mdl-cell--1-col.losers
-            = race_result.finish_delta
+            = race_result.racer.uci_id
+        .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone
+          - if @is_admin
+            = race_result.racer.year_of_birth
+          = link_to race_result.racer do
+            .emoji= race_result.racer.country_flag
+            - if @race.uci_display?
+              = race_result.racer.uci_name
+            - else
+              = race_result.racer.full_name
+        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
+          = race_result.racer.club.try(:name)
+        .mdl-cell.mdl-cell--1-col= race_result.pretty_status
+        - unless @race.laps.nil?
+          - (1..@race.laps).each do |lap|
+            .mdl-cell.mdl-cell--1-col= race_result.lap_time lap
+        .mdl-cell.mdl-cell--1-col= race_result.finish_time
+        - if @race.ended_at.blank?
+          .mdl-cell.mdl-cell--1-col= '--'
+        - else
+          - if index.zero?
+            .mdl-cell.mdl-cell--1-col
+          -else
+            .mdl-cell.mdl-cell--1-col.losers
+              = race_result.finish_delta
 
-      - if @is_admin && race_result.status && race_result.status < 2
-        .mdl-cell.mdl-cell--1-col
-          = form_for race_result do |f|
-            = f.hidden_field :status, value: 2
-            .actions
-              = f.submit 'Na startu', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
-      - if @is_admin
-        .mdl-cell.mdl-cell--1-col
-          = link_to 'Izmijeni', edit_race_result_path(race_result), class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
-          = form_for race_result, method: :delete do |f|
-            .actions
-              = f.submit 'Odjavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect', onclick: "return confirm('Ovo ce izbrisati rezultat iz baze podataka. Molim potvrdi.')"
+        - if @is_admin && race_result.status && race_result.status < 2
+          .mdl-cell.mdl-cell--3-col
+            = form_for race_result do |f|
+              = f.hidden_field :status, value: 2
+              .actions
+                = f.submit 'Na startu', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+        - if @is_admin
+          .mdl-cell.mdl-cell--3-col
+            = link_to 'Izmijeni', edit_race_result_path(race_result), class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+            = form_for race_result, method: :delete do |f|
+              .actions
+                = f.submit 'Odjavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect', onclick: "return confirm('Ovo ce izbrisati rezultat iz baze podataka. Molim potvrdi.')"
 
-        #adminFormContainer.mdl-cell.mdl-cell--1-col
-          = form_for race_result do |f|
-            = f.text_field :start_number, value: race_result.start_number&.value, placeholder: 'Startni broj', autocomplete: 'off'
-            = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: race_result.category_id
-            = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+          #adminFormContainer.mdl-cell.mdl-cell--6-col
+            = form_for race_result do |f|
+              = f.text_field :start_number, value: race_result.start_number&.value, placeholder: 'Startni broj', autocomplete: 'off'
+              = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: race_result.category_id
+              = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'

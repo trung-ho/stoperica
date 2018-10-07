@@ -96,7 +96,6 @@
         return '<div class="autocomplete-suggestion" data-val="' + item[0] + '" data-id="' + item[1] + '">' + item[0].replace(re, "<b>$1</b>") + '</div>';
       },
       onSelect: function (event, term, item) {
-        console.log(event, term, item);
         document.querySelector('#race_result_racer_id').value = item.dataset.id;
       }
     });

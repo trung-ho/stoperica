@@ -72,6 +72,6 @@
 
           #adminFormContainer.mdl-cell.mdl-cell--6-col
             = form_for race_result do |f|
-              = f.text_field :start_number, value: race_result.start_number&.value, placeholder: 'Startni broj', autocomplete: 'off'
+              = f.select :start_number, options_for_select(@race.pool.start_numbers.collect{|sn| [sn.value, sn.value]}, race_result.start_number&.value), include_blank: true
               = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: race_result.category_id
               = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'

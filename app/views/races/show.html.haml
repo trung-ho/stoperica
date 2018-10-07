@@ -15,7 +15,7 @@
       %b Napomena:
       Odjave su onemogućene za ovu utrku.
 
-- if user_signed_in? && current_user.admin? && @race.pool
+- if @is_admin && @race.pool
   %h4
     Baza brojeva:
     = link_to @race.pool&.name, pool_path(@race.pool)
@@ -25,7 +25,7 @@
     .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
       Natrag
 
-  - if user_signed_in? && current_user.admin
+  - if @is_admin
     = link_to race_path(@race, format: "csv") do
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
         Export CSV
@@ -64,7 +64,7 @@
   %h4
     Informacije o utrci
 
-- if user_signed_in? && current_user.admin
+- if @is_admin
   = form_for RaceResult.new do |f|
     %input#racer_search{ type: 'text', placeholder: 'Natjecatelji...' }
     = f.hidden_field :racer_id

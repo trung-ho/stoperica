@@ -6,13 +6,6 @@
   %br
 
 %table.clubs_table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
-  %thead
-    %tr
-      %th Ime
-      - if user_signed_in? && current_user.admin
-        %th
-        %th
-
   %tbody
     - Club.categories.each do |category|
       %tr.has-background-accent

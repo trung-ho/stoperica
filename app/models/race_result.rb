@@ -47,7 +47,11 @@ class RaceResult < ApplicationRecord
     when 2
       'Na startu'
     when 3
-      "#{ended_text} #{lap_times.length} #{lap_text(lap_times.length)}"
+      if race.laps
+        "#{ended_text} #{lap_times.length} #{lap_text(lap_times.length)}"
+      else
+        ended_text
+      end
     when 4
       'DNF'
     when 5

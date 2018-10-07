@@ -29,37 +29,36 @@
     }
   });
 
-= paginate @racers
-%table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
-  %thead
-    %tr
-      %th Ime i Prezime
-      %th Godina rodenja
-      %th Klub
-      - if current_user&.admin?
-        %th UCI ID
-      - if user_signed_in? && current_user.admin
-        %th Email
-        %th Broj mobitela
-        %th
-        %th
 
-  %tbody
-    - @racers.each do |racer|
-      %tr
-        %td
-          .emoji= racer.country_flag
-          = link_to racer.full_name, racer
-        %td= racer.year_of_birth
-        %td= racer.club.try(:name) || '- -'
-        - if user_signed_in? && current_user.admin
-          %td= racer.uci_id
-          %td= racer.email
-          %td
-            %a{href: "tel:#{racer.phone_number}"}
-              = racer.phone_number
-          %td
-            = link_to 'Izmijeni', edit_racer_path(racer), class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored', style: 'color: white;'
-          %td
-            = form_for racer, method: :delete do |f|
-              = f.submit 'Izbrisi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent', style: 'color: white;'
+.mdl-grid.is-heading
+  .mdl-cell.mdl-cell--3-col Ime i Prezime
+  .mdl-cell.mdl-cell--2-col Godina rodenja
+  .mdl-cell.mdl-cell--2-col Klub
+  - if user_signed_in? && current_user.admin
+    .mdl-cell.mdl-cell--1-col UCI ID
+    .mdl-cell.mdl-cell--1-col Email
+    .mdl-cell.mdl-cell--1-col Broj mobitela
+    .mdl-cell.mdl-cell--2-col
+
+- @racers.each_with_index do |racer, index|
+  .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
+    .mdl-cell.mdl-cell--3-col
+      .emoji= racer.country_flag
+      = link_to racer.full_name, racer
+    .mdl-cell.mdl-cell--2-col
+      = racer.year_of_birth
+    .mdl-cell.mdl-cell--2-col
+      = racer.club.try(:name) || '- -'
+    - if user_signed_in? && current_user.admin
+      .mdl-cell.mdl-cell--1-col= racer.uci_id
+      .mdl-cell.mdl-cell--1-col= racer.email
+      .mdl-cell.mdl-cell--1-col
+        %a{href: "tel:#{racer.phone_number}"}
+          = racer.phone_number
+      .mdl-cell.mdl-cell--1-col
+        = link_to 'Izmijeni', edit_racer_path(racer), class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored', style: 'color: white;'
+      .mdl-cell.mdl-cell--1-col
+        = form_for racer, method: :delete do |f|
+          = f.submit 'Izbrisi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent', style: 'color: white;'
+
+= paginate @racers

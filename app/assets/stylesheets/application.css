@@ -255,3 +255,13 @@ option {
 .mdl-navigation__link.is-active {
   color: rgb(64,196,255) !important;
 }
+
+.mdl-grid.is-heading {
+  background-color: #ccc;
+}
+
+@media screen and (max-width: 1024px) {
+  .mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
+    padding: 0 1rem;
+  }
+}

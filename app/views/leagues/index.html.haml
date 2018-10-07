@@ -7,21 +7,20 @@
     = link_to 'Izmijeni', edit_league_path(league)
   %hr
 
-  %table.mdl-data-table.mdl-shadow--2dp.wide_table
-    %thead
-      %tr
-        %th Utrka
-        %th Datum
-        %th Prijave do
-        %th Prijave/Rezultati
-        / TODO: add personal notification if I'm attending the race
+  .mdl-grid.is-heading
+    .mdl-cell.mdl-cell--6-col.mdl-cell--2-col-phone Utrka
+    .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Datum
+    .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Prijave do
+    .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Prijave/Rezultati
 
-    %tbody
-      - league.races.order(date: :desc).each do |race|
-        %tr
-          %td= race.name
-          %td= l race.date, format: :short
-          %td= l race.registration_threshold, format: :short
-          %td= link_to race.ended_at.present? ? 'REZULTATI' : 'PRIJAVE', race
+  - league.races.order(date: :desc).each do |race|
+    .mdl-grid
+      .mdl-cell.mdl-cell--6-col.mdl-cell--2-col-phone= race.name
+      .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
+        = l race.date, format: :short
+      .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
+        = l race.registration_threshold, format: :short
+      .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
+        = link_to race.ended_at.present? ? 'REZULTATI' : 'PRIJAVE', race
 
 

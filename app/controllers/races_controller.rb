@@ -13,6 +13,7 @@ class RacesController < ApplicationController
   # GET /races/1
   # GET /races/1.json
   def show
+    @is_admin = (user_signed_in? && current_user.admin?)
     respond_to do |format|
       format.html { render :show }
       format.json do
@@ -117,6 +118,7 @@ class RacesController < ApplicationController
   end
 
   def check_race_result
+    # TODO rijesi ovo groblje
     has_race_result = current_user&.racer&.races&.include?(@race)
     @racer_has_race_result = has_race_result
     if has_race_result

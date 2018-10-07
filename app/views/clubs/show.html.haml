@@ -1,6 +1,6 @@
 %h1
   = @club.name
-%h2.is-capitalized
+%h4.is-capitalized
   = @club.category
 
 - if @club.user
@@ -11,25 +11,22 @@
 
 %h4 Natjecatelji
 
-%table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
-  %thead
-    %tr
-      %th Ime
-      %th.mdl-data-table__cell--non-numeric Godina rodenja
-      - if user_signed_in? && current_user.admin
-        %th Email
-        %th Broj mobitela
+.mdl-grid.is-heading
+  .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone Ime
+  .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone Godina rodenja
+  - if user_signed_in? && current_user.admin
+    .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone Email
+    .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone Broj mobitela
 
-  %tbody
-    - @club.racers.order(first_name: :asc).each do |racer|
-      %tr
-        %td= link_to racer.full_name, racer
-        %td.mdl-data-table__cell--non-numeric= racer.year_of_birth
-        - if user_signed_in? && current_user.admin
-          %td= racer.email
-          %td
-            %a{href: "tel:#{racer.phone_number}"}
-              = racer.phone_number
+- @club.racers.order(first_name: :asc).each_with_index do |racer, index|
+  .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
+    .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone= link_to racer.full_name, racer
+    .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone= racer.year_of_birth
+    - if user_signed_in? && current_user.admin
+      .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone= racer.email
+      .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone
+        %a{href: "tel:#{racer.phone_number}"}
+          = racer.phone_number
 
 %br
 %br

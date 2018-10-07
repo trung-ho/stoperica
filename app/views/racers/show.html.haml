@@ -52,23 +52,21 @@
 %h4
   Utrke
 
-%table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
-  %thead
-    %tr
-      %th Utrka
-      %th Kategorija
-      %th Mjesto
-      %th Vrijeme
-  %tbody
-    - @racer.race_results.sort{ |a, b| b.id <=> a.id }.each do |race_result|
-      %tr
-        %td= race_result.race.name
-        %td= race_result.category.name
-        %td
-          = race_result.try(:position)
-          - if (race_result.try(:position) || 0) <= 3 && race_result.status == 3
-            = render partial: '/races/trophy', locals: { index: (race_result.try(:position) || 0) - 1 }
-        %td= race_result.finish_time
+.mdl-grid.is-heading
+  .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone Utrka
+  .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone Kategorija
+  .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone Mjesto
+  .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone Vrijeme
+
+- @racer.race_results.order(id: :desc).each_with_index do |race_result, index|
+  .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
+    %b.mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone= race_result.race.name
+    .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone= race_result.category.name
+    .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone
+      = race_result.try(:position)
+      - if (race_result.try(:position) || 0) <= 3 && race_result.status == 3
+        = render partial: '/races/trophy', locals: { index: (race_result.try(:position) || 0) - 1 }
+    .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone= race_result.finish_time
 
 
 %br

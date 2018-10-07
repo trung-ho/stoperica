@@ -3,6 +3,10 @@ class DashboardController < ApplicationController
 
   before_action :only_admin, only: [:index]
 
+  def certbot
+    render plain: 'GNY2fdOrPES30fZ3L_PWuQxR9OdQaZRJjrHoTYSj_N0.lbHyykbnulS06xq8vXx1F8lSSc1pPx-yL-IlyNKpEY0'
+  end
+
   def timesync
     ts = {
       jsonrpc: '2.0',

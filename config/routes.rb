@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get '.well-known/acme-challenge/GNY2fdOrPES30fZ3L_PWuQxR9OdQaZRJjrHoTYSj_N0' => 'dashboard#certbot'
   resources :leagues, path: :natjecanja
   resources :pools
   devise_for :users

@@ -19,8 +19,8 @@ class RacesController < ApplicationController
       format.json do
         render json: @race,
                include: [
-                { sorted_results: { include: [{ racer: { include: :club } }, :category, :start_number], methods: [:finish_time] } },
-                { race_results: { include: [{ racer: { include: :club } }, :category, :start_number], methods: [:finish_time] } },
+                { sorted_results: { include: [{ racer: { include: :club } }, :category, :start_number], methods: [:finish_time, :finish_delta] } },
+                { race_results: { include: [{ racer: { include: :club } }, :category, :start_number], methods: [:finish_time, :finish_delta] } },
                 categories: { methods: [:started?, :started_at] }
                ]
       end
@@ -103,7 +103,7 @@ class RacesController < ApplicationController
 
   def set_race
     if action_name == 'show'
-      @race = Race.includes(race_results: { racer: :club }).find(params[:id])
+      @race = Race.includes(race_results: [{ racer: :club }, :start_number]).find(params[:id])
     else
       @race = Race.find(params[:id])
     end

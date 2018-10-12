@@ -1,11 +1,11 @@
 class RacersController < ApplicationController
-  before_action :set_racer, only: %i[show edit update destroy]
+  before_action :set_racer, only: %i[edit update destroy]
   before_action :only_admin, only: %i[edit destroy]
 
   # GET /racers
   # GET /racers.json
   def index
-    @racers = Racer.includes(:race_results).order(:created_at).page(params[:page])
+    @racers = Racer.includes(:club).order(:created_at).page(params[:page])
   end
 
   # GET /racers
@@ -19,6 +19,7 @@ class RacersController < ApplicationController
   # GET /racers/1
   # GET /racers/1.json
   def show
+    @racer = Racer.includes(race_results: [:race, :category]).find(params[:id])
   end
 
   # GET /racers/new

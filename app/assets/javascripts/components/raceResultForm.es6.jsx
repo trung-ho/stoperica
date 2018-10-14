@@ -27,7 +27,7 @@ class RaceResultForm extends React.Component {
     }
 
     saveResult() {
-      const {racerNumber, hours, minutes, seconds} = this.state;
+      const {racerNumber, hours, minutes, seconds, millis} = this.state;
       const raceId = DraftResultStore.getRaceId();
       let ajax = new Ajax(
         `/start_numbers/start_time?race_id=${raceId}&start_number=${racerNumber}`,

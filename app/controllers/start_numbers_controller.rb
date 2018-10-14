@@ -64,8 +64,7 @@ class StartNumbersController < ApplicationController
 
   def start_time
     race = Race.find params[:race_id]
-    start_number = StartNumber.find_by(value: params[:start_number], race: race)
-    start_number = StartNumber.find_by(value: params[:start_number]) if start_number.nil?
+    start_number = race.pool.start_numbers.find_by!(value: params[:start_number])
     start_time = start_number.race_results.find_by(race: race).started_at || race.started_at
     render json: { start_time: start_time }
   end

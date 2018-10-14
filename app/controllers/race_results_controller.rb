@@ -80,7 +80,7 @@ class RaceResultsController < ApplicationController
 
   # POST /race_results/from_timing
   def from_timing
-    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: @start_number)
+    race_result = RaceResult.find_by!(race: @race, start_number: @start_number)
     race_result.lap_times << params[:time].to_f / 1000 if params[:time]
     race_result.status = params[:status]
     race_result.save!
@@ -154,7 +154,7 @@ class RaceResultsController < ApplicationController
 
   def set_start_number
     @race = Race.find(params[:race_id])
-    @race.pool.start_numbers.find_by!(value: params[:start_number])
+    @start_number = @race.pool.start_numbers.find_by!(value: params[:start_number])
   end
 
   def race_result_params

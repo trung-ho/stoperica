@@ -70,7 +70,10 @@ class RacesController < ApplicationController
     @race.ended_at = Time.at(params[:ended_at].to_i / 1000) if params[:ended_at].present?
     @race.save!
 
-    @race.assign_positions if params[:ended_at].present? && @race.ended_at
+    if params[:ended_at].present? && @race.ended_at
+      @race.assign_positions
+      @race.assign_points if @race.league&.xczld?
+    end
 
     if params[:started_at].present? && params[:categories].present?
       start_time = Time.at(params[:started_at].to_i / 1000)

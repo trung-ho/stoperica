@@ -1,8 +1,10 @@
 #raceResults
   .mdl-grid.is-heading
     .mdl-cell.mdl-cell--1-col Mjesto
+    - if @race.league&.xczld?
+      .mdl-cell.mdl-cell--1-col Bodovi
     .mdl-cell.mdl-cell--1-col Startni broj
-    .mdl-cell.mdl-cell--2-col
+    .mdl-cell{ class: "mdl-cell--#{@race.league&.xczld? ? 1 : 2}-col" }
       - if @race.uci_display?
         UCI ID
     .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone Ime i Prezime
@@ -23,13 +25,15 @@
       .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
         .mdl-cell.mdl-cell--1-col
           - if race_result.status == 3 && @race.ended_at.present?
-            = race_result.position
+            %b= race_result.position
 
             - if index <= 2
               = render partial: 'trophy', locals: { index: index }
 
+        - if @race.league&.xczld?
+          .mdl-cell.mdl-cell--1-col= race_result.points
         .mdl-cell.mdl-cell--1-col= race_result.start_number&.value
-        .mdl-cell.mdl-cell--2-col
+        .mdl-cell{ class: "mdl-cell--#{@race.league&.xczld? ? 1 : 2}-col" }
           - if @race.uci_display?
             = race_result.racer.uci_id
         .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone

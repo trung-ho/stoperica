@@ -24,6 +24,29 @@ class Race < ApplicationRecord
     end
   end
 
+  def self.points
+    [
+      250, 200, 160, 150, 140, 130, 120, 110, 100, 90, 80, 75, 70, 65, 60, 55,
+      50, 45, 40, 35, 30, 25, 20, 15, 10
+    ]
+  end
+
+  def assign_points
+    # za svaku kategoriju
+    categories.each do |category|
+      # nadi top 25 rezultata
+      results = race_results.includes(:racer)
+        .where(status: 3).where(category: category)
+        .sort{|x,y| x.finish_time <=> y.finish_time}
+        .select{ |rr| rr.lap_times.length > 0 }.first(25)
+
+      results.each_with_index do |rr, index|
+        # podijeli bodove
+        rr.update!(points: Race.points[index])
+      end
+    end
+  end
+
   def to_csv
     CSV.generate() do |csv|
       csv << ['Startni broj', 'Pozicija', 'Ime', 'Prezime', 'Klub', 'Kategorija',

@@ -7,6 +7,7 @@ class RaceResult < ApplicationRecord
 
   validate :disallow_duplicates
   after_save :calculate_climbing_positions, if: :saved_change_to_climbs?
+  after_save :assign_league_number
 
   def disallow_duplicates
     return if self.id
@@ -191,6 +192,17 @@ class RaceResult < ApplicationRecord
     res.sort_by { |rr| [rr.climbs['final']['position'], rr.climbs['final']['time']] }
       .each_with_index do |rr, index|
       rr.update_column(:position, index + 1)
+    end
+  end
+
+  # assign same number throughout the league
+  def assign_league_number
+    if start_number.nil? && race.league&.xczld?
+      first_race = race.league.races.first
+      first_number = RaceResult.find_by(race: first_race, racer: racer)&.start_number_id
+      if first_number
+        self.update_column(:start_number_id, first_number)
+      end
     end
   end
 end

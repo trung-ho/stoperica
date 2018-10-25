@@ -17,12 +17,7 @@ class RacesController < ApplicationController
     respond_to do |format|
       format.html { render :show }
       format.json do
-        render json: @race,
-               include: [
-                { sorted_results: { include: [{ racer: { include: :club } }, :category, :start_number], methods: [:finish_time, :finish_delta] } },
-                { race_results: { include: [{ racer: { include: :club } }, :category, :start_number], methods: [:finish_time, :finish_delta] } },
-                categories: { methods: [:started?, :started_at] }
-               ]
+        render json: @race, include: json_includes
       end
       format.csv { send_data @race.to_csv }
     end
@@ -157,5 +152,27 @@ class RacesController < ApplicationController
         end
       end
     end
+  end
+
+  def json_includes
+    [
+      { sorted_results: race_result_includes },
+      { race_results: race_result_includes },
+      categories: { methods: [:started?, :started_at] },
+    ]
+  end
+
+  def race_result_includes
+    personal_fields = [:email, :phone_number, :year_of_birth, :gender, :address,
+      :zip_code, :town, :day_of_birth, :month_of_birth, :shirt_size]
+    personal_fields = [] if current_user&.admin?
+    {
+      include: [
+        { racer: { include: :club, except: personal_fields } },
+        :category,
+        :start_number
+      ],
+      methods: [:finish_time, :finish_delta]
+    }
   end
 end

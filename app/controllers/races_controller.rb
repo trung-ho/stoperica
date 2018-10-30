@@ -13,7 +13,8 @@ class RacesController < ApplicationController
   # GET /races/1
   # GET /races/1.json
   def show
-    @is_admin = (user_signed_in? && current_user.admin?)
+    @is_admin = user_signed_in? && current_user.admin?
+    @start_numbers = @race.pool.start_numbers.sort_by{|sn| [sn.value.to_i]}.collect{|sn| [sn.value, sn.value]} unless @race.penjanje?
     respond_to do |format|
       format.html { render :show }
       format.json do
@@ -36,8 +37,7 @@ class RacesController < ApplicationController
   end
 
   # GET /races/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /races
   # POST /races.json

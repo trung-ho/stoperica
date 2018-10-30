@@ -106,7 +106,7 @@ class RacesController < ApplicationController
 
   def set_race
     if action_name == 'show'
-      @race = Race.includes(race_results: [{ racer: :club }, :start_number]).find(params[:id])
+      @race = Race.includes(:league, :categories, race_results: [{ racer: :club }, :start_number]).find(params[:id])
     else
       @race = Race.find(params[:id])
     end

@@ -77,6 +77,6 @@
           - if @race.pool.present?
             #adminFormContainer.mdl-cell.mdl-cell--6-col
               = form_for race_result do |f|
-                = f.select :start_number, options_for_select(@race.pool.start_numbers.where.not(id: @race.start_number_ids - [race_result.start_number_id]).sort_by{|sn| [sn.value.to_i]}.collect{|sn| [sn.value, sn.value]}, race_result.start_number&.value), include_blank: true
+                = f.select :start_number, options_for_select(@start_numbers, race_result.start_number&.value), include_blank: true
                 = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: race_result.category_id
                 = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'

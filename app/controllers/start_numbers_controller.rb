@@ -57,7 +57,7 @@ class StartNumbersController < ApplicationController
   def destroy
     @start_number.destroy
     respond_to do |format|
-      format.html { redirect_to start_numbers_url, notice: 'Start number was successfully destroyed.' }
+      format.html { redirect_to @start_number&.pool, notice: 'Start number was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

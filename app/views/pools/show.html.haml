@@ -29,5 +29,8 @@
         %td= start_number.tag_id
         %td= link_to 'Show', start_number
         %td= link_to 'Edit', edit_start_number_path(start_number)
-        %td TODO DESTROY
+        %td
+          = form_for start_number, method: 'DELETE' do |f|
+            .actions
+              = f.submit 'Izbrisi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
 

@@ -10,6 +10,7 @@
     %tr
       %th Name
       %th Race
+      %th Type
       %th
       %th
       %th
@@ -19,6 +20,7 @@
       %tr
         %td= category.name
         %td= category.race&.name
+        %td= category.category
         %td= link_to 'Show', category
         %td= link_to 'Edit', edit_category_path(category)
         %td

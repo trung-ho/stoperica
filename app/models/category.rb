@@ -1,6 +1,7 @@
 class Category < ApplicationRecord
   belongs_to :race
   has_many :race_results
+  enum category: %i[zene u16 16-20 20-30 30-40 40-50 50]
 
   def started?
     race_results.count > 0 && race_results.first.started_at.present?

@@ -31,6 +31,13 @@ class Race < ApplicationRecord
     ]
   end
 
+  def self.lead_points
+    [
+      100, 80, 65, 55, 51, 47, 43, 40, 37, 34, 31, 28, 26, 24, 22, 20, 18, 16,
+      14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+    ]
+  end
+
   def assign_points
     # za svaku kategoriju
     categories.each do |category|

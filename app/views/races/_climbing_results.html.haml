@@ -2,6 +2,7 @@
   %thead
     %tr
       %th Mjesto
+      %th Bodovi
       %th Startni Broj
       %th Natjecatelj
       %th Klub
@@ -24,9 +25,10 @@
       - @sorted_results.select{ |rr| rr.category == category }.each do |rr|
         %tr
           %td
-            = rr.position
+            %b= rr.position
             - if rr.position && rr.position < 4
               = render partial: 'trophy', locals: { index: rr.position - 1 }
+          %td= rr.points
           %td= rr.start_number&.value
           %td
             = link_to rr.racer do
@@ -58,7 +60,7 @@
           - if user_signed_in? && current_user.admin
             %td#adminFormContainer
               = form_for rr do |f|
-                = f.text_field :start_number, value: rr.start_number&.value, placeholder: 'Startni broj', autocomplete: 'off'
+                = f.select :start_number, options_for_select(@start_numbers, rr.start_number&.value), include_blank: true
                 = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: rr.category_id
                 = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
 

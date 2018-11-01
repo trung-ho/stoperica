@@ -29,6 +29,7 @@
 .page-content {
   width: 80%;
   margin: 2em auto;
+  overflow-x: auto;
 }
 
 .field {

@@ -7,7 +7,8 @@ class TimeSync {
     if (!this.ts) {
       this.ts = timesync.create({
         server: '/timesync',
-        interval: 60000
+        interval: 60000,
+        repeat: 1
       });
     }
   }

@@ -17,10 +17,6 @@ class Racer < ApplicationRecord
     "#{last_name.mb_chars.upcase} #{first_name}"
   end
 
-  def total_points
-    race_results.sum { |rr| rr.points || 0 }
-  end
-
   def country_flag
     if country.present?
       Country.new(country).emoji_flag

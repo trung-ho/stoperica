@@ -47,7 +47,7 @@
       %select{ name: 'racer[shirt_size]' }
         %option{ disabled: true, selected: @racer.shirt_size.nil?, value: 0 }
           Velicina majice
-        - %w(S M L XL).each do |size|
+        - %w(S M L XL XXL).each do |size|
           %option{ value: size, selected: @racer.shirt_size == size }
             = size
   .field

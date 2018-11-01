@@ -146,8 +146,8 @@ class RaceResult < ApplicationRecord
         position = index + 1
         peers = res.take(position).select { |r| r.climbs[level]['points'] == rr.climbs[level]['points'] }
         if peers.size > 1
-          positions = position-peers.size..position
-          avg = positions.inject(0.0) { |sum, el| sum + (el || position - peers.size + 1) } / positions.size
+          positions = (position + 1)-peers.size..position
+          avg = positions.inject(0.0) { |sum, el| sum + el } / positions.size
           avg = avg.round 2
 
           peers.each do |p|

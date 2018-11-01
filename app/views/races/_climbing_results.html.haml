@@ -58,7 +58,7 @@
           - if user_signed_in? && current_user.admin
             %td#adminFormContainer
               = form_for rr do |f|
-                = f.text_field :start_number, value: rr.start_number&.value, placeholder: 'Startni broj', autocomplete: 'off'
+                = f.select :start_number, options_for_select(@start_numbers, rr.start_number&.value), include_blank: true
                 = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: rr.category_id
                 = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
 

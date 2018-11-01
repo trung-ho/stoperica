@@ -1,5 +1,5 @@
 class LeaguesController < ApplicationController
-  before_action :only_admin, except: [:index]
+  before_action :only_admin, except: [:index, :show]
   before_action :set_league, only: [:show, :edit, :update, :destroy]
 
   # GET /leagues

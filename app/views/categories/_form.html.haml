@@ -12,5 +12,8 @@
   .field
     = f.label :race_id
     = f.text_field :race_id
+  .field
+    = f.label 'Kategorija'
+    = f.select :category, options_for_select(Category.categories.collect { |s| [s[0].humanize, s[0]] }, selected: @category.category), {}
   .actions
     = f.submit 'Save'

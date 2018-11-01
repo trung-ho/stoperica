@@ -191,7 +191,11 @@ class RaceResult < ApplicationRecord
       .select { |rr| rr.climbs.dig('final', 'position') }
     res.sort_by { |rr| [rr.climbs['final']['position'], rr.climbs['q']['position'], rr.climbs['final']['time']] }
       .each_with_index do |rr, index|
-      rr.update_column(:position, index + 1)
+      if Race.lead_points[index]
+        rr.update_columns(position: index + 1, points: Race.lead_points[index])
+      else
+        rr.update_column(:position, index + 1)
+      end
     end
   end
 

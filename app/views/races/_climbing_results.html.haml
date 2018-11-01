@@ -2,6 +2,7 @@
   %thead
     %tr
       %th Mjesto
+      %th Bodovi
       %th Startni Broj
       %th Natjecatelj
       %th Klub
@@ -24,9 +25,10 @@
       - @sorted_results.select{ |rr| rr.category == category }.each do |rr|
         %tr
           %td
-            = rr.position
+            %b= rr.position
             - if rr.position && rr.position < 4
               = render partial: 'trophy', locals: { index: rr.position - 1 }
+          %td= rr.points
           %td= rr.start_number&.value
           %td
             = link_to rr.racer do

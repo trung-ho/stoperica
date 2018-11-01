@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :leagues, path: :natjecanja
+  resources :leagues, path: :natjecanja, param: :slug
   resources :pools
   devise_for :users
   root to: 'dashboard#info'

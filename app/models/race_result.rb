@@ -209,6 +209,12 @@ class RaceResult < ApplicationRecord
       ]
     end
     rest.each_with_index do |rr, index|
+      previous = rest[index - 1]
+      if rr.climbs.dig('q', 'position').present? && previous&.climbs.dig('q', 'position') == rr.climbs.dig('q', 'position')
+        rr.update_columns(position: previous.position, points: previous.points)
+        next
+      end
+
       if Race.lead_points[res.size + index]
         rr.update_columns(position: res.size + index + 1, points: Race.lead_points[res.size + index])
       else

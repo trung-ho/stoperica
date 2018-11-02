@@ -9,22 +9,38 @@
 
 .mdl-tabs.mdl-js-tabs.mdl-js-ripple-effect
   .mdl-tabs__tab-bar
-    %a.mdl-tabs__tab.is-active{href: "#natjecatelji-panel"} Natjecatelji
+    - if @league.xczld?
+      %a.mdl-tabs__tab.is-active{href: "#natjecatelji-panel"} Poredak natjecatelja
+    - if @league.lead?
+      %a.mdl-tabs__tab.is-active{href: "#klubovi-panel"} Poredak klubova
     %a.mdl-tabs__tab{href: "#utrke-panel"} Utrke
 
-  #natjecatelji-panel.mdl-tabs__panel.is-active
-    - Category.categories.each do |cat, _|
-      %h4= cat.upcase
-      %ol.mdl-list
-        - @league.racers[cat].sort_by{|k, v| v.sum{|r| -(r.points || 0)}}.each_with_index do |(_, results), index|
-          %li.mdl-list__item.mdl-list__item--two-line
-            %span.mdl-list__item-primary-content
-              .mdl-list__item-icon= index + 1
-              .emoji= results[0].racer.country_flag
-              = link_to results[0].racer.uci_name, racer_path(results[0].racer)
-              %span.mdl-list__item-sub-title= results[0].racer.club&.name
-            %b.mdl-list__item-secondary-info
-              = results.sum{ |r| r.points || 0 }
+  - if @league.xczld?
+    #natjecatelji-panel.mdl-tabs__panel.is-active
+      - Category.categories.each do |cat, _|
+        %h4= cat.upcase
+        %ol.mdl-list
+          - @league.racers[cat].sort_by{|k, v| v.sum{|r| -(r.points || 0)}}.each_with_index do |(_, results), index|
+            %li.mdl-list__item.mdl-list__item--two-line
+              %span.mdl-list__item-primary-content
+                .mdl-list__item-icon= index + 1
+                .emoji= results[0].racer.country_flag
+                = link_to results[0].racer.uci_name, racer_path(results[0].racer)
+                %span.mdl-list__item-sub-title= results[0].racer.club&.name
+              %b.mdl-list__item-secondary-info
+                = results.sum{ |r| r.points || 0 }
+
+  - if @league.lead?
+    #klubovi-panel.mdl-tabs__panel.is-active
+      .mdl-grid.is-heading
+        .mdl-cell.mdl-cell--8-col.mdl-cell--2-col-phone Klub
+        .mdl-cell.mdl-cell--4-col.mdl-cell--2-col-phone Bodovi
+
+      - @league.club_league_points.where.not(total: 0).order(total: :desc).each do |cp|
+        .mdl-grid
+          .mdl-cell.mdl-cell--8-col.mdl-cell--2-col-phone
+            = link_to cp.club.name, club_path(cp.club)
+          %b.mdl-cell.mdl-cell--4-col.mdl-cell--2-col-phone= cp.total
 
   #utrke-panel.mdl-tabs__panel
     .mdl-grid.is-heading

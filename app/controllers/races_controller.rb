@@ -97,8 +97,8 @@ class RacesController < ApplicationController
   end
 
   def assign_positions
-    @race.assign_positions
-    @race.assign_points if @race.league&.xczld?
+    @race.assign_positions if @race.league&.xczld?
+    @race.assign_points
     redirect_to @race
   end
 

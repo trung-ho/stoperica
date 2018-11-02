@@ -101,8 +101,7 @@ class RaceResultsController < ApplicationController
 
   def from_climbing
     raise 'Not Found' if @start_number.nil?
-    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: @start_number)
-    raise 'Not Found' if race_result.nil?
+    race_result = RaceResult.find_by!(race_id: params[:race_id], start_number: @start_number)
     climbs = race_result.climbs
     climbs[params[:level]] = {
       points: params[:points],

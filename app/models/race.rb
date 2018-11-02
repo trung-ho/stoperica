@@ -44,7 +44,11 @@ class Race < ApplicationRecord
       clps.each do |clp|
         points = 0
         categories.each do |c|
-          points += c.race_results.joins(:racer).where('racers.club_id = ?', clp.club.id).order(position: :asc).first(5).sum(&:points)
+          points += c.race_results.joins(:racer)
+                    .where('racers.club_id = ?', clp.club.id)
+                    .order(position: :asc)
+                    .first(5)
+                    .sum(&:points)
         end
         data = clp.points
         data[id] = points

@@ -186,9 +186,10 @@ class RaceResult < ApplicationRecord
 
     # calculate positions in finals
     res = race
-      .race_results
-      .select{ |rr| rr.category == category }
-      .select { |rr| rr.climbs.dig('final', 'position') }
+          .race_results.joins(:racer)
+          .where('racers.country': :HR)
+          .where(category: category)
+          .select { |rr| rr.climbs.dig('final', 'position') }
     res.sort_by { |rr| [rr.climbs['final']['position'], rr.climbs['q']['position'], rr.climbs['final']['time']] }
       .each_with_index do |rr, index|
       if Race.lead_points[index]
@@ -199,7 +200,10 @@ class RaceResult < ApplicationRecord
     end
 
     fallback = race.race_results.count
-    rest = race.race_results.where(category: category).select { |rr| !rr.climbs.dig('final', 'position') }
+    rest = race
+           .race_results.joins(:racer)
+           .where('racers.country': :HR)
+           .select { |rr| !rr.climbs.dig('final', 'position') }
     rest = rest.sort_by do |r|
       [
         r.climbs.dig('final', 'position') || fallback,

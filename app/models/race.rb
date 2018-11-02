@@ -39,7 +39,6 @@ class Race < ApplicationRecord
   end
 
   def assign_points
-    p league
     if league&.lead?
       clps = ClubLeaguePoint.where(league: league)
       clps.each do |clp|
@@ -47,7 +46,6 @@ class Race < ApplicationRecord
         categories.each do |c|
           points += c.race_results.joins(:racer).where('racers.club_id = ?', clp.club.id).order(position: :asc).first(5).sum(&:points)
         end
-        # update clp
         data = clp.points
         data[id] = points
         clp.update(points: data)

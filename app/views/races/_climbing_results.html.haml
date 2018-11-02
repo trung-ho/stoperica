@@ -18,7 +18,7 @@
       - if user_signed_in? && current_user.admin
         %th{ colspan: 6 } Admin
   %tbody
-    - @race.categories.each_with_index do |category, index|
+    - @race.categories.order(id: :asc).each_with_index do |category, index|
       %tr{ class: "cat-#{index}" }
         %td{ colspan: 20 }
           = category.name.upcase

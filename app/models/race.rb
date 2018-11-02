@@ -52,7 +52,7 @@ class Race < ApplicationRecord
       end
     end
 
-    if league.xczld?
+    if league&.xczld?
       # za svaku kategoriju
       categories.each do |category|
         # nadi top 25 rezultata

@@ -197,6 +197,24 @@ class RaceResult < ApplicationRecord
         rr.update_column(:position, index + 1)
       end
     end
+
+    fallback = race.race_results.count
+    rest = race.race_results.where(category: category).select { |rr| !rr.climbs.dig('final', 'position') }
+    rest = rest.sort_by do |r|
+      [
+        r.climbs.dig('final', 'position') || fallback,
+        r.climbs.dig('q', 'position') || fallback,
+        r.climbs.dig('q2', 'position') || fallback,
+        r.climbs.dig('q1', 'position') || fallback
+      ]
+    end
+    rest.each_with_index do |rr, index|
+      if Race.lead_points[res.size + index]
+        rr.update_columns(position: res.size + index + 1, points: Race.lead_points[res.size + index])
+      else
+        rr.update_column(:position, res.size + index + 1)
+      end
+    end
   end
 
   # assign same number throughout the league

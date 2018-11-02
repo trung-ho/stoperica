@@ -39,17 +39,34 @@ class Race < ApplicationRecord
   end
 
   def assign_points
-    # za svaku kategoriju
-    categories.each do |category|
-      # nadi top 25 rezultata
-      results = race_results.includes(:racer)
-        .where(status: 3).where(category: category)
-        .sort{|x,y| x.finish_time <=> y.finish_time}
-        .select{ |rr| rr.lap_times.length > 0 }.first(25)
+    p league
+    if league&.lead?
+      clps = ClubLeaguePoint.where(league: league)
+      clps.each do |clp|
+        points = 0
+        categories.each do |c|
+          points += c.race_results.joins(:racer).where('racers.club_id = ?', clp.club.id).order(position: :asc).first(5).sum(&:points)
+        end
+        # update clp
+        data = clp.points
+        data[id] = points
+        clp.update(points: data)
+      end
+    end
 
-      results.each_with_index do |rr, index|
-        # podijeli bodove
-        rr.update!(points: Race.points[index])
+    if league.xczld?
+      # za svaku kategoriju
+      categories.each do |category|
+        # nadi top 25 rezultata
+        results = race_results.includes(:racer)
+          .where(status: 3).where(category: category)
+          .sort{|x,y| x.finish_time <=> y.finish_time}
+          .select{ |rr| rr.lap_times.length > 0 }.first(25)
+
+        results.each_with_index do |rr, index|
+          # podijeli bodove
+          rr.update!(points: Race.points[index])
+        end
       end
     end
   end

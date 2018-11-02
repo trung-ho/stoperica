@@ -48,6 +48,7 @@ class Race < ApplicationRecord
                     .where('racers.club_id = ?', clp.club.id)
                     .order(position: :asc)
                     .first(5)
+                    .select(&:points)
                     .sum(&:points)
         end
         data = clp.points

@@ -203,6 +203,7 @@ class RaceResult < ApplicationRecord
     rest = race
            .race_results.joins(:racer)
            .where('racers.country': :HR)
+           .where(category: category)
            .select { |rr| !rr.climbs.dig('final', 'position') }
     rest = rest.sort_by do |r|
       [

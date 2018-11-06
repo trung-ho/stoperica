@@ -99,9 +99,9 @@ class RaceResult < ApplicationRecord
     end
   end
 
-  def finish_delta
+  def calc_finish_delta
     return '- -' unless status == 3
-    reference_race_result = RaceResult.joins(:racer).where(category: category, race: race, status: 3).order(:position).limit(1).first()
+    reference_race_result = RaceResult.where(category: category, race: race, status: 3).order(:position).limit(1).first()
     lap_diff = reference_race_result.lap_times.length - lap_times.length
     if !lap_times.empty?
       if lap_diff == 0

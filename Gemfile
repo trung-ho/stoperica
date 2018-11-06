@@ -25,13 +25,13 @@ gem 'material_design_lite-rails'
 gem 'recaptcha', require: 'recaptcha/rails'
 gem 'kaminari'
 
+gem 'faker', git: 'https://github.com/stympy/faker.git', branch: 'master'
 gem 'countries', require: 'countries/global'
 gem 'country_select', require: 'country_select_without_sort_alphabetical'
 
 gem 'scout_apm'
 
 group :development, :test do
-  gem 'faker', git: 'https://github.com/stympy/faker.git', branch: 'master'
   gem 'byebug', platform: :mri
   gem 'rubocop', require: false
 end

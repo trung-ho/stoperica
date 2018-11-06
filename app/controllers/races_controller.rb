@@ -176,7 +176,7 @@ class RacesController < ApplicationController
         :category,
         :start_number
       ],
-      methods: [:finish_time, :finish_delta]
+      methods: [:finish_time]
     }
   end
 end

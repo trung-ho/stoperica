@@ -19,7 +19,7 @@ class Race < ApplicationRecord
         .select{ |rr| rr.lap_times.length > 0 }
         .sort_by{ |rr| [-rr.lap_times.length, rr.finish_time] }
       results.each_with_index do |rr, index|
-        rr.update!(position: index + 1)
+        rr.update!(position: index + 1, finish_delta: rr.calc_finish_delta)
       end
     end
   end

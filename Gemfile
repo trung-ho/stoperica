@@ -16,9 +16,6 @@ gem 'bcrypt', '~> 3.1.7'
 # Auth
 gem 'devise', '~> 4.4.0'
 
-# Heroku stuff
-gem 'rack-zippy'
-
 # Frontend
 gem 'haml', '~> 5.0.4'
 gem 'react-rails'
@@ -34,6 +31,8 @@ gem 'faker', git: 'https://github.com/stympy/faker.git', branch: 'master'
 gem 'countries', require: 'countries/global'
 gem 'country_select', require: 'country_select_without_sort_alphabetical'
 
+gem 'scout_apm'
+
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'rubocop', require: false
@@ -43,8 +42,4 @@ group :development do
   gem 'bullet'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-end
-
-group :production do
-  gem 'rails_12factor'
 end

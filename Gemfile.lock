@@ -135,7 +135,6 @@ GEM
     rack (2.0.3)
     rack-test (0.7.0)
       rack (>= 1.0, < 3)
-    rack-zippy (3.0.1)
     rails (5.1.4)
       actioncable (= 5.1.4)
       actionmailer (= 5.1.4)
@@ -153,11 +152,6 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
-    rails_12factor (0.0.3)
-      rails_serve_static_assets
-      rails_stdout_logging
-    rails_serve_static_assets (0.0.5)
-    rails_stdout_logging (0.0.5)
     railties (5.1.4)
       actionpack (= 5.1.4)
       activesupport (= 5.1.4)
@@ -202,6 +196,7 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
+    scout_apm (2.4.20)
     simplecov (0.13.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -267,14 +262,13 @@ DEPENDENCIES
   material_design_lite-rails
   pg
   puma (~> 3.0)
-  rack-zippy
   rails (>= 5.0)
-  rails_12factor
   react-flux-rails
   react-rails
   recaptcha
   rubocop
   sass-rails (~> 5.0)
+  scout_apm
   spring
   spring-watcher-listen (~> 2.0.0)
   sprockets-es6

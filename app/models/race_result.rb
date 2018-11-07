@@ -6,6 +6,7 @@ class RaceResult < ApplicationRecord
   attr_accessor :racer_start_number
 
   validate :disallow_duplicates
+  before_validation :set_finish_time
   after_save :calculate_climbing_positions, if: :saved_change_to_climbs?
   after_save :assign_league_number
 
@@ -84,7 +85,7 @@ class RaceResult < ApplicationRecord
     end
   end
 
-  def finish_time
+  def calc_finish_time
     return '- -' unless status == 3
 
     start_time = started_at || race.started_at
@@ -97,6 +98,10 @@ class RaceResult < ApplicationRecord
     else
       '- -'
     end
+  end
+
+  def set_finish_time
+    self.finish_time = calc_finish_time
   end
 
   def calc_finish_delta

@@ -175,8 +175,7 @@ class RacesController < ApplicationController
         { racer: { include: :club, except: personal_fields } },
         :category,
         :start_number
-      ],
-      methods: [:finish_time]
+      ]
     }
   end
 end

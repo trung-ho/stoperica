@@ -151,7 +151,11 @@ class RaceResults extends React.Component {
 
     this.ajax.get();
 
-    setInterval(() => this.ajax.get(), 10000);
+    this.interval = setInterval(() => this.ajax.get(), 20000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   render () {

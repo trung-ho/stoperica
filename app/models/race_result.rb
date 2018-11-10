@@ -240,6 +240,13 @@ class RaceResult < ApplicationRecord
       first_number = RaceResult.find_by(race: first_race, racer: racer)&.start_number_id
       if first_number
         self.update_column(:start_number_id, first_number)
+      else
+        second_race = race.league.races.second
+        second_number = RaceResult.find_by(race: second_race, racer: racer)&.start_number_id
+
+        if second_number
+        self.update_column(:start_number_id, second_number)
+        end
       end
     end
   end

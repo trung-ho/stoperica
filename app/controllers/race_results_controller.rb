@@ -118,6 +118,7 @@ class RaceResultsController < ApplicationController
   def from_device
     race = Race.find(params[:RACEID])
     start_number = race.pool.start_numbers.find_by(tag_id: params[:TAGID].strip)
+    start_number = race.pool.start_numbers.find_by(alternate_tag_id: params[:TAGID].strip) if start_number.nil?
 
     if start_number.nil?
       data = {
@@ -139,7 +140,8 @@ class RaceResultsController < ApplicationController
       finish_time: race_result.finish_time,
       racer_name: race_result.racer.full_name,
       start_number: race_result.start_number.value,
-      tag_id: race_result.start_number.tag_id
+      tag_id: race_result.start_number.tag_id,
+      alternate_tag_id: race_result.start_number.alternate_tag_id
     }
 
     render json: data

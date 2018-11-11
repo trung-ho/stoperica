@@ -55,6 +55,15 @@ class Race < ApplicationRecord
         data[id] = points
         clp.update(points: data)
       end
+    elsif league&.xczld?
+      clps = ClubLeaguePoint.where(league: league)
+      clps
+        .sort_by{ |clp| clp.club.points_in_race self }
+        .each_with_index do |clp, index|
+          data = clp.points
+          data[id] = index + 1
+          clp.update(points: data)
+        end
     end
 
     if league&.xczld?

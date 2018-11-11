@@ -30,7 +30,7 @@
       = @racer.uci_id || '-'
 
       %br
-      %b Personal best 20.1km
+      %b Personal best 21.1km
       = @racer.personal_best || '-'
 
 - if user_signed_in? && (current_user.admin || current_user.racer == @racer)

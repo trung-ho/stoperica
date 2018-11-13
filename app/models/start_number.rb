@@ -1,6 +1,5 @@
 class StartNumber < ApplicationRecord
   has_many :race_results
-  belongs_to :race, optional: true
   belongs_to :pool, optional: true
   before_save :strip_tag_id
 

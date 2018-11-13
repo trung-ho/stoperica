@@ -2,7 +2,6 @@ class Race < ApplicationRecord
   has_many :race_results
   has_many :categories
   has_many :racers, through: :race_results
-  has_many :start_numbers, through: :race_results
   belongs_to :league, optional: true
   belongs_to :pool
 

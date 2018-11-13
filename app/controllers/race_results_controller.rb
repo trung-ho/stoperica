@@ -117,7 +117,7 @@ class RaceResultsController < ApplicationController
   # "RACEID"=>5,6,7
   def from_device
     race_ids = params[:RACEID].split(',')
-    pool_ids = Race.find(race_ids).pluck(:pool_id).uniq
+    pool_ids = Race.select(:pool_id, :id).find(race_ids).pluck(:pool_id).uniq
     start_number = StartNumber.find_by(pool_id: pool_ids, tag_id: params[:TAGID].strip)
     start_number = StartNumber.find_by(pool_id: pool_ids, alternate_tag_id: params[:TAGID].strip) if start_number.nil?
 

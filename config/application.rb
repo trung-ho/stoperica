@@ -19,7 +19,7 @@ module MtbTiming
     config.action_dispatch.default_headers = {
      'X-Frame-Options' => 'ALLOWALL'
     }
-    config.action_mailer.asset_host = 'http://stoperica.herokuapp.com'
+    config.action_mailer.asset_host = 'http://stoperica.live'
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
     config.generators do |g|
       g.template_engine :haml

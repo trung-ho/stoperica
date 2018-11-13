@@ -58,6 +58,7 @@ class Race < ApplicationRecord
     elsif league&.xczld?
       clps = ClubLeaguePoint.where(league: league)
       clps
+        .reject{ |clp| clp.club.points_in_race(self).zero? }
         .sort_by{ |clp| clp.club.points_in_race self }
         .each_with_index do |clp, index|
           data = clp.points

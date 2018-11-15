@@ -81,6 +81,37 @@ class Race < ApplicationRecord
         end
       end
     end
+
+    if league&.running?
+      finishers = race_results.includes(:racer).where(status: 3)
+      men = finishers.where('racers.gender = 2').references(:racers).order(finish_time: :desc)
+      women = finishers.where('racers.gender = 1').references(:racers).order(finish_time: :desc)
+
+      men.each_with_index do |rr, index|
+        rr.update(additional_points: index + 1)
+      end
+
+      women.each_with_index do |rr, index|
+        rr.update(additional_points: index + 1)
+      end
+
+      categories.each do |category|
+        results = race_results
+          .includes(:racer)
+          .where(status: 3)
+          .where(category: category)
+          .order(finish_time: :desc)
+        results.each_with_index do |rr, index|
+          rr.update(points: index + 1)
+        end
+      end
+
+      ClubLeaguePoint.where(league: league).each_with_index do |clp, index|
+          data = clp.points
+          data[id] = clp.club.points_in_race self
+          clp.update(points: data)
+        end
+    end
   end
 
   def to_csv

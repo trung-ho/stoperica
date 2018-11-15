@@ -1,12 +1,12 @@
 #raceResults
   .mdl-grid.is-heading
     .mdl-cell.mdl-cell--1-col Mjesto
-    - if @race.league&.xczld?
+    - if @race.league&.xczld? || @race.league&.running?
       .mdl-cell.mdl-cell--1-col Bodovi
     .mdl-cell.mdl-cell--1-col Startni broj
-    .mdl-cell{ class: "mdl-cell--#{@race.league&.xczld? ? 1 : 2}-col" }
-      - if @race.uci_display?
-        UCI ID
+    / .mdl-cell{ class: "mdl-cell--#{@race.league&.xczld? ? 1 : 2}-col" }
+    /   - if @race.uci_display?
+    /     UCI ID
     .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone Ime i Prezime
     .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Klub
     .mdl-cell.mdl-cell--1-col Status
@@ -32,10 +32,17 @@
 
         - if @race.league&.xczld?
           .mdl-cell.mdl-cell--1-col= race_result.points
+        - elsif @race.league&.running?
+          .mdl-cell.mdl-cell--1-col{ title: 'Ukupno = bodovi u kategoriji + bodovi u ukupnom poretku' }
+            - if race_result.total_points
+              %b= race_result.total_points
+              ="(#{race_result.points} + #{race_result.additional_points})"
+            - else
+              = "- -"
         .mdl-cell.mdl-cell--1-col= race_result.start_number&.value
-        .mdl-cell{ class: "mdl-cell--#{@race.league&.xczld? ? 1 : 2}-col" }
-          - if @race.uci_display?
-            = race_result.racer.uci_id
+        / .mdl-cell{ class: "mdl-cell--#{@race.league&.xczld? ? 1 : 2}-col" }
+        /   - if @race.uci_display?
+        /     = race_result.racer.uci_id
         .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone
           - if @is_admin
             = race_result.racer.year_of_birth

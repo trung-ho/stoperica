@@ -114,11 +114,12 @@ class RaceResultsController < ApplicationController
   # "TAGID"=>" 00 00 00 00 00 00 00 00 00 01 65 19",
   # "RSSI"=>"60",
   # "TIME"=>"14.08.2017 13:07:14.36753 %2B02:00",
-  # "RACEID"=>5
+  # "RACEID"=>5,6,7
   def from_device
-    race = Race.find(params[:RACEID])
-    start_number = race.pool.start_numbers.find_by(tag_id: params[:TAGID].strip)
-    start_number = race.pool.start_numbers.find_by(alternate_tag_id: params[:TAGID].strip) if start_number.nil?
+    race_ids = params[:RACEID].split(',')
+    pool_ids = Race.select(:pool_id, :id).find(race_ids).pluck(:pool_id).uniq
+    start_number = StartNumber.find_by(pool_id: pool_ids, tag_id: params[:TAGID].strip)
+    start_number = StartNumber.find_by(pool_id: pool_ids, alternate_tag_id: params[:TAGID].strip) if start_number.nil?
 
     if start_number.nil?
       data = {
@@ -129,7 +130,7 @@ class RaceResultsController < ApplicationController
       return render json: data
     end
 
-    race_result = RaceResult.find_by(race: race, start_number: start_number)
+    race_result = RaceResult.find_by(race_id: race_ids, start_number: start_number)
     millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z').to_f
 
     race_result.lap_times << millis

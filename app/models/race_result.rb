@@ -120,6 +120,12 @@ class RaceResult < ApplicationRecord
     end
   end
 
+  def total_points
+    x = points || 0
+    y = additional_points || 0
+    x + y
+  end
+
   def to_csv
     # ['Startni broj', 'Pozicija', 'Ime', 'Prezime', 'Klub',
     # 'Kategorija', 'Velicina majice',

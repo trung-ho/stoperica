@@ -13,6 +13,6 @@ test:
 
 production:
   <<: *default
-  database: mtb_production
-  username: mtb_timing
-  password: <%= ENV['MTB_TIMING _DATABASE_PASSWORD'] %>
+  database: stoperica
+  username: rails
+  password: <%= ENV['EXAMPLE_DATABASE_PASSWORD'] %>

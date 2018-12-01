@@ -242,18 +242,12 @@ class RaceResult < ApplicationRecord
   # assign same number throughout the league
   def assign_league_number
     if start_number.nil? && race.league&.xczld?
-      first_race = race.league.races.first
-      first_number = RaceResult.find_by(race: first_race, racer: racer)&.start_number_id
-      if first_number
-        self.update_column(:start_number_id, first_number)
-      else
-        second_race = race.league.races.second
-        second_number = RaceResult.find_by(race: second_race, racer: racer)&.start_number_id
-
-        if second_number
-        self.update_column(:start_number_id, second_number)
-        end
-      end
+      race_ids = race.league.race_ids
+      start_number = RaceResult
+        .where(race_id: race_ids, racer: racer)
+        .where.not(start_number_id: nil)
+        .first&.start_number_id
+      self.update_column(:start_number_id, start_number) unless start_number.nil?
     end
   end
 end

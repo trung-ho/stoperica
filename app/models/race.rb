@@ -70,10 +70,13 @@ class Race < ApplicationRecord
       # za svaku kategoriju
       categories.each do |category|
         # nadi top 25 rezultata
-        results = race_results.includes(:racer)
-          .where(status: 3).where(category: category)
-          .sort{|x,y| x.finish_time <=> y.finish_time}
-          .select{ |rr| rr.lap_times.length > 0 }.first(25)
+        results = race_results
+          .includes(:racer)
+          .where(status: 3)
+          .where(category: category)
+          .select{ |rr| rr.lap_times.length > 0 }
+          .sort_by{ |rr| [-rr.lap_times.length, rr.finish_time] }
+          .first(25)
 
         results.each_with_index do |rr, index|
           # podijeli bodove

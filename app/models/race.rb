@@ -67,6 +67,7 @@ class Race < ApplicationRecord
     end
 
     if league&.xczld?
+      race_results.update(points: nil)
       # za svaku kategoriju
       categories.each do |category|
         # nadi top 25 rezultata

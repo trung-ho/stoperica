@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :race_admins
   resources :leagues, path: :natjecanja, param: :slug
   resources :pools
   devise_for :users

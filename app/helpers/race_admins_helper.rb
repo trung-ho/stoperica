@@ -1,0 +1,2 @@
+module RaceAdminsHelper
+end

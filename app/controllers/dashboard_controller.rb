@@ -1,7 +1,13 @@
 class DashboardController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:timesync]
 
-  before_action :only_admin, only: [:index]
+  def index
+    if current_user.admin?
+      @races = Race.all
+    else
+      @races = RaceAdmin.where(racer: current_user).collect(&:race)
+    end
+  end
 
   def timesync
     ts = {

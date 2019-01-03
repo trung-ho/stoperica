@@ -1,0 +1,14 @@
+= form_with(model: race_admin, local: true) do |f|
+  - if race_admin.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(race_admin.errors.count, "error")
+        prohibited this race admin from being saved:
+      %ul
+        - race_admin.errors.full_messages.each do |message|
+          %li= message
+  .field
+    = f.select :racer_id, options_for_select(Racer.all.collect{ |r| [r.full_name, r.id] }, selected: @race_admin.racer_id), {}
+    = f.select :race_id, options_for_select(Race.all.collect{ |r| [r.name, r.id] }, selected: @race_admin.race_id), {}
+  .actions
+    = f.submit

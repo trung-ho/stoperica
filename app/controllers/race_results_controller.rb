@@ -1,6 +1,6 @@
 class RaceResultsController < ApplicationController
   before_action :set_race_result, only: %i[show edit update destroy]
-  before_action :only_admin, only: %i[index show new from_timing destroy_from_timing]
+  before_action :check_admin, only: %i[index show new from_timing destroy_from_timing]
   before_action :set_start_number, only: %i[from_timing destroy_from_timing from_climbing]
 
   protect_from_forgery except: %i[from_device from_climbing]
@@ -149,6 +149,11 @@ class RaceResultsController < ApplicationController
   end
 
   private
+
+  def check_admin
+    race_id = @race_result&.race_id || params[:race_id]
+    fail 'Access denied' unless current_user.admin? || race_admin?(race_id)
+  end
 
   def set_race_result
     @race_result = RaceResult.find(params[:id])

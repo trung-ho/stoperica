@@ -13,7 +13,8 @@ class RacesController < ApplicationController
   # GET /races/1
   # GET /races/1.json
   def show
-    @is_admin = user_signed_in? && current_user.admin?
+    @is_admin = current_user.admin?
+    @is_race_admin = race_admin?(@race.id)
     if @is_admin && @race.pool
       @start_numbers = @race.pool.start_numbers.sort_by{|sn| [sn.value.to_i]}.collect{|sn| [sn.value, sn.value]}
     else

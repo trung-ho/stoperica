@@ -132,6 +132,15 @@ class RaceResultsController < ApplicationController
     end
 
     race_result = RaceResult.find_by(race_id: race_ids, start_number: start_number)
+    if race_result.race.ended_at
+      data = {
+        error: 'Race ended',
+        tag_id: params[:TAGID],
+        race_id: params[:RACEID]
+      }
+      return render json: data
+    end
+
     millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z').to_f
 
     race_result.lap_times << { time: millis, reader_id: reader_id }

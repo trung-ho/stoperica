@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190103162339) do
+ActiveRecord::Schema.define(version: 20190103202041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 20190103162339) do
     t.integer "racer_id"
     t.integer "race_id"
     t.integer "status"
-    t.text "lap_times", default: [], array: true
+    t.jsonb "lap_times"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "points"
@@ -134,6 +134,7 @@ ActiveRecord::Schema.define(version: 20190103162339) do
     t.integer "race_type", default: 0
     t.bigint "pool_id"
     t.bigint "league_id"
+    t.jsonb "control_points", array: true
     t.index ["league_id"], name: "index_races_on_league_id"
     t.index ["pool_id"], name: "index_races_on_pool_id"
   end

@@ -66,7 +66,7 @@ class RaceResult < ApplicationRecord
   end
 
   def last_lap_time
-    time = lap_times.last.is_a?(String) ? lap_times.last : lap_times.last.time
+    time = lap_times.last.is_a?(String) ? lap_times.last : lap_times.last[:time]
     time&.to_i
   end
 

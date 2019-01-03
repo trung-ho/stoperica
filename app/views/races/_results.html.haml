@@ -69,14 +69,14 @@
               = race_result.finish_delta
 
         - if @is_admin && race_result.status && race_result.status < 2
-          .mdl-cell.mdl-cell--3-col
+          .mdl-cell.mdl-cell--1-col
             = form_for race_result do |f|
               = f.hidden_field :status, value: 2
               .actions
                 = f.submit 'Na startu', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
-        - if @is_admin
-          .mdl-cell.mdl-cell--3-col
-            = link_to 'Izmijeni', edit_race_result_path(race_result), class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+
+        - if @is_admin || @is_race_admin
+          .mdl-cell.mdl-cell--2-col
             = form_for race_result, method: :delete do |f|
               .actions
                 = f.submit 'Odjavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect', onclick: "return confirm('Ovo ce izbrisati rezultat iz baze podataka. Molim potvrdi.')"

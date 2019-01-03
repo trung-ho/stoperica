@@ -25,11 +25,12 @@
     .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
       Natrag
 
-  - if @is_admin
+  - if @is_admin || @is_race_admin
     = link_to race_path(@race, format: "csv") do
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
         Export CSV
 
+  - if @is_admin
     = link_to assign_positions_race_path(@race) do
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
         Azuriraj
@@ -64,7 +65,7 @@
   %h4
     Dodatne informacije
 
-- if @is_admin
+- if @is_admin || @is_race_admin
   = form_for RaceResult.new do |f|
     %input#racer_search{ type: 'text', placeholder: 'Natjecatelji...' }
     = f.hidden_field :racer_id, class: 'admin_racer_id'

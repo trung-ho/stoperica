@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 20190103202041) do
     t.integer "racer_id"
     t.integer "race_id"
     t.integer "status"
-    t.jsonb "lap_times"
+    t.jsonb "lap_times", default: []
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "points"

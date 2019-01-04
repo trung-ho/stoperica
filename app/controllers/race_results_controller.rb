@@ -81,7 +81,12 @@ class RaceResultsController < ApplicationController
   # POST /race_results/from_timing
   def from_timing
     race_result = RaceResult.find_by!(race: @race, start_number: @start_number)
-    race_result.lap_times << params[:time].to_f / 1000 if params[:time]
+    if params[:time]
+      race_result.lap_times << {
+        time: params[:time].to_f / 1000,
+        reader_id: 'WEB'
+      }
+    end
     race_result.status = params[:status]
     race_result.save!
     respond_to do |format|
@@ -92,7 +97,10 @@ class RaceResultsController < ApplicationController
   # DELETE /race_results/destroy_from_timing
   def destroy_from_timing
     race_result = RaceResult.find_by(race_id: params[:race_id], start_number: @start_number)
-    race_result.lap_times -= [(params[:time].to_f / 1000).to_s]
+    race_result.lap_times -= [{
+      time: (params[:time].to_f / 1000).to_s,
+      reader_id: 'WEB'
+    }]
     race_result.save!
     respond_to do |format|
       format.json { render json: race_result }
@@ -115,6 +123,7 @@ class RaceResultsController < ApplicationController
   # "RSSI"=>"60",
   # "TIME"=>"14.08.2017 13:07:14.36753 %2B02:00",
   # "RACEID"=>5,6,7
+  # "READERID"=>"ABCD"
   def from_device
     reader_id = params[:READERID]
     race_ids = params[:RACEID].split(',')

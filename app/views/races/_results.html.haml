@@ -87,3 +87,14 @@
                 = f.select :start_number, options_for_select(@start_numbers, race_result.start_number&.value), include_blank: true
                 = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: race_result.category_id
                 = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+
+      - if @race.treking? && race_result.lap_times
+        .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
+          .mdl-cell.mdl-cell--2-col Kontrolne točke
+          - race_result.lap_times.each_with_index do |lap, index|
+            .mdl-cell.mdl-cell--2-col
+              %b
+                KT
+                = index + 1
+              = race_result.lap_time(index + 1)
+

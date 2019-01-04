@@ -5,7 +5,7 @@ class DashboardController < ApplicationController
     if current_user.admin?
       @races = Race.all
     else
-      @races = RaceAdmin.where(racer_id: current_user.racer_id).collect(&:race)
+      @races = RaceAdmin.where(racer: current_user.racer).collect(&:race)
     end
   end
 

@@ -81,10 +81,6 @@ class RacesController < ApplicationController
       @race.update!(ended_at: nil)
     end
 
-    if params[:control_points].present?
-      @race.update!(control_points: JSON.parse(params[:control_points]))
-    end
-
     respond_to do |format|
       format.html { redirect_to @race, notice: 'Race was successfully updated.' }
       format.json { render :show, status: :ok, location: @race }

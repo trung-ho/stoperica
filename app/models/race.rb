@@ -133,6 +133,6 @@ class Race < ApplicationRecord
   end
 
   def parse_json
-    self.control_points = JSON.parse(control_points_raw)
+    self.control_points = JSON.parse(control_points_raw) if control_points_raw.present?
   end
 end

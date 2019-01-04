@@ -81,7 +81,12 @@ class RaceResultsController < ApplicationController
   # POST /race_results/from_timing
   def from_timing
     race_result = RaceResult.find_by!(race: @race, start_number: @start_number)
-    race_result.lap_times << params[:time].to_f / 1000 if params[:time]
+    if params[:time]
+      race_result.lap_times << {
+        time: params[:time].to_f / 1000,
+        reader_id: 'WEB'
+      }
+    end
     race_result.status = params[:status]
     race_result.save!
     respond_to do |format|
@@ -92,7 +97,10 @@ class RaceResultsController < ApplicationController
   # DELETE /race_results/destroy_from_timing
   def destroy_from_timing
     race_result = RaceResult.find_by(race_id: params[:race_id], start_number: @start_number)
-    race_result.lap_times -= [(params[:time].to_f / 1000).to_s]
+    race_result.lap_times -= [{
+      time: (params[:time].to_f / 1000).to_s,
+      reader_id: 'WEB'
+    }]
     race_result.save!
     respond_to do |format|
       format.json { render json: race_result }
@@ -115,7 +123,9 @@ class RaceResultsController < ApplicationController
   # "RSSI"=>"60",
   # "TIME"=>"14.08.2017 13:07:14.36753 %2B02:00",
   # "RACEID"=>5,6,7
+  # "READERID"=>"ABCD"
   def from_device
+    reader_id = params[:READERID]
     race_ids = params[:RACEID].split(',')
     pool_ids = Race.select(:pool_id, :id).find(race_ids).pluck(:pool_id).uniq
     start_number = StartNumber.find_by(pool_id: pool_ids, tag_id: params[:TAGID].strip)
@@ -131,9 +141,25 @@ class RaceResultsController < ApplicationController
     end
 
     race_result = RaceResult.find_by(race_id: race_ids, start_number: start_number)
+    if race_result.race.ended_at
+      data = {
+        error: 'Race ended',
+        tag_id: params[:TAGID],
+        race_id: params[:RACEID]
+      }
+      return render json: data
+    end
+
     millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z').to_f
 
-    race_result.lap_times << millis
+    existing_time = race_result.lap_times
+      .find{|it| it['reader_id'].to_s == reader_id.to_s}
+
+    if existing_time
+      existing_time['time'] = millis
+    else
+      race_result.lap_times << { time: millis, reader_id: reader_id }
+    end
     race_result.status = 3
     race_result.save!
 

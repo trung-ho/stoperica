@@ -5,9 +5,12 @@ class Race < ApplicationRecord
   belongs_to :league, optional: true
   belongs_to :pool
 
+  before_validation :parse_json
+
   enum race_type: [:mtb, :trcanje, :treking, :duatlon, :triatlon, :penjanje]
 
   attr_accessor :sorted_results
+  attr_accessor :control_points_raw
 
   def assign_positions
     categories.each do |category|
@@ -127,5 +130,9 @@ class Race < ApplicationRecord
         csv << race_result.to_csv
       end
     end
+  end
+
+  def parse_json
+    self.control_points = JSON.parse(control_points_raw)
   end
 end

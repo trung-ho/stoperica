@@ -32,6 +32,7 @@ class RaceResult < ApplicationRecord
   end
 
   def lap_text(length)
+    return 'KT' if race.treking?
     case length
     when 1
       'krug'
@@ -65,6 +66,35 @@ class RaceResult < ApplicationRecord
     end
   end
 
+  def last_lap_time
+    time = lap_times.last.is_a?(String) ? lap_times.last : lap_times.last.with_indifferent_access[:time]
+    time&.to_i
+  end
+
+  def reader_id_valid?(index, reader_id)
+    reader_id.present? && reader_id.to_s == lap_times.dig(index, 'reader_id')&.to_s
+  end
+
+  def control_time(reader_id)
+    lap_time = lap_times.find{|it| it.with_indifferent_access['reader_id'].to_s == reader_id.to_s}
+
+    return '- -' if lap_time.nil?
+
+    return '- -' unless status == 3
+
+    start_time = started_at || race.started_at
+
+    if !lap_times.empty? && start_time
+      time = lap_time.with_indifferent_access[:time]
+      ended_at = Time.at(time.to_i)
+      seconds = ended_at - start_time
+
+      Time.at(seconds).utc.strftime('%k:%M:%S')
+    else
+      '- -'
+    end
+  end
+
   # TODO: refactor this and finish_time into one method
   def lap_time lap
     lap_time = lap_times[lap - 1]
@@ -76,7 +106,8 @@ class RaceResult < ApplicationRecord
     start_time = started_at || race.started_at
 
     if !lap_times.empty? && start_time
-      ended_at = Time.at(lap_time.to_i)
+      time = lap_time.is_a?(String) ? lap_time : lap_time.with_indifferent_access[:time]
+      ended_at = Time.at(time.to_i)
       seconds = ended_at - start_time
 
       Time.at(seconds).utc.strftime('%k:%M:%S')
@@ -91,7 +122,7 @@ class RaceResult < ApplicationRecord
     start_time = started_at || race.started_at
 
     if !lap_times.empty? && start_time
-      ended_at = Time.at(lap_times.last.to_i)
+      ended_at = Time.at(last_lap_time)
       seconds = ended_at - start_time
 
       Time.at(seconds).utc.strftime('%k:%M:%S')
@@ -110,7 +141,7 @@ class RaceResult < ApplicationRecord
     lap_diff = reference_race_result.lap_times.length - lap_times.length
     if !lap_times.empty?
       if lap_diff == 0
-        seconds = Time.at(lap_times.last.to_i) - Time.at(reference_race_result.lap_times.last.to_i)
+        seconds = Time.at(last_lap_time) - Time.at(reference_race_result.last_lap_time)
         Time.at(seconds).utc.strftime('+%k:%M:%S')
       else
         "- #{lap_diff} #{lap_text(lap_diff)}"

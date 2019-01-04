@@ -13,7 +13,7 @@ class RacesController < ApplicationController
   # GET /races/1
   # GET /races/1.json
   def show
-    @is_admin = current_user.admin?
+    @is_admin = current_user&.admin?
     @is_race_admin = race_admin?(@race.id)
     if @is_admin && @race.pool
       @start_numbers = @race.pool.start_numbers.sort_by{|sn| [sn.value.to_i]}.collect{|sn| [sn.value, sn.value]}
@@ -117,7 +117,7 @@ class RacesController < ApplicationController
     params.require(:race).permit(
       :name, :date, :laps, :easy_laps, :description_url, :send_email,
       :registration_threshold, :categories, :email_body, :lock_race_results,
-      :uci_display, :race_type, :pool_id, :league_id
+      :uci_display, :race_type, :pool_id, :league_id, :control_points_raw
     )
   end
 

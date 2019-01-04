@@ -145,12 +145,6 @@ class Race < ApplicationRecord
           rr.update!(points: Race.trail_points[index] || 1)
         end
       end
-
-      ClubLeaguePoint.where(league: league).each_with_index do |clp, index|
-        data = clp.points
-        data[id] = clp.club.points_in_race self
-        clp.update(points: data)
-      end
     end
   end
 

@@ -69,7 +69,7 @@ class RaceResultsController < ApplicationController
   # DELETE /race_results/1.json
   def destroy
     race = @race_result.race
-    raise 'Odjave su zakljucane!' unless current_user.admin? || !race.lock_race_results
+    raise 'Odjave su zakljucane!' unless current_user.admin? || race_admin?(race.id) || !race.lock_race_results
     @race_result.destroy
 
     respond_to do |format|

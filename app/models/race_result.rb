@@ -32,6 +32,7 @@ class RaceResult < ApplicationRecord
   end
 
   def lap_text(length)
+    return 'KT' if race.treking?
     case length
     when 1
       'krug'
@@ -66,7 +67,7 @@ class RaceResult < ApplicationRecord
   end
 
   def last_lap_time
-    time = lap_times.last.is_a?(String) ? lap_times.last : lap_times.last['time']
+    time = lap_times.last.is_a?(String) ? lap_times.last : lap_times.last.with_indifferent_access[:time]
     time&.to_i
   end
 
@@ -81,7 +82,7 @@ class RaceResult < ApplicationRecord
     start_time = started_at || race.started_at
 
     if !lap_times.empty? && start_time
-      time = lap_time.is_a?(String) ? lap_time : lap_time['time']
+      time = lap_time.is_a?(String) ? lap_time : lap_time.with_indifferent_access[:time]
       ended_at = Time.at(time.to_i)
       seconds = ended_at - start_time
 

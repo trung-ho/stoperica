@@ -1,7 +1,7 @@
 #raceResults
   .mdl-grid.is-heading
     .mdl-cell.mdl-cell--1-col Mjesto
-    - if @race.league&.xczld? || @race.league&.running?
+    - if @race.league&.xczld? || @race.league&.running? || @race.league&.trail?
       .mdl-cell.mdl-cell--1-col Bodovi
     .mdl-cell.mdl-cell--1-col Startni broj
     / .mdl-cell{ class: "mdl-cell--#{@race.league&.xczld? ? 1 : 2}-col" }
@@ -30,7 +30,7 @@
             - if index <= 2
               = render partial: 'trophy', locals: { index: index }
 
-        - if @race.league&.xczld?
+        - if @race.league&.xczld? || @race.league&.trail?
           .mdl-cell.mdl-cell--1-col= race_result.points
         - elsif @race.league&.running?
           .mdl-cell.mdl-cell--1-col{ title: 'Ukupno = bodovi u kategoriji + bodovi u ukupnom poretku' }

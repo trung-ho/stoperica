@@ -1,7 +1,7 @@
 class League < ApplicationRecord
   has_many :races
   has_many :club_league_points
-  enum league_type: [:xczld, :lead, :running]
+  enum league_type: [:xczld, :lead, :running, :trail]
   before_validation :generate_slug
 
   def to_param

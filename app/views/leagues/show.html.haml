@@ -10,7 +10,7 @@
 .mdl-tabs.mdl-js-tabs.mdl-js-ripple-effect
   .mdl-tabs__tab-bar
     %a.mdl-tabs__tab.is-active{href: "#klubovi-panel"} Klubovi
-    - if @league.xczld?
+    - if @league.xczld? || @league.trail?
       %a.mdl-tabs__tab{href: "#natjecatelji-panel"} Natjecatelji
     %a.mdl-tabs__tab{href: "#utrke-panel"} Utrke
 
@@ -31,6 +31,20 @@
         %h4= cat.upcase
         %ol.mdl-list
           - @league.racers[cat].sort_by{|k, v| v.sum{|r| -(r.points || 0)}}.each_with_index do |(_, results), index|
+            %li.mdl-list__item.mdl-list__item--two-line
+              %span.mdl-list__item-primary-content
+                .mdl-list__item-icon= index + 1
+                .emoji= results[0].racer.country_flag
+                = link_to results[0].racer.uci_name, racer_path(results[0].racer)
+                %span.mdl-list__item-sub-title= results[0].racer.club&.name
+              %b.mdl-list__item-secondary-info
+                = results.sum{ |r| r.points || 0 }
+  - elsif @league.trail?
+    #natjecatelji-panel.mdl-tabs__panel
+      - Category.generics.each do |cat, _|
+        %h4= cat.upcase
+        %ol.mdl-list
+          - @league.racers[cat]&.sort_by{|k, v| v.sum{|r| -(r.points || 0)}}&.each_with_index do |(_, results), index|
             %li.mdl-list__item.mdl-list__item--two-line
               %span.mdl-list__item-primary-content
                 .mdl-list__item-icon= index + 1

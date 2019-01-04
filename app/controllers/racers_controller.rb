@@ -6,7 +6,7 @@ class RacersController < ApplicationController
   # GET /racers
   # GET /racers.json
   def index
-    @racers = Racer.includes(:club).order(:created_at).page(params[:page])
+    @racers = Racer.includes(:club).order(id: :desc).page(params[:page])
   end
 
   # GET /racers

@@ -81,6 +81,10 @@ class RacesController < ApplicationController
       @race.update!(ended_at: nil)
     end
 
+    if params[:control_points].present?
+      @race.update!(control_points: JSON.parse(params[:control_points]))
+    end
+
     respond_to do |format|
       format.html { redirect_to @race, notice: 'Race was successfully updated.' }
       format.json { render :show, status: :ok, location: @race }
@@ -117,7 +121,7 @@ class RacesController < ApplicationController
     params.require(:race).permit(
       :name, :date, :laps, :easy_laps, :description_url, :send_email,
       :registration_threshold, :categories, :email_body, :lock_race_results,
-      :uci_display, :race_type, :pool_id, :league_id, :control_points
+      :uci_display, :race_type, :pool_id, :league_id, :control_points_raw
     )
   end
 

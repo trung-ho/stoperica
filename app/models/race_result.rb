@@ -71,6 +71,10 @@ class RaceResult < ApplicationRecord
     time&.to_i
   end
 
+  def reader_id_valid?(index, reader_id)
+    reader_id.present? && reader_id.to_s == lap_times.dig(index, 'reader_id')&.to_s
+  end
+
   # TODO: refactor this and finish_time into one method
   def lap_time lap
     lap_time = lap_times[lap - 1]

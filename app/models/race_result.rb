@@ -75,6 +75,26 @@ class RaceResult < ApplicationRecord
     reader_id.present? && reader_id.to_s == lap_times.dig(index, 'reader_id')&.to_s
   end
 
+  def control_time(reader_id)
+    lap_time = lap_times.find{|it| it.with_indifferent_access['reader_id'].to_s == reader_id.to_s}
+
+    return '- -' if lap_time.nil?
+
+    return '- -' unless status == 3
+
+    start_time = started_at || race.started_at
+
+    if !lap_times.empty? && start_time
+      time = lap_time.with_indifferent_access[:time]
+      ended_at = Time.at(time.to_i)
+      seconds = ended_at - start_time
+
+      Time.at(seconds).utc.strftime('%k:%M:%S')
+    else
+      '- -'
+    end
+  end
+
   # TODO: refactor this and finish_time into one method
   def lap_time lap
     lap_time = lap_times[lap - 1]

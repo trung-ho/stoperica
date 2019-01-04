@@ -152,7 +152,14 @@ class RaceResultsController < ApplicationController
 
     millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z').to_f
 
-    race_result.lap_times << { time: millis, reader_id: reader_id }
+    existing_time = race_result.lap_times
+      .find{|it| it['reader_id'].to_s == reader_id.to_s}
+
+    if existing_time
+      existing_time['time'] = millis
+    else
+      race_result.lap_times << { time: millis, reader_id: reader_id }
+    end
     race_result.status = 3
     race_result.save!
 

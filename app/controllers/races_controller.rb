@@ -15,7 +15,7 @@ class RacesController < ApplicationController
   def show
     @is_admin = current_user&.admin?
     @is_race_admin = race_admin?(@race.id)
-    if @is_admin && @race.pool
+    if (@is_admin || @is_race_admin) && @race.pool
       @start_numbers = @race.pool.start_numbers.sort_by{|sn| [sn.value.to_i]}.collect{|sn| [sn.value, sn.value]}
     else
       @start_numbers = []

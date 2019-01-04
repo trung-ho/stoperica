@@ -82,7 +82,7 @@
                 = f.submit 'Odjavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect', onclick: "return confirm('Ovo ce izbrisati rezultat iz baze podataka. Molim potvrdi.')"
 
           - if @race.pool.present?
-            #adminFormContainer.mdl-cell.mdl-cell--6-col
+            #adminFormContainer.mdl-cell.mdl-cell--8-col
               = form_for race_result do |f|
                 = f.select :start_number, options_for_select(@start_numbers, race_result.start_number&.value), include_blank: true
                 = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: race_result.category_id

@@ -29,7 +29,7 @@
 
   - if @league.xczld?
     #natjecatelji-panel.mdl-tabs__panel
-      - Category.categories.each do |cat, _|
+      - Category.categories.except(:muskarci).each do |cat, _|
         %h4= cat.upcase
         %ol.mdl-list
           - @league.racers[cat].sort_by{|k, v| v.sum{|r| -(r.points || 0)}}.each_with_index do |(_, results), index|

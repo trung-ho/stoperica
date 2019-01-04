@@ -40,6 +40,14 @@ class Race < ApplicationRecord
     ]
   end
 
+  def self.trail_points
+    [
+      100, 88, 78, 72, 68, 66, 64, 62, 60, 58, 56, 54, 52, 50, 48, 46, 44, 42,
+      40, 38, 36, 34, 32, 30, 28, 26, 24, 22, 20, 18, 17, 16, 15, 14, 13, 12,
+      11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+    ]
+  end
+
   def assign_points
     if league&.lead?
       clps = ClubLeaguePoint.where(league: league)
@@ -114,10 +122,35 @@ class Race < ApplicationRecord
       end
 
       ClubLeaguePoint.where(league: league).each_with_index do |clp, index|
-          data = clp.points
-          data[id] = clp.club.points_in_race self
-          clp.update(points: data)
+        data = clp.points
+        data[id] = clp.club.points_in_race self
+        clp.update(points: data)
+      end
+    end
+
+    if league&.trail?
+      race_results.update(points: nil)
+      # za svaku kategoriju
+      categories.each do |category|
+        # nadi top 25 rezultata
+        results = race_results
+          .includes(:racer)
+          .where(status: 3)
+          .where(category: category)
+          .select{ |rr| rr.lap_times.length > 0 }
+          .sort_by{ |rr| [-rr.lap_times.length, rr.finish_time] }
+
+        results.each_with_index do |rr, index|
+          # podijeli bodove
+          rr.update!(points: Race.trail_points[index] || 1)
         end
+      end
+
+      ClubLeaguePoint.where(league: league).each_with_index do |clp, index|
+        data = clp.points
+        data[id] = clp.club.points_in_race self
+        clp.update(points: data)
+      end
     end
   end
 

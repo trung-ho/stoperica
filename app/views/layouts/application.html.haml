@@ -18,11 +18,10 @@
     .mdl-layout.mdl-js-layout.mdl-layout--fixed-header
       %header.mdl-layout__header
         .mdl-layout__header-row
-          %span.mdl-layout-title
+          %a.mdl-layout-title{:href => "/"}
             = image_tag 'logo.png', height: 50
           .mdl-layout-spacer
           %nav.mdl-navigation.mdl-layout--large-screen-only
-            %a.mdl-navigation__link{:href => "/info"} Info
             %a.mdl-navigation__link{:href => "/natjecanja"} Natjecanja
             %a.mdl-navigation__link{:href => "/racers"} Natjecatelji
             %a.mdl-navigation__link{:href => "/clubs"} Klubovi
@@ -33,6 +32,7 @@
                 %a.mdl-navigation__link{:href => "/timing"} Timing
                 %a.mdl-navigation__link{:href => "/pools"} Brojevi
                 %a.mdl-navigation__link{:href => "/race_admins"} Race Admins
+                %a.mdl-navigation__link{:href => "/categories"} Kategorije
               - if current_user.racer.present?
                 = link_to racer_path(current_user.try(:racer)), class: 'mdl-navigation__link' do
                   = current_user.racer.try(:first_name)
@@ -45,10 +45,9 @@
               %a.mdl-navigation__link{:href => "/racers/login"} Login
 
       .mdl-layout__drawer
-        %span.mdl-layout-title
+        %a.mdl-layout-title{:href => "/"}
           = image_tag 'logo.png', height: 35
         %nav.mdl-navigation
-          %a.mdl-navigation__link{:href => "/info"} Info
           %a.mdl-navigation__link{:href => "/natjecanja"} Natjecanja
           %a.mdl-navigation__link{:href => "/racers"} Natjecatelji
           %a.mdl-navigation__link{:href => "/clubs"} Klubovi
@@ -59,6 +58,7 @@
               %a.mdl-navigation__link{:href => "/timing"} Timing
               %a.mdl-navigation__link{:href => "/pools"} Brojevi
               %a.mdl-navigation__link{:href => "/race_admins"} Race Admins
+              %a.mdl-navigation__link{:href => "/categories"} Kategorije
             - if current_user.racer.present?
               = link_to racer_path(current_user.try(:racer)), class: 'mdl-navigation__link' do
                 = current_user.racer.try(:first_name)

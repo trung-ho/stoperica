@@ -68,13 +68,6 @@
             .mdl-cell.mdl-cell--1-col.losers
               = race_result.finish_delta
 
-        - if @is_admin && race_result.status && race_result.status < 2
-          .mdl-cell.mdl-cell--1-col
-            = form_for race_result do |f|
-              = f.hidden_field :status, value: 2
-              .actions
-                = f.submit 'Na startu', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
-
         - if @is_admin || @is_race_admin
           .mdl-cell.mdl-cell--2-col
             = form_for race_result, method: :delete do |f|

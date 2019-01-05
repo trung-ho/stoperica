@@ -44,12 +44,6 @@
           %td= rr.climbs.dig('final', 'points')
           %td= rr.climbs.dig('final', 'position')
           %td= rr.climbs.dig('final', 'time')
-          - if user_signed_in? && current_user.admin && rr.status && rr.status < 2
-            %td
-              = form_for rr do |f|
-                = f.hidden_field :status, value: 2
-                .actions
-                  = f.submit 'Na startu', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
           - if user_signed_in? && current_user.admin
             %td
               = link_to 'Izmijeni', edit_race_result_path(rr), class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'

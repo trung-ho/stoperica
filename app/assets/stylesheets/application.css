@@ -64,7 +64,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .wide_table {
   width: 100%;
-  margin: 0 !important;
 }
 
 .mdl-data-table th, .mdl-data-table td {

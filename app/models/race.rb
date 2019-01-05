@@ -162,26 +162,4 @@ class Race < ApplicationRecord
   def parse_json
     self.control_points = JSON.parse(control_points_raw) if control_points_raw.present?
   end
-
-  def start_box_racers
-    # for 10 racers per category
-    # 1 box racer
-    racers = league.racers.except([:zene, :u16])
-    box_racers = []
-
-    categories.each do |category|
-      next if [:u16, :zene].include?(category.category)
-      category_racers = racers[category.category]
-      # 2 box places for 1-20 racers
-      if category_racers.size <= 20
-        box_places = 2
-      # 3 box places for 21-30 etc
-      else
-        box_places = category_racers.size/10 + 1
-      end
-      box_racers << category_racers.sort_by{|_, v| v.sum{|r| -(r.points || 0)}}.collect{|_, v| v[0].racer}.first(box_places)
-    end
-
-    box_racers.flatten
-  end
 end

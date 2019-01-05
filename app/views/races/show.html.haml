@@ -103,20 +103,6 @@
   %br
   %br
 
-- if @race.league.xczld? && !@race.started_at
-  %h4 Start Box
-
-  %table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp{ style: 'background: #ffe082' }
-    %thead
-      %tr
-        %th Ime i Prezime
-        %th Klub
-    %tbody
-      - @race.start_box_racers.each do |racer|
-        %tr
-          %td= racer.full_name
-          %td= racer.club.try(:name)
-
 %h4
   Prijavljeni natjecatelji
   = "(#{@race.race_results.count})"

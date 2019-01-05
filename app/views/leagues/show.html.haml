@@ -47,7 +47,7 @@
       - Category.generics.each do |cat, _|
         %h4= cat.upcase
         %ol.mdl-list
-          - @league.racers[cat]&.sort_by{|k, v| v.sum{|r| -(r.points || 0)}}&.each_with_index do |(_, results), index|
+          - @league.racers[cat]&.sort_by{|_, v| v.sum{|r| -(r.points || 0)}}&.each_with_index do |(_, results), index|
             %li.mdl-list__item.mdl-list__item--two-line
               %span.mdl-list__item-primary-content
                 .mdl-list__item-icon= index + 1

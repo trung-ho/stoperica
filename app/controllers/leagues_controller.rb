@@ -5,7 +5,7 @@ class LeaguesController < ApplicationController
   # GET /leagues
   # GET /leagues.json
   def index
-    @leagues = League.all.order(id: :desc)
+    @leagues = League.all.order(updated_at: :desc)
   end
 
   # GET /leagues/1

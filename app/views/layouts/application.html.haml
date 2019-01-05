@@ -32,6 +32,7 @@
               - if current_user.admin?
                 %a.mdl-navigation__link{:href => "/timing"} Timing
                 %a.mdl-navigation__link{:href => "/pools"} Brojevi
+                %a.mdl-navigation__link{:href => "/race_admins"} Race Admins
               - if current_user.racer.present?
                 = link_to racer_path(current_user.try(:racer)), class: 'mdl-navigation__link' do
                   = current_user.racer.try(:first_name)
@@ -57,6 +58,7 @@
             - if current_user.admin?
               %a.mdl-navigation__link{:href => "/timing"} Timing
               %a.mdl-navigation__link{:href => "/pools"} Brojevi
+              %a.mdl-navigation__link{:href => "/race_admins"} Race Admins
             - if current_user.racer.present?
               = link_to racer_path(current_user.try(:racer)), class: 'mdl-navigation__link' do
                 = current_user.racer.try(:first_name)

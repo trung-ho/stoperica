@@ -41,7 +41,6 @@
                 %span.mdl-list__item-sub-title= results[0].racer.club&.name
               %b.mdl-list__item-secondary-info
                 = results.sum{ |r| r.points || 0 }
-    }
   - elsif @league.trail?
     #natjecatelji-panel.mdl-tabs__panel{ class: "#{ @league.trail? ? 'is-active' : '' }" }
       - Category.generics.each do |cat, _|

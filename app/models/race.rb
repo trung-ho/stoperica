@@ -27,6 +27,28 @@ class Race < ApplicationRecord
   end
 
   def assign_points
+    # assign category points
+    if league&.xczld? || league&.trail?
+      race_results.update(points: nil)
+      limit = league.xczld? ? 25 : nil
+      fallback_points = league.xczld? ? nil : 1
+
+      categories.each do |category|
+        # nadi top 25 rezultata
+        results = race_results
+          .includes(:racer)
+          .where(status: 3)
+          .where(category: category)
+          .order(:position)
+          .limit(limit)
+
+        results.each_with_index do |rr, index|
+          rr.update!(points: league.points[index] || fallback_points)
+        end
+      end
+    end
+
+    # assign lead club league points
     if league&.lead?
       clps = ClubLeaguePoint.where(league: league)
       clps.each do |clp|
@@ -43,7 +65,10 @@ class Race < ApplicationRecord
         data[id] = points
         clp.update(points: data)
       end
-    elsif league&.xczld?
+    end
+
+    # assign xczld club league points
+    if league&.xczld?
       clps = ClubLeaguePoint.where(league: league)
       clps
         .reject{ |clp| clp.club.points_in_race(self).zero? }
@@ -55,26 +80,7 @@ class Race < ApplicationRecord
         end
     end
 
-    if league&.xczld?
-      race_results.update(points: nil)
-      # za svaku kategoriju
-      categories.each do |category|
-        # nadi top 25 rezultata
-        results = race_results
-          .includes(:racer)
-          .where(status: 3)
-          .where(category: category)
-          .select{ |rr| rr.lap_times.length > 0 }
-          .sort_by{ |rr| [-rr.lap_times.length, rr.finish_time] }
-          .first(25)
-
-        results.each_with_index do |rr, index|
-          # podijeli bodove
-          rr.update!(points: league.points[index])
-        end
-      end
-    end
-
+    # assign running category, overall and club league points
     if league&.running?
       finishers = race_results.includes(:racer).where(status: 3)
       men = finishers.where('racers.gender = 2').references(:racers).order(finish_time: :desc)
@@ -103,25 +109,6 @@ class Race < ApplicationRecord
         data = clp.points
         data[id] = clp.club.points_in_race self
         clp.update(points: data)
-      end
-    end
-
-    if league&.trail?
-      race_results.update(points: nil)
-      # za svaku kategoriju
-      categories.each do |category|
-        # nadi top 25 rezultata
-        results = race_results
-          .includes(:racer)
-          .where(status: 3)
-          .where(category: category)
-          .select{ |rr| rr.lap_times.length > 0 }
-          .sort_by{ |rr| [-rr.lap_times.length, rr.finish_time] }
-
-        results.each_with_index do |rr, index|
-          # podijeli bodove
-          rr.update!(points: league.points[index] || 1)
-        end
       end
     end
   end

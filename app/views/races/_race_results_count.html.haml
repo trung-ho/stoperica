@@ -1,0 +1,20 @@
+%span.mdl-chip.mdl-chip--contact
+  %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.count
+  %span.mdl-chip__text Ukupno
+
+- if @race.ended_at
+  %span.mdl-chip.mdl-chip--contact
+    %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.where(status: 3).count
+    %span.mdl-chip__text Završilo
+
+  %span.mdl-chip.mdl-chip--contact
+    %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.where(status: 4).count
+    %span.mdl-chip__text DNF
+
+  %span.mdl-chip.mdl-chip--contact
+    %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.where(status: 5).count
+    %span.mdl-chip__text DNS
+
+  %span.mdl-chip.mdl-chip--contact
+    %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.where(status: 6).count
+    %span.mdl-chip__text DSQ

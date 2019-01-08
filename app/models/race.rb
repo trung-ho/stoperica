@@ -34,7 +34,6 @@ class Race < ApplicationRecord
       fallback_points = league.xczld? ? nil : 1
 
       categories.each do |category|
-        # nadi top 25 rezultata
         results = race_results
           .includes(:racer)
           .where(status: 3)

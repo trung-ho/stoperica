@@ -26,28 +26,6 @@ class Race < ApplicationRecord
     end
   end
 
-  def self.points
-    [
-      250, 200, 160, 150, 140, 130, 120, 110, 100, 90, 80, 75, 70, 65, 60, 55,
-      50, 45, 40, 35, 30, 25, 20, 15, 10
-    ]
-  end
-
-  def self.lead_points
-    [
-      100, 80, 65, 55, 51, 47, 43, 40, 37, 34, 31, 28, 26, 24, 22, 20, 18, 16,
-      14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
-    ]
-  end
-
-  def self.trail_points
-    [
-      100, 88, 78, 72, 68, 66, 64, 62, 60, 58, 56, 54, 52, 50, 48, 46, 44, 42,
-      40, 38, 36, 34, 32, 30, 28, 26, 24, 22, 20, 18, 17, 16, 15, 14, 13, 12,
-      11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
-    ]
-  end
-
   def assign_points
     if league&.lead?
       clps = ClubLeaguePoint.where(league: league)
@@ -92,7 +70,7 @@ class Race < ApplicationRecord
 
         results.each_with_index do |rr, index|
           # podijeli bodove
-          rr.update!(points: Race.points[index])
+          rr.update!(points: league.points[index])
         end
       end
     end
@@ -142,7 +120,7 @@ class Race < ApplicationRecord
 
         results.each_with_index do |rr, index|
           # podijeli bodove
-          rr.update!(points: Race.trail_points[index] || 1)
+          rr.update!(points: league.points[index] || 1)
         end
       end
     end

@@ -133,6 +133,18 @@ class RaceResult < ApplicationRecord
     x + y
   end
 
+  def insert_lap_time time, reader_id
+     index = lap_times.find_index{|it| it['reader_id'].to_s == reader_id.to_s}
+
+    if index
+      lap_times[index]['time'] = millis
+    else
+      self.lap_times << { time: time, reader_id: reader_id }
+    end
+    race_result.status = 3
+    race_result.save!
+  end
+
   def to_csv
     # ['Startni broj', 'Pozicija', 'Ime', 'Prezime', 'Klub',
     # 'Kategorija', 'Velicina majice',

@@ -12,8 +12,8 @@ var DraftResultStore = flux.createStore({
       RaceResultActions.startRace,
       RaceResultActions.setRace
     ],
-    newRaceResult: function(racerNumber, time, status) {
-        this.raceResults.push({ racerNumber, time, status });
+    newRaceResult: function(racerNumber, time, status, readerId) {
+        this.raceResults.push({ racerNumber, time, status, readerId });
         this.emit('draftResultStore.change');
     },
     newTempResult: function(time) {

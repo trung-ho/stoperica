@@ -8,13 +8,15 @@ class RaceResultForm extends React.Component {
         this.updateMinutes = this.updateMinutes.bind(this);
         this.updateSeconds = this.updateSeconds.bind(this);
         this.updateMillis = this.updateMillis.bind(this);
+        this.updateReaderId = this.updateReaderId.bind(this);
 
         this.state = {
           racerNumber: undefined,
           hours: 0,
           minutes: 0,
           seconds: 0,
-          millis: 0
+          millis: 0,
+          readerId: 0
         }
     }
 
@@ -27,7 +29,7 @@ class RaceResultForm extends React.Component {
     }
 
     saveResult() {
-      const {racerNumber, hours, minutes, seconds, millis} = this.state;
+      const {racerNumber, hours, minutes, seconds, millis, readerId} = this.state;
       const raceId = DraftResultStore.getRaceId();
       let ajax = new Ajax(
         `/start_numbers/start_time?race_id=${raceId}&start_number=${racerNumber}`,
@@ -40,7 +42,7 @@ class RaceResultForm extends React.Component {
           time += millis;
 
           if(racerNumber && time) {
-            RaceResultActions.newRaceResult(racerNumber, time, 3);
+            RaceResultActions.newRaceResult(racerNumber, time, 3, readerId);
           }
           else {
             alert('Ispuni sva polja!');
@@ -69,6 +71,10 @@ class RaceResultForm extends React.Component {
 
     updateMillis(event) {
       this.setState({millis: event.target.value});
+    }
+
+    updateReaderId(event) {
+      this.setState({readerId: event.target.value});
     }
 
     render() {
@@ -111,6 +117,8 @@ class RaceResultForm extends React.Component {
                   {this.getOptions(1000, 'ms')}
                 </select>
               </p>
+              <label>Reader ID</label>
+              <p><input type="text" placeholder="Reader ID" onKeyUp={this.updateReaderId}/></p>
               <div>
                 <button
                   className={`mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect`}

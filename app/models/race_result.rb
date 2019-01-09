@@ -137,12 +137,12 @@ class RaceResult < ApplicationRecord
      index = lap_times.find_index{|it| it['reader_id'].to_s == reader_id.to_s}
 
     if index
-      lap_times[index]['time'] = millis
+      lap_times[index]['time'] = time
     else
       self.lap_times << { time: time, reader_id: reader_id }
     end
-    race_result.status = 3
-    race_result.save!
+    self.status = 3
+    self.save!
   end
 
   def to_csv

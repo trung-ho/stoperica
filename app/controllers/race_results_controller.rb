@@ -93,16 +93,16 @@ class RaceResultsController < ApplicationController
   # DELETE /race_results/destroy_from_timing
   def destroy_from_timing
     # TODO update this
-    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: @start_number)
-    race_result.lap_times -= [{
-      time: (params[:time].to_f / 1000).to_s,
-      reader_id: 0
-    }]
-    race_result.save!
-    race_result.race.ended_at
-    respond_to do |format|
-      format.json { render json: race_result }
-    end
+    # race_result = RaceResult.find_by(race_id: params[:race_id], start_number: @start_number)
+    # race_result.lap_times -= [{
+    #   time: (params[:time].to_f / 1000).to_s,
+    #   reader_id: 0
+    # }]
+    # race_result.save!
+    # race_result.race.ended_at
+    # respond_to do |format|
+    #   format.json { render json: race_result }
+    # end
   end
 
   def from_climbing

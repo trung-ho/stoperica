@@ -32,7 +32,8 @@ class DraftResult extends React.Component {
       start_number: this.props.result.racerNumber,
       race_id: DraftResultStore.getRaceId(),
       time: this.props.result.time,
-      status: this.props.result.status
+      status: this.props.result.status,
+      reader_id: this.props.result.readerId
     };
 
     let ajax = new Ajax(

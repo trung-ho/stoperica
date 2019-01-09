@@ -23,8 +23,9 @@
   - else
     - @race.categories.order(id: :asc).each_with_index do |category, index|
       .mdl-grid{ class: "cat-#{index}" }
-        .mdl-cell.mdl-cell--2-col
+        .mdl-cell.mdl-cell--12-col
           = category.name.upcase
+          %b= "(#{@sorted_results[category].size})"
 
       - @sorted_results[category].each_with_index do |race_result, index|
         = render 'result', race_result: race_result, index: index

@@ -96,8 +96,8 @@
         if (this.status === 200) {
           var res = JSON.parse(xhr.responseText);
           var startNumber = res.start_number ? res.start_number.value : '';
-          var raceId = res.start_number ? res.start_number.race_id : '';
-          alert('Spremljen broj: ' + startNumber + ' race_id: ' + raceId);
+          var raceId = res.start_number ? res.race_id : '';
+          alert('Spremljen broj ' + startNumber);
         }
         else {
           alert('GRESKA. Nije spremljeno.');

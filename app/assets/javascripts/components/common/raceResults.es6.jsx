@@ -137,8 +137,9 @@ class RaceResults extends React.Component {
 
   componentWillMount() {
     this.ajax = new Ajax(
-      `/races/${this.props.raceId}`,
+      `/races/${this.props.raceId}?unsorted=true`,
       (data) => {
+
         this.setState({
           race: data,
           categories: data.categories.map(c => c.name)

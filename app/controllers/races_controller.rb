@@ -131,6 +131,7 @@ class RacesController < ApplicationController
   end
 
   def sort_results
+    return if params[:unsorted].present?
     if @race.penjanje?
       fallback = @race.race_results.count
       @sorted_results = @race.race_results.where.not(position: nil).order(:position)

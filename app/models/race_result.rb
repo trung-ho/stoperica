@@ -77,13 +77,22 @@ class RaceResult < ApplicationRecord
     end
 
     return '- -' if index.nil?
-    lap_time index
+    lap_time index + 1
+  end
+
+  def control_point_millis reader_id
+    lap_time = lap_times.find do |it|
+      it.with_indifferent_access['reader_id'].to_s == reader_id.to_s
+    end
+    time = lap_time.is_a?(Hash) ? lap_time.with_indifferent_access[:time] : lap_time
+    time&.to_i
   end
 
   def lap_millis lap_position = nil
     return nil if lap_times.length.zero?
-    index = (lap_position || lap_times.length) - 1
-    lap_time = lap_times[index]
+    return control_point_millis 0 unless lap_position
+    lap_time = lap_times[lap_position - 1]
+    return nil unless lap_time
     time = lap_time.is_a?(Hash) ? lap_time.with_indifferent_access[:time] : lap_time
     time&.to_i
   end

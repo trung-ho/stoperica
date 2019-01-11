@@ -82,7 +82,8 @@ class RaceResultsController < ApplicationController
   def from_timing
     race_result = RaceResult.find_by!(race: @race, start_number: @start_number)
     millis = params[:time].to_f / 1000
-    reader_id = params[:reader_id] || 0
+    has_reader_id = params[:reader_id] && params[:reader_id].strip.present?
+    reader_id = has_reader_id ? params[:reader_id].strip : 0
     race_result.insert_lap_time(millis, reader_id)
     race_result.update!(status: params[:status]) if params[:status].present? && params[:status] != 3
     respond_to do |format|

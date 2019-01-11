@@ -66,9 +66,9 @@ class RaceResult < ApplicationRecord
     end
   end
 
-  def reader_id_valid? index, reader_id
-    return true unless lap_times[index].present?
-    reader_id.present? && reader_id.to_s == lap_times.dig(index, 'reader_id')&.to_s
+  def reader_id_valid? reader_id
+    lap_time = lap_times.find{|it| it['reader_id'].to_s == reader_id.to_s}
+    return lap_time.present?
   end
 
   def control_point_time reader_id
@@ -91,20 +91,14 @@ class RaceResult < ApplicationRecord
   # calling this method without lap param will return last lap time
   def lap_time lap_position = nil
     lap_time = lap_millis lap_position
-
     return '- -' if lap_time.nil? || status != 3
 
     start_time = started_at || race.started_at
+    return '- -' unless start_time
 
-    if !lap_times.empty? && start_time
-      time = lap_time.is_a?(Hash) ? lap_time.with_indifferent_access[:time] : lap_time
-      ended_at = Time.at(time.to_i)
-      seconds = ended_at - start_time
-
-      Time.at(seconds).utc.strftime('%k:%M:%S')
-    else
-      '- -'
-    end
+    ended_at = Time.at(lap_time)
+    seconds = ended_at - start_time
+    Time.at(seconds).utc.strftime('%k:%M:%S')
   end
 
   def set_finish_time

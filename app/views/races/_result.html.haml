@@ -61,7 +61,7 @@
   .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
     .mdl-cell.mdl-cell--2-col Kontrolne točke
     - @race.control_points.each_with_index do |point, index|
-      .mdl-cell.mdl-cell--2-col{ class: "#{ race_result.reader_id_valid?(index, point.with_indifferent_access[:reader_id]) ? '' : 'losers' }" }
+      .mdl-cell.mdl-cell--2-col{ class: "#{ race_result.reader_id_valid?(point.with_indifferent_access[:reader_id]) ? '' : 'losers' }" }
         %b
           KT
           = index + 1

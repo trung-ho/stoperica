@@ -25,15 +25,6 @@
     .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
       Natrag
 
-  - if params[:absolute]
-    = link_to race_path @race, absolute: true do
-      .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
-        Prikaz po kategorijama
-  - else
-    = link_to race_path @race, absolute: true do
-      .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
-        Generalni poredak
-
   - if @is_admin || @is_race_admin
     = link_to race_path(@race, format: "csv") do
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect

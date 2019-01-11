@@ -66,7 +66,8 @@ class RaceResult < ApplicationRecord
     end
   end
 
-  def reader_id_valid?(index, reader_id)
+  def reader_id_valid? index, reader_id
+    return true unless lap_times[index].present?
     reader_id.present? && reader_id.to_s == lap_times.dig(index, 'reader_id')&.to_s
   end
 
@@ -75,6 +76,7 @@ class RaceResult < ApplicationRecord
       it.with_indifferent_access['reader_id'].to_s == reader_id.to_s
     end
 
+    return '- -' if index.nil?
     lap_time index
   end
 

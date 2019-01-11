@@ -25,6 +25,15 @@
     .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
       Natrag
 
+  - if params[:absolute]
+    = link_to race_path @race, absolute: true do
+      .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
+        Prikaz po kategorijama
+  - else
+    = link_to race_path @race, absolute: true do
+      .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
+        Generalni poredak
+
   - if @is_admin || @is_race_admin
     = link_to race_path(@race, format: "csv") do
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
@@ -70,6 +79,13 @@
 
 %h4
   Natjecatelji
+
+%label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect{for: "poredak"}
+  %input#poredak.mdl-switch__input{checked: params[:absolute], type: "checkbox"}
+  %span.mdl-switch__label Generalni poredak
+%br
+%br
+
 %p
   = render 'race_results_count'
 
@@ -114,3 +130,10 @@
 
     return false;
   }
+
+:javascript
+  document.querySelector('#poredak').addEventListener('click', function(event) {
+    var checked = event.target.checked;
+    if (checked) window.location.search = 'absolute=true';
+    else window.location.search = '';
+  });

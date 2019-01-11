@@ -84,7 +84,7 @@ class RaceResultsController < ApplicationController
     millis = params[:time].to_f / 1000
     reader_id = params[:reader_id] || 0
     race_result.insert_lap_time(millis, reader_id)
-    race_result.update!(status, params[:status]) if params[:status].present? && params[:status] != 3
+    race_result.update!(status: params[:status]) if params[:status].present? && params[:status] != 3
     respond_to do |format|
       format.json { render json: race_result }
     end

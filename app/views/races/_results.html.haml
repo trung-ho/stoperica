@@ -22,10 +22,22 @@
 
   - else
     - @race.categories.order(id: :asc).each_with_index do |category, index|
-      .mdl-grid{ class: "cat-#{index}" }
-        .mdl-cell.mdl-cell--12-col
+      .mdl-grid{ class: "cat-#{index}", onclick: "collapse('#collapse-#{category.id}', event)" }
+        .mdl-cell.mdl-cell--12-col.collapse-trigger
           = category.name.upcase
           %b= "(#{@sorted_results[category].size})"
+          %i.material-icons.down.is-pulled-right expand_more
+          %i.material-icons.up.is-pulled-right expand_less
 
-      - @sorted_results[category].each_with_index do |race_result, index|
-        = render 'result', race_result: race_result, index: index
+
+      .collapse{ id: "collapse-#{category.id}" }
+        - @sorted_results[category].each_with_index do |race_result, index|
+          = render 'result', race_result: race_result, index: index
+
+
+:javascript
+  function collapse(selector, e) {
+    var el = document.querySelector(selector);
+    el.classList.toggle('collapsed');
+    e.target.classList.toggle('collapsed');
+  }

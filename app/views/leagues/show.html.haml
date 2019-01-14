@@ -27,26 +27,15 @@
             = link_to cp.club.name, club_path(cp.club)
           %b.mdl-cell.mdl-cell--4-col.mdl-cell--2-col-phone= cp.total
 
-  - if @league.xczld?
-    #natjecatelji-panel.mdl-tabs__panel
-      - Category.categories.except(:muskarci).each do |cat, _|
-        %h4= cat.upcase
-        %ol.mdl-list
-          - @league.racers[cat].sort_by{|k, v| v.sum{|r| -(r.points || 0)}}.each_with_index do |(_, results), index|
-            %li.mdl-list__item.mdl-list__item--two-line
-              %span.mdl-list__item-primary-content
-                .mdl-list__item-icon= index + 1
-                .emoji= results[0].racer.country_flag
-                = link_to results[0].racer.uci_name, racer_path(results[0].racer)
-                %span.mdl-list__item-sub-title= results[0].racer.club&.name
-              %b.mdl-list__item-secondary-info
-                = results.sum{ |r| r.points || 0 }
-  - elsif @league.trail?
+  - if @league.xczld? || @league.trail?
     #natjecatelji-panel.mdl-tabs__panel{ class: "#{ @league.trail? ? 'is-active' : '' }" }
-      - Category.generics.each do |cat, _|
-        %h4= cat.upcase
-        %ol.mdl-list
-          - @league.racers[cat]&.sort_by{|_, v| v.sum{|r| -(r.points || 0)}}&.each_with_index do |(_, results), index|
+      - @categories.each_with_index do |cat, index|
+        %h4.collapse-trigger{ class: "cat-#{index}", onclick: "collapse('#collapse-#{index}', event)"}
+          = cat[0].upcase
+          %i.material-icons.down.is-pulled-right expand_more
+          %i.material-icons.up.is-pulled-right expand_less
+        %ol.mdl-list.collapse{ id: "collapse-#{index}" }
+          - @league.racers[cat[0]]&.sort_by{|k, v| v.sum{|r| -(r.points || 0)}}&.each_with_index do |(_, results), index|
             %li.mdl-list__item.mdl-list__item--two-line
               %span.mdl-list__item-primary-content
                 .mdl-list__item-icon= index + 1
@@ -69,3 +58,10 @@
           = l race.date, format: :short
         .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone
           = link_to race.ended_at.present? ? 'REZULTATI' : 'PRIJAVE', race
+
+:javascript
+  function collapse(selector, e) {
+    var el = document.querySelector(selector);
+    el.classList.toggle('collapsed');
+    e.target.classList.toggle('collapsed');
+  }

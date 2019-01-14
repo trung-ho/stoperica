@@ -66,82 +66,63 @@ class RaceResult < ApplicationRecord
     end
   end
 
-  def last_lap_time
-    time = lap_times.last.is_a?(String) ? lap_times.last : lap_times.last.with_indifferent_access[:time]
+  def reader_id_valid? reader_id
+    lap_time = lap_times.find{|it| it['reader_id'].to_s == reader_id.to_s}
+    return lap_time.present?
+  end
+
+  def control_point_time reader_id
+    index = lap_times.find_index do |it|
+      it.with_indifferent_access['reader_id'].to_s == reader_id.to_s
+    end
+
+    return '- -' if index.nil?
+    lap_time index + 1
+  end
+
+  def control_point_millis reader_id
+    lap_time = lap_times.find do |it|
+      it.with_indifferent_access['reader_id'].to_s == reader_id.to_s
+    end
+    time = lap_time.is_a?(Hash) ? lap_time.with_indifferent_access[:time] : lap_time
     time&.to_i
   end
 
-  def reader_id_valid?(index, reader_id)
-    reader_id.present? && reader_id.to_s == lap_times.dig(index, 'reader_id')&.to_s
+  def lap_millis lap_position = nil
+    return nil if lap_times.length.zero?
+    return control_point_millis 0 unless lap_position
+    lap_time = lap_times[lap_position - 1]
+    return nil unless lap_time
+    time = lap_time.is_a?(Hash) ? lap_time.with_indifferent_access[:time] : lap_time
+    time&.to_i
   end
 
-  def control_time(reader_id)
-    lap_time = lap_times.find{|it| it.with_indifferent_access['reader_id'].to_s == reader_id.to_s}
-
-    return '- -' if lap_time.nil?
-
-    return '- -' unless status == 3
+  # calling this method without lap param will return last lap time
+  def lap_time lap_position = nil
+    lap_time = lap_millis lap_position
+    return '- -' if lap_time.nil? || status != 3
 
     start_time = started_at || race.started_at
+    return '- -' unless start_time
 
-    if !lap_times.empty? && start_time
-      time = lap_time.with_indifferent_access[:time]
-      ended_at = Time.at(time.to_i)
-      seconds = ended_at - start_time
-
-      Time.at(seconds).utc.strftime('%k:%M:%S')
-    else
-      '- -'
-    end
-  end
-
-  # TODO: refactor this and finish_time into one method
-  def lap_time lap
-    lap_time = lap_times[lap - 1]
-
-    return '- -' if lap_time.nil?
-
-    return '- -' unless status == 3
-
-    start_time = started_at || race.started_at
-
-    if !lap_times.empty? && start_time
-      time = lap_time.is_a?(String) ? lap_time : lap_time.with_indifferent_access[:time]
-      ended_at = Time.at(time.to_i)
-      seconds = ended_at - start_time
-
-      Time.at(seconds).utc.strftime('%k:%M:%S')
-    else
-      '- -'
-    end
-  end
-
-  def calc_finish_time
-    return '- -' unless status == 3
-
-    start_time = started_at || race.started_at
-
-    if !lap_times.empty? && start_time
-      ended_at = Time.at(last_lap_time)
-      seconds = ended_at - start_time
-
-      Time.at(seconds).utc.strftime('%k:%M:%S')
-    else
-      '- -'
-    end
+    ended_at = Time.at(lap_time)
+    seconds = ended_at - start_time
+    Time.at(seconds).utc.strftime('%k:%M:%S')
   end
 
   def set_finish_time
-    self.finish_time = calc_finish_time
+    self.finish_time = lap_time
   end
 
   def calc_finish_delta
     return '- -' unless status == 3
-    reference_race_result = RaceResult.where(category: category, race: race, status: 3).order(:position).limit(1).first()
+
+    reference_race_result = RaceResult.where(category: category, race: race, status: 3).order(:position).limit(1).first
     lap_diff = reference_race_result.lap_times.length - lap_times.length
-    if !lap_times.empty?
-      if lap_diff == 0
-        seconds = Time.at(last_lap_time) - Time.at(reference_race_result.last_lap_time)
+
+    unless lap_times.empty?
+      if lap_diff.zero?
+        seconds = lap_millis - reference_race_result.lap_millis
         Time.at(seconds).utc.strftime('+%k:%M:%S')
       else
         "- #{lap_diff} #{lap_text(lap_diff)}"
@@ -155,6 +136,18 @@ class RaceResult < ApplicationRecord
     x = points || 0
     y = additional_points || 0
     x + y
+  end
+
+  def insert_lap_time time, reader_id
+     index = lap_times.find_index{|it| it['reader_id'].to_s == reader_id.to_s}
+
+    if index
+      lap_times[index]['time'] = time
+    else
+      self.lap_times << { time: time, reader_id: reader_id }
+    end
+    self.status = 3
+    self.save!
   end
 
   def to_csv
@@ -234,8 +227,8 @@ class RaceResult < ApplicationRecord
           .select { |rr| rr.climbs.dig('final', 'position') }
     res.sort_by { |rr| [rr.climbs['final']['position'], rr.climbs['q']['position'], rr.climbs['final']['time']] }
       .each_with_index do |rr, index|
-      if Race.lead_points[index]
-        rr.update_columns(position: index + 1, points: Race.lead_points[index])
+      if race.league.points[index]
+        rr.update_columns(position: index + 1, points: race.league.points[index])
       else
         rr.update_column(:position, index + 1)
       end

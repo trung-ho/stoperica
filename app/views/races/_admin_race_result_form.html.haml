@@ -1,0 +1,36 @@
+= form_for RaceResult.new do |f|
+  %input#racer_search{ type: 'text', placeholder: 'Natjecatelji...' }
+  = f.hidden_field :racer_id, class: 'admin_racer_id'
+  = f.hidden_field :race_id, value: @race.id
+  = f.hidden_field :status, value: 1
+  = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}
+  = f.submit 'Prijavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+:javascript
+  var choices = #{Racer.where.not(id: @race.race_results.pluck(:racer_id)).collect{|r| [r.full_name, r.id, r.email]}.sort{|a, b| a[0] <=> b[0]}.inspect.html_safe};
+
+  new autoComplete({
+    selector: '#racer_search',
+    minChars: 2,
+    source: function(term, suggest){
+      term = term.toLowerCase();
+      var matches = [];
+      for (i=0; i<choices.length; i++) {
+        var matchesName = ~choices[i][0].toLowerCase().indexOf(term);
+        var matchesEmail = ~choices[i][2].toLowerCase().indexOf(term);
+        if (matchesName || matchesEmail) {
+          matches.push(choices[i]);
+        }
+      }
+      suggest(matches);
+    },
+    renderItem: function (item, search){
+      search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+      var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+      return '<div class="autocomplete-suggestion" data-val="' + item[0] + '" data-id="' + item[1] + '">' + item[0].replace(re, "<b>$1</b>") + '</div>';
+    },
+    onSelect: function (event, term, item) {
+      document.querySelector('.admin_racer_id').value = item.dataset.id;
+    }
+  });
+%br
+%br

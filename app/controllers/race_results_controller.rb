@@ -1,7 +1,7 @@
 class RaceResultsController < ApplicationController
   before_action :set_race_result, only: %i[show edit update destroy]
-  before_action :check_admin, only: %i[index show new from_timing destroy_from_timing]
-  before_action :set_start_number, only: %i[from_timing destroy_from_timing from_climbing]
+  before_action :check_admin, only: %i[index show new from_timing]
+  before_action :set_start_number, only: %i[from_timing from_climbing]
 
   protect_from_forgery except: %i[from_device from_climbing]
 
@@ -81,27 +81,11 @@ class RaceResultsController < ApplicationController
   # POST /race_results/from_timing
   def from_timing
     race_result = RaceResult.find_by!(race: @race, start_number: @start_number)
-    if params[:time]
-      race_result.lap_times << {
-        time: params[:time].to_f / 1000,
-        reader_id: 0
-      }
-    end
-    race_result.status = params[:status]
-    race_result.save!
-    respond_to do |format|
-      format.json { render json: race_result }
-    end
-  end
-
-  # DELETE /race_results/destroy_from_timing
-  def destroy_from_timing
-    race_result = RaceResult.find_by(race_id: params[:race_id], start_number: @start_number)
-    race_result.lap_times -= [{
-      time: (params[:time].to_f / 1000).to_s,
-      reader_id: 0
-    }]
-    race_result.save!
+    millis = params[:time].to_f / 1000
+    has_reader_id = params[:reader_id] && params[:reader_id].strip.present?
+    reader_id = has_reader_id ? params[:reader_id].strip : 0
+    race_result.insert_lap_time(millis, reader_id)
+    race_result.update!(status: params[:status]) if params[:status].present? && params[:status] != 3
     respond_to do |format|
       format.json { render json: race_result }
     end
@@ -141,9 +125,9 @@ class RaceResultsController < ApplicationController
     end
 
     race_result = RaceResult.find_by(race_id: race_ids, start_number: start_number)
-    if race_result.race.ended_at
+    if race_result.race.ended_at || race_result.race.started_at.nil?
       data = {
-        error: 'Race ended',
+        error: 'Race inactive',
         tag_id: params[:TAGID],
         race_id: params[:RACEID]
       }
@@ -152,16 +136,7 @@ class RaceResultsController < ApplicationController
 
     millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z').to_f
 
-    existing_time = race_result.lap_times
-      .find{|it| it['reader_id'].to_s == reader_id.to_s}
-
-    if existing_time
-      existing_time['time'] = millis
-    else
-      race_result.lap_times << { time: millis, reader_id: reader_id }
-    end
-    race_result.status = 3
-    race_result.save!
+    race_result.insert_lap_time(millis, reader_id)
 
     data = {
       finish_time: race_result.finish_time,

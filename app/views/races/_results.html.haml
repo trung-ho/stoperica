@@ -16,78 +16,16 @@
     .mdl-cell.mdl-cell--1-col Vrijeme
     .mdl-cell.mdl-cell--1-col Zaostatak
 
-  - @race.categories.order(id: :asc).each_with_index do |category, index|
-    .mdl-grid{ class: "cat-#{index}" }
-      .mdl-cell.mdl-cell--2-col
-        = category.name.upcase
+  - if params[:absolute]
+    - @race.race_results.sort_by{ |rr| [-rr.lap_times.length, rr.finish_time] }.each_with_index do |race_result, index|
+      = render 'result', race_result: race_result, index: index
 
-    - @sorted_results[category].each_with_index do |race_result, index|
-      .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
-        .mdl-cell.mdl-cell--1-col
-          - if race_result.status == 3 && @race.ended_at.present?
-            %b= race_result.position
+  - else
+    - @race.categories.order(id: :asc).each_with_index do |category, index|
+      .mdl-grid{ class: "cat-#{index}" }
+        .mdl-cell.mdl-cell--12-col
+          = category.name.upcase
+          %b= "(#{@sorted_results[category].size})"
 
-            - if index <= 2
-              = render partial: 'trophy', locals: { index: index }
-
-        - if @race.league&.xczld? || @race.league&.trail?
-          .mdl-cell.mdl-cell--1-col= race_result.points
-        - elsif @race.league&.running?
-          .mdl-cell.mdl-cell--1-col{ title: 'Ukupno = bodovi u kategoriji + bodovi u ukupnom poretku' }
-            - if race_result.total_points
-              %b= race_result.total_points
-              ="(#{race_result.points} + #{race_result.additional_points})"
-            - else
-              = "- -"
-        .mdl-cell.mdl-cell--1-col= race_result.start_number&.value
-        / .mdl-cell{ class: "mdl-cell--#{@race.league&.xczld? ? 1 : 2}-col" }
-        /   - if @race.uci_display?
-        /     = race_result.racer.uci_id
-        .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone
-          - if @is_admin
-            = race_result.racer.year_of_birth
-          = link_to race_result.racer do
-            .emoji= race_result.racer.country_flag
-            - if @race.uci_display?
-              = race_result.racer.uci_name
-            - else
-              = race_result.racer.full_name
-        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
-          = race_result.racer.club.try(:name)
-        .mdl-cell.mdl-cell--1-col= race_result.pretty_status
-        - unless @race.laps.nil?
-          - (1..@race.laps).each do |lap|
-            .mdl-cell.mdl-cell--1-col= race_result.lap_time lap
-        .mdl-cell.mdl-cell--1-col= race_result.finish_time
-        - if @race.ended_at.blank?
-          .mdl-cell.mdl-cell--1-col= '--'
-        - else
-          - if index.zero?
-            .mdl-cell.mdl-cell--1-col
-          -else
-            .mdl-cell.mdl-cell--1-col.losers
-              = race_result.finish_delta
-
-        - if @is_admin || @is_race_admin
-          .mdl-cell.mdl-cell--2-col
-            = form_for race_result, method: :delete do |f|
-              .actions
-                = f.submit 'Odjavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect', onclick: "return confirm('Ovo ce izbrisati rezultat iz baze podataka. Molim potvrdi.')"
-
-          - if @race.pool.present?
-            #adminFormContainer.mdl-cell.mdl-cell--8-col
-              = form_for race_result do |f|
-                = f.select :start_number, options_for_select(@start_numbers, race_result.start_number&.value), include_blank: true
-                = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: race_result.category_id
-                = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
-
-      - if @race.treking? && race_result.lap_times && race_result.status == 3
-        .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
-          .mdl-cell.mdl-cell--2-col Kontrolne točke
-          - @race.control_points.each_with_index do |point, index|
-            .mdl-cell.mdl-cell--2-col{ class: "#{ race_result.reader_id_valid?(index, point.with_indifferent_access[:reader_id]) ? '' : 'losers' }" }
-              %b
-                KT
-                = index + 1
-              = race_result.control_time(point.with_indifferent_access[:reader_id])
-
+      - @sorted_results[category].each_with_index do |race_result, index|
+        = render 'result', race_result: race_result, index: index

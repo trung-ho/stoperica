@@ -98,7 +98,7 @@ class RacesController < ApplicationController
   end
 
   def assign_positions
-    @race.assign_positions if @race.league&.xczld? || @race.league&.running? || @race.league&.trail?
+    @race.assign_positions unless @race.league&.lead?
     @race.assign_points
     redirect_to @race
   end
@@ -131,6 +131,7 @@ class RacesController < ApplicationController
   end
 
   def sort_results
+    return if params[:unsorted].present?
     if @race.penjanje?
       fallback = @race.race_results.count
       @sorted_results = @race.race_results.where.not(position: nil).order(:position)

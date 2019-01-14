@@ -3,7 +3,6 @@ class DraftResult extends React.Component {
     super();
 
     this.uploadResult = this.uploadResult.bind(this);
-    this.deleteResult = this.deleteResult.bind(this);
     this.prettyStatus = this.prettyStatus.bind(this);
 
     this.state = {
@@ -32,7 +31,8 @@ class DraftResult extends React.Component {
       start_number: this.props.result.racerNumber,
       race_id: DraftResultStore.getRaceId(),
       time: this.props.result.time,
-      status: this.props.result.status
+      status: this.props.result.status,
+      reader_id: this.props.result.readerId
     };
 
     let ajax = new Ajax(
@@ -49,28 +49,6 @@ class DraftResult extends React.Component {
     this.setState({status: 'uploading', failed: false})
 
     ajax.post(data);
-  }
-
-  deleteResult() {
-    let data = {
-      start_number: this.props.result.racerNumber,
-      race_id: DraftResultStore.getRaceId(),
-      time: this.props.result.time
-    };
-
-    let ajax = new Ajax(
-      '/race_results/destroy_from_timing',
-      (data) => {
-        this.setState({status: 'izbrisano'})
-      },
-      (error, status) => {
-        console.log(error, status);
-        this.setState({status: 'nije uspjelo brisanje'})
-      }
-    );
-
-    this.setState({status: 'brisanje'})
-    ajax.delete(data);
   }
 
   componentDidMount() {
@@ -97,12 +75,6 @@ class DraftResult extends React.Component {
             onClick={this.uploadResult}
           >
             Upload
-          </button>
-          <button
-            className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect"
-            onClick={this.deleteResult}
-          >
-            Izbrisi
           </button>
           {
            !this.state.failed ?

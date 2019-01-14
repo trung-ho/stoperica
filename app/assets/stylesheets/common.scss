@@ -1,0 +1,34 @@
+.collapse-trigger {
+  cursor: pointer;
+
+  i {
+    pointer-events: none;
+  }
+
+  .up {
+    display: none;
+  }
+
+  .down {
+    display: block;
+  }
+
+  &.collapsed {
+    .up {
+      display: block;
+    }
+
+    .down {
+      display: none;
+    }
+  }
+}
+
+.collapse.collapsed {
+  height: 0;
+  overflow: hidden;
+}
+
+.is-pulled-right {
+  float: right;
+}

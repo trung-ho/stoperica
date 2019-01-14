@@ -16,13 +16,13 @@
   - unless @race.race_results.where(status: 5).size.zero?
     %span.mdl-chip.mdl-chip--contact
       %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.where(status: 5).size
-      %span.mdl-chip__text DNS
+      %span.mdl-chip__text DSQ
 
 
   - unless @race.race_results.where(status: 6).size.zero?
     %span.mdl-chip.mdl-chip--contact
       %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.where(status: 6).size
-      %span.mdl-chip__text DSQ
+      %span.mdl-chip__text DNS
 
   - unless @race.race_results.where(start_number_id: nil).size.zero?
     %span.mdl-chip.mdl-chip--contact

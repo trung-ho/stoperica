@@ -71,11 +71,12 @@
 %h4
   Natjecatelji
 
-%label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect{for: "poredak"}
-  %input#poredak.mdl-switch__input{checked: params[:absolute], type: "checkbox"}
-  %span.mdl-switch__label Generalni poredak
-%br
-%br
+- unless @race.ended_at.nil?
+  %label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect{for: "poredak"}
+    %input#poredak.mdl-switch__input{checked: params[:absolute], type: "checkbox"}
+    %span.mdl-switch__label Generalni poredak
+  %br
+  %br
 
 %p
   = render 'race_results_count'

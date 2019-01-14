@@ -71,7 +71,7 @@
 %h4
   Natjecatelji
 
-- unless @race.ended_at.nil?
+- if @race.started_at
   %label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect{for: "poredak"}
     %input#poredak.mdl-switch__input{checked: params[:absolute], type: "checkbox"}
     %span.mdl-switch__label Generalni poredak

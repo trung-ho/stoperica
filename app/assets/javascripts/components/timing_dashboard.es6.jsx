@@ -74,6 +74,8 @@ class TimingDashboard extends React.Component {
           <TempResults />
           <hr/>
           <RaceResultForm />
+          <hr/>
+          <MissedControlPointsForm/>
         </div>
         <div className="mdl-cell mdl-cell--6-col">
           <DraftResults />

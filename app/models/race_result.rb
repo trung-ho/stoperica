@@ -116,6 +116,7 @@ class RaceResult < ApplicationRecord
 
   def calc_finish_delta
     return '- -' unless status == 3
+    return "- #{missed_control_points} #{lap_text(missed_control_points)}" unless missed_control_points.zero?
 
     reference_race_result = RaceResult.where(category: category, race: race, status: 3).order(:position).limit(1).first
     lap_diff = reference_race_result.lap_times.length - lap_times.length

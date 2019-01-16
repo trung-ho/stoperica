@@ -65,6 +65,14 @@ class RaceResultsController < ApplicationController
     end
   end
 
+  def update_missed
+    race = Race.find params[:race_id]
+    start_number = race.pool.start_numbers.find_by!(value: params[:start_number])
+    race_result = RaceResult.find_by!(race: race, start_number: start_number)
+    race_result.update!(missed_control_points: params[:missed_control_points])
+    render json: race_result
+  end
+
   # DELETE /race_results/1
   # DELETE /race_results/1.json
   def destroy

@@ -19,7 +19,7 @@ class Race < ApplicationRecord
         .where(status: 3)
         .where(category: category)
         .select{ |rr| rr.lap_times.length > 0 }
-        .sort_by{ |rr| [-rr.lap_times.length, rr.finish_time] }
+        .sort_by{ |rr| [rr.missed_control_points, -rr.lap_times.length, rr.finish_time] }
       results.each_with_index do |rr, index|
         rr.update!(position: index + 1, finish_delta: rr.calc_finish_delta)
       end

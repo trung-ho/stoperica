@@ -1,6 +1,6 @@
 class RaceResultsController < ApplicationController
   before_action :set_race_result, only: %i[show edit update destroy]
-  before_action :check_admin, only: %i[index show new from_timing]
+  before_action :check_admin, only: %i[index show new from_timing update_missed]
   before_action :set_start_number, only: %i[from_timing from_climbing]
 
   protect_from_forgery except: %i[from_device from_climbing]
@@ -63,6 +63,14 @@ class RaceResultsController < ApplicationController
       format.html { redirect_to @race_result.race, notice: 'Uplata uspjesno zaprimljena.' }
       format.json { render :show, status: :ok, location: @race_result }
     end
+  end
+
+  def update_missed
+    race = Race.find params[:race_id]
+    start_number = race.pool.start_numbers.find_by!(value: params[:start_number])
+    race_result = RaceResult.find_by!(race: race, start_number: start_number)
+    race_result.update!(missed_control_points: params[:missed_control_points])
+    render json: race_result
   end
 
   # DELETE /race_results/1

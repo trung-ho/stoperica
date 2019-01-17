@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   resources :race_results do
     collection do
       match :from_device, via: [:get, :post]
+      post :update_missed
       post :from_timing
       post :from_climbing
     end

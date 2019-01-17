@@ -17,7 +17,7 @@
     .mdl-cell.mdl-cell--1-col Zaostatak
 
   - if params[:absolute]
-    - @race.race_results.sort_by{ |rr| [-rr.lap_times.length, rr.finish_time] }.each_with_index do |race_result, index|
+    - @race.race_results.sort_by{ |rr| [rr.missed_control_points, -rr.lap_times.length, rr.finish_time] }.each_with_index do |race_result, index|
       = render 'result', race_result: race_result, index: index
 
   - else

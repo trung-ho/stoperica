@@ -28,7 +28,7 @@ class MissedControlPointsForm extends React.Component {
     const ajax = new Ajax(
       '/race_results/update_missed',
       data => {
-        alert(`Spremljen broj ${this.state.start_number}: ${data.finish_delta}.`);
+        alert(`Spremljen broj ${this.state.start_number}.`);
         this.setState = blankState();
       },
       () => alert('Greska! Nije spremljeno.')

@@ -36,7 +36,7 @@
       .mdl-cell.mdl-cell--1-col= race_result.lap_time lap
   .mdl-cell.mdl-cell--1-col= race_result.finish_time
   - if @race.ended_at.blank?
-    .mdl-cell.mdl-cell--1-col= '--'
+    .mdl-cell.mdl-cell--1-col= '- -'
   - else
     - if index.zero?
       .mdl-cell.mdl-cell--1-col

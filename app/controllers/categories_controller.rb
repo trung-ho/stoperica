@@ -69,6 +69,9 @@ class CategoriesController < ApplicationController
   end
 
   def category_params
-    params.require(:category).permit(:name, :category, :race_id)
+    params.require(:category).permit(
+      :name, :category, :race_id, :track_length, :track_elevation,
+      :track_descent
+    )
   end
 end

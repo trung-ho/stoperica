@@ -2,6 +2,12 @@
 
 %h1= @category.name
 %h2= @category.race&.name
+%b Duljina
+= @category.track_length
+%b Uspon
+= @category.track_elevation
+%b Spust
+= @category.track_descent
 
 = link_to 'Edit', edit_category_path(@category)
 \|

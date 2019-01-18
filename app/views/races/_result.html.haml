@@ -38,7 +38,7 @@
     %b= race_result.finish_time
     - if race_result.average_speed
       %br
-      = "(#{race_result.average_speed})"
+      = race_result.average_speed
   - if @race.ended_at.blank?
     .mdl-cell.mdl-cell--1-col= '- -'
   - else

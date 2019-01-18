@@ -275,4 +275,19 @@ class RaceResult < ApplicationRecord
       self.update_column(:start_number_id, start_number) unless start_number.nil?
     end
   end
+
+  def average_speed
+    return unless status == 3
+    return if finish_delta.include? 'KT' # do not show speed of racers who haven't completed all control points
+    return unless category.track_length && lap_millis
+    start_time = started_at || race.started_at
+    return unless start_time
+
+    len = category.track_length.to_f/1000
+
+    ended_at = Time.at(lap_millis)
+    seconds = ended_at - start_time
+    dur = seconds/3600
+    "#{(len/dur).round 1} km/h"
+  end
 end

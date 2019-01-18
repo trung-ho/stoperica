@@ -34,7 +34,11 @@
   - unless @race.laps.nil?
     - (1..@race.laps).each do |lap|
       .mdl-cell.mdl-cell--1-col= race_result.lap_time lap
-  .mdl-cell.mdl-cell--1-col= race_result.finish_time
+  .mdl-cell.mdl-cell--1-col
+    %b= race_result.finish_time
+    - if race_result.average_speed
+      %br
+      = race_result.average_speed
   - if @race.ended_at.blank?
     .mdl-cell.mdl-cell--1-col= '- -'
   - else
@@ -57,7 +61,7 @@
           = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: race_result.category_id
           = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
 
-- if @race.treking? && race_result.lap_times && race_result.status == 3 && @race.control_points
+- if false && @race.treking? && race_result.lap_times && race_result.status == 3 && @race.control_points
   .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
     .mdl-cell.mdl-cell--2-col Kontrolne točke
     - @race.control_points.each_with_index do |point, index|

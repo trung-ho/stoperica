@@ -26,6 +26,16 @@
         .mdl-cell.mdl-cell--12-col.collapse-trigger
           = category.name.upcase
           %b= "(#{@sorted_results[category].size})"
+
+          - if category.track_length
+            %i.material-icons navigation
+            = (category.track_length.to_f/1000).round 1
+            km
+          - if category.track_elevation
+            %i.material-icons landscape
+            = category.track_elevation
+            m
+
           %i.material-icons.down.is-pulled-right expand_more
           %i.material-icons.up.is-pulled-right expand_less
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190118201151) do
+ActiveRecord::Schema.define(version: 20190118202330) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,6 +140,7 @@ ActiveRecord::Schema.define(version: 20190118201151) do
     t.bigint "league_id"
     t.jsonb "control_points", array: true
     t.string "picture_url"
+    t.string "location_url"
     t.index ["league_id"], name: "index_races_on_league_id"
     t.index ["pool_id"], name: "index_races_on_pool_id"
   end

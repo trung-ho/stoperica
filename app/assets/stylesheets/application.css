@@ -46,6 +46,10 @@
   display: none;
 }
 
+.is-vcentered {
+  vertical-align: middle;
+}
+
 .uppercase {
   text-transform: uppercase;
 }

@@ -6,14 +6,21 @@
   %b
     = l @race.date, format: :short
 
-%h4
-  Prijave otvorene do:
-  %b#raceResultLocked{ class: @race.lock_race_results ? 'shame' : '' }
-    = l @race.registration_threshold, format: :short
-  - if @race.lock_race_results
-    .mdl-tooltip.mdl-tooltip--large{for: "raceResultLocked"}
-      %b Napomena:
-      Odjave su onemogućene za ovu utrku.
+- if @race.location_url
+  %h4
+    %a{ href: @race.location_url, target: 'blank', style: "text-decoration: none" }
+      %i.material-icons.is-vcentered location_on
+      Lokacija utrke
+
+- unless @race.started_at
+  %h4
+    Prijave otvorene do:
+    %b#raceResultLocked{ class: @race.lock_race_results ? 'shame' : '' }
+      = l @race.registration_threshold, format: :short
+    - if @race.lock_race_results
+      .mdl-tooltip.mdl-tooltip--large{for: "raceResultLocked"}
+        %b Napomena:
+        Odjave su onemogućene za ovu utrku.
 
 - if @is_admin && @race.pool
   %h4
@@ -30,7 +37,7 @@
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
         Export CSV
 
-  - if @is_admin
+  - if @is_admin || @is_race_admin
     = link_to assign_positions_race_path(@race) do
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
         Azuriraj

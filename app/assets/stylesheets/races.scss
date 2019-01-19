@@ -20,8 +20,16 @@
       background: rgb(64,196,255);
       color: white;
       margin-top: 0;
-      padding: 2rem 0;
+      padding: 1.25rem 0;
       text-align: center;
+    }
+
+    &.mdl-card--expand {
+      background-size: cover;
+      h4.text-outline {
+        color: white;
+        text-shadow: 1px 1px 0 black;
+      }
     }
   }
 

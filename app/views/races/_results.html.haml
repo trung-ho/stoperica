@@ -27,18 +27,20 @@
           = category.name.upcase
           %b= "(#{@sorted_results[category].size})"
 
-          - if category.track_length
-            %i.material-icons navigation
-            = (category.track_length.to_f/1000).round 1
-            km
-          - if category.track_elevation
-            %i.material-icons landscape
-            = category.track_elevation
-            m
-
           %i.material-icons.down.is-pulled-right expand_more
           %i.material-icons.up.is-pulled-right expand_less
 
+          - if category.track_elevation
+            %span.is-pulled-right
+              %i.material-icons landscape
+              = category.track_elevation
+              m
+
+          - if category.track_length
+            %span.is-pulled-right
+              %i.material-icons navigation
+              = (category.track_length.to_f/1000).round 1
+              km &nbsp;
 
       .collapse{ id: "collapse-#{category.id}" }
         - @sorted_results[category].each_with_index do |race_result, index|

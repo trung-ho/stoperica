@@ -32,20 +32,20 @@ class RaceResults extends React.Component {
   _renderSequential() {
     const newestFirst = this.state.newestFirst;
     return this.state.race.race_results.filter((a)=>{
-        return a.finish_time != '- -' && a.status == 3
+        return a.live_time.time != '- -' && a.status == 3
       }).sort((a, b)=>{
         if(newestFirst){
-          if(a.finish_time < b.finish_time)
+          if(a.live_time.time < b.live_time.time)
             return 1;
-          else if(a.finish_time === b.finish_time)
+          else if(a.live_time.time === b.live_time.time)
             return 0
           else
             return -1;
         }
         else {
-          if(a.finish_time > b.finish_time)
+          if(a.live_time.time > b.live_time.time)
             return 1;
-          else if(a.finish_time === b.finish_time)
+          else if(a.live_time.time === b.live_time.time)
             return 0
           else
             return -1;
@@ -56,7 +56,7 @@ class RaceResults extends React.Component {
           <td>{raceResult.category.name.toUpperCase()}</td>
           <td>{`${raceResult.racer.first_name} ${raceResult.racer.last_name}`}</td>
           <td>{raceResult.racer && raceResult.racer.club && raceResult.racer.club.name}</td>
-          <td>{raceResult.finish_time}</td>
+          <td>{raceResult.live_time.time} ({raceResult.live_time.control_point})</td>
           <td></td>
         </tr>)
       });
@@ -64,7 +64,7 @@ class RaceResults extends React.Component {
 
   _renderActive() {
     return this.state.race.race_results.filter((a)=>{
-        return a.finish_time === '- -'
+        return a.live_time.time === '- -'
       }).map((raceResult)=>{
         return (<tr key={`race-result-${raceResult.id}`}>
           <td>{raceResult.start_number && raceResult.start_number.value}</td>
@@ -79,7 +79,7 @@ class RaceResults extends React.Component {
   _renderByCategory() {
     const { newestFirst, categories } = this.state;
     let finishedTimes = this.state.race.race_results.filter((a)=>{
-      return a.finish_time != '- -' && a.status == 3
+      return a.live_time.time != '- -' && a.status == 3
     });
 
     return categories.map((category, index) => {
@@ -88,17 +88,17 @@ class RaceResults extends React.Component {
         })
         .sort((a, b)=>{
           if(newestFirst){
-            if(a.finish_time < b.finish_time)
+            if(a.live_time.time < b.live_time.time)
               return 1;
-            else if(a.finish_time === b.finish_time)
+            else if(a.live_time.time === b.live_time.time)
               return 0
             else
               return -1;
           }
           else {
-            if(a.finish_time > b.finish_time)
+            if(a.live_time.time > b.live_time.time)
               return 1;
-            else if(a.finish_time === b.finish_time)
+            else if(a.live_time.time === b.live_time.time)
               return 0
             else
               return -1;
@@ -109,7 +109,7 @@ class RaceResults extends React.Component {
             <td>{raceResult.category.name.toUpperCase()}</td>
             <td>{`${raceResult.racer.first_name} ${raceResult.racer.last_name}`}</td>
             <td>{raceResult.racer && raceResult.racer.club && raceResult.racer.club.name}</td>
-            <td>{raceResult.finish_time}</td>
+            <td>{raceResult.live_time.time} ({raceResult.live_time.control_point})</td>
             <td></td>
           </tr>)
         }));

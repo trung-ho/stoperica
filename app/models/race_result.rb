@@ -67,6 +67,7 @@ class RaceResult < ApplicationRecord
   end
 
   def live_time
+    return { time: '- -', control_point: nil } if lap_times.empty?
     r_id = lap_times.last.dig('reader_id')
     time = control_point_time r_id
     control_point_name = 'Finish' if r_id.to_s == '0'

@@ -160,9 +160,12 @@ class RaceResults extends React.Component {
   }
 
   render () {
+    const total = this.state.race.race_results.length;
+    const active = this.state.race.race_results.filter(a => a.live_time.time === '- -').length;
+    const finished = total - active;
     return(
       <div>
-        <h2>Trenutni rezultati</h2>
+        <h2>Trenutni rezultati ({ finished })</h2>
 
         <label htmlFor="switch1" className="mdl-cell mdl-cell--4-col mdl-cell--12-col-phone mdl-switch mdl-js-switch mdl-js-ripple-effect">
           <input type="checkbox" id="switch1" className="mdl-switch__input" onClick={this._handleSwitchView} />
@@ -203,7 +206,7 @@ class RaceResults extends React.Component {
           </tbody>
         </table>
 
-        <h2>Nisu zavrsili</h2>
+        <h2>Nisu zavrsili({ active })</h2>
 
         <table
           className={`${this.state.largeView ? 'large-view' : ''} mdl-data-table wide_table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp`}

@@ -74,7 +74,7 @@ class RaceResult < ApplicationRecord
     if control_point_name.nil? && race.control_points
       cp_index = race.control_points.find_index{ |cp| cp['reader_id'] == r_id }
       if cp_index
-        control_point_name = race.control_points[cp_index].name || "KT #{cp_index + 1}"
+        control_point_name = race.control_points[cp_index]['name'] || "KT #{cp_index + 1}"
       end
     end
     { time: time, control_point: control_point_name }

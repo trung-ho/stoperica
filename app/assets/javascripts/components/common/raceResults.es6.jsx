@@ -56,7 +56,7 @@ class RaceResults extends React.Component {
           <td>{raceResult.category.name.toUpperCase()}</td>
           <td>{`${raceResult.racer.first_name} ${raceResult.racer.last_name}`}</td>
           <td>{raceResult.racer && raceResult.racer.club && raceResult.racer.club.name}</td>
-          <td>{raceResult.live_time.time} ({raceResult.live_time.control_point})</td>
+          <td>{raceResult.live_time.time} {raceResult.live_time.control_point}</td>
           <td></td>
         </tr>)
       });
@@ -109,7 +109,7 @@ class RaceResults extends React.Component {
             <td>{raceResult.category.name.toUpperCase()}</td>
             <td>{`${raceResult.racer.first_name} ${raceResult.racer.last_name}`}</td>
             <td>{raceResult.racer && raceResult.racer.club && raceResult.racer.club.name}</td>
-            <td>{raceResult.live_time.time} ({raceResult.live_time.control_point})</td>
+            <td>{raceResult.live_time.time} {raceResult.live_time.control_point}</td>
             <td></td>
           </tr>)
         }));

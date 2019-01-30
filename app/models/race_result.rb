@@ -66,6 +66,20 @@ class RaceResult < ApplicationRecord
     end
   end
 
+  def live_time
+    return { time: '- -', control_point: nil } if lap_times.empty?
+    r_id = lap_times.last.dig('reader_id')
+    time = control_point_time r_id
+    control_point_name = 'Finish' if r_id.to_s == '0'
+    if control_point_name.nil? && race.control_points
+      cp_index = race.control_points.find_index{ |cp| cp['reader_id'] == r_id }
+      if cp_index
+        control_point_name = race.control_points[cp_index]['name'] || "KT #{cp_index + 1}"
+      end
+    end
+    { time: time, control_point: control_point_name }
+  end
+
   def reader_id_valid? reader_id
     lap_time = lap_times.find{|it| it['reader_id'].to_s == reader_id.to_s}
     return lap_time.present?

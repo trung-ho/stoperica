@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   end
 
   def race_admin? race_id
+    return false unless user_signed_in?
     RaceAdmin.exists?(race_id: race_id, racer_id: current_user&.racer&.id)
   end
 end

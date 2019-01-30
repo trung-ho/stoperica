@@ -28,6 +28,8 @@
             %a.mdl-navigation__link{:href => "/races"} Utrke
             %a.mdl-navigation__link{:href => "/live"} Live
             - if user_signed_in?
+              - if RaceAdmin.exists? racer: current_user&.racer
+                %a.mdl-navigation__link{:href => "/timing"} Timing
               - if current_user.admin?
                 %a.mdl-navigation__link{:href => "/timing"} Timing
                 %a.mdl-navigation__link{:href => "/pools"} Brojevi
@@ -54,6 +56,8 @@
           %a.mdl-navigation__link{:href => "/races"} Utrke
           %a.mdl-navigation__link{:href => "/live"} Live
           - if user_signed_in?
+            - if RaceAdmin.exists? racer: current_user&.racer
+              %a.mdl-navigation__link{:href => "/timing"} Timing
             - if current_user.admin?
               %a.mdl-navigation__link{:href => "/timing"} Timing
               %a.mdl-navigation__link{:href => "/pools"} Brojevi

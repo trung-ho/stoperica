@@ -21,6 +21,8 @@ class RacersController < ApplicationController
   # GET /racers/1.json
   def show
     @racer = Racer.includes(race_results: [:race, :category]).find(params[:id])
+    race_ids = @racer.race_results.pluck :race_id
+    @is_race_admin = race_admin? race_ids
   end
 
   # GET /racers/new

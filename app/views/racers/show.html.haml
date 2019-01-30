@@ -20,7 +20,7 @@
     %b Mjesto stanovanja
     = @racer.town
 
-    - if current_user.admin?
+    - if current_user&.admin? || current_user&.racer == @racer || @is_race_admin
       %br
       %b Velicina majice
       = @racer.shirt_size || '-'
@@ -33,7 +33,7 @@
       %b Personal best 21.1km
       = @racer.personal_best || '-'
 
-- if user_signed_in? && (current_user.admin || current_user.racer == @racer)
+- if current_user&.admin? || current_user&.racer == @racer || @is_race_admin
   %p
     %b Kontakt:
     %ul
@@ -72,5 +72,5 @@
 %br
 = link_to 'Natrag', racers_path, class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
 
-- if user_signed_in? && current_user.admin
+- if current_user&.admin?
   = link_to 'Izmijeni podatke', edit_racer_path(@racer), class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'

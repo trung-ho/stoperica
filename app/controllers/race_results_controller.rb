@@ -90,8 +90,7 @@ class RaceResultsController < ApplicationController
   def from_timing
     race_result = RaceResult.find_by!(race: @race, start_number: @start_number)
     millis = params[:time].to_f / 1000
-    has_reader_id = params[:reader_id] && params[:reader_id].strip.present?
-    reader_id = has_reader_id ? params[:reader_id].strip : 0
+    reader_id = parse_reader_id params[:reader_id]
     race_result.insert_lap_time(millis, reader_id)
     race_result.update!(status: params[:status]) if params[:status].present? && params[:status] != 3
     respond_to do |format|
@@ -177,6 +176,11 @@ class RaceResultsController < ApplicationController
     params.require(:race_result).permit(
       :racer_id, :race_id, :status, :lap_times, :category_id, :climbs
     )
+  end
+
+  def parse_reader_id reader_id
+    return reader_id if reader_id.is_a? Integer
+    reader_id&.strip.present? ? reader_id.strip : 0
   end
 
   def send_email

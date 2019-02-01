@@ -70,3 +70,5 @@
           KT
           = index + 1
         = race_result.control_point_time(point.with_indifferent_access[:reader_id])
+        .split
+          = race_result.control_point_diff(point.with_indifferent_access[:reader_id])

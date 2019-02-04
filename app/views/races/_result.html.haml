@@ -72,3 +72,14 @@
         = race_result.control_point_time(point.with_indifferent_access[:reader_id])
         .split
           = race_result.control_point_diff(point.with_indifferent_access[:reader_id])
+
+- if @race.xco? && race_result.lap_times && race_result.status == 3
+  .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
+    - race_result.lap_times.each_with_index do |lap_time, index|
+      .mdl-cell.mdl-cell--2-col
+        %b
+          LAP
+          = index + 1
+        = race_result.lap_time(index + 1)
+
+

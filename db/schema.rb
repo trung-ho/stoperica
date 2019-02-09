@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190118202330) do
+ActiveRecord::Schema.define(version: 20190209083235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,7 +78,7 @@ ActiveRecord::Schema.define(version: 20190118202330) do
     t.jsonb "lap_times", default: []
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "points"
+    t.float "points"
     t.integer "category_id"
     t.integer "position"
     t.integer "start_number_id"
@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 20190118202330) do
     t.jsonb "climbs", default: {}
     t.string "finish_delta", default: "- -"
     t.string "finish_time", default: "- -"
-    t.integer "additional_points"
+    t.float "additional_points"
     t.integer "missed_control_points", default: 0
     t.index ["category_id"], name: "index_race_results_on_category_id"
     t.index ["race_id"], name: "index_race_results_on_race_id"
@@ -141,6 +141,7 @@ ActiveRecord::Schema.define(version: 20190118202330) do
     t.jsonb "control_points", array: true
     t.string "picture_url"
     t.string "location_url"
+    t.float "points_multiplier", default: 1.0
     t.index ["league_id"], name: "index_races_on_league_id"
     t.index ["pool_id"], name: "index_races_on_pool_id"
   end

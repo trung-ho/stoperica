@@ -31,7 +31,7 @@ class Race < ApplicationRecord
     if league&.xczld? || league&.trail?
       race_results.update(points: nil)
       limit = league.xczld? ? 25 : nil
-      fallback_points = league.xczld? ? nil : 1
+      fallback_points = league.xczld? ? 0 : 1
 
       categories.each do |category|
         results = race_results
@@ -42,7 +42,8 @@ class Race < ApplicationRecord
           .limit(limit)
 
         results.each_with_index do |rr, index|
-          rr.update!(points: league.points[index] || fallback_points)
+          points = (league.points[index] || fallback_points) * points_multiplier
+          rr.update!(points: points)
         end
       end
     end

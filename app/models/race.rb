@@ -7,7 +7,7 @@ class Race < ApplicationRecord
 
   before_validation :parse_json
 
-  enum race_type: [:mtb, :trcanje, :treking, :duatlon, :triatlon, :penjanje]
+  enum race_type: [:mtb, :trcanje, :treking, :duatlon, :triatlon, :penjanje, :xco]
 
   attr_accessor :sorted_results
   attr_accessor :control_points_raw

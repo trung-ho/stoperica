@@ -22,7 +22,7 @@ class TimingDashboard extends React.Component {
     DraftResultStore.off('draftResultStore.setRace', this.onChange);
   }
 
-  createRaceResult(event, status=3) {
+  createRaceResult(event, status = 3) {
     let input = document.getElementById('raceResultInput');
 
     if((event.keyCode == 13 || event.type === 'click') && input.value.length) {
@@ -43,7 +43,7 @@ class TimingDashboard extends React.Component {
       <div className={`${this.state.show ? '' : 'hidden'} mdl-grid`}>
         <div className="mdl-cell mdl-cell--6-col" style={{border: '1px solid #aaa', padding: '1em', marginLeft: '-1em'}}>
           <h4 style={{marginLeft: '20px'}}>Unesi startni broj</h4>
-          <input type="number" min="1" id="raceResultInput" onKeyUp={ this.createRaceResult } />
+          <input type="number" min="1" id="raceResultInput" onKeyUp={ event => this.createRaceResult(event) } />
           <ul className="list-unstyled">
             <li
               className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect"

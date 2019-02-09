@@ -50,7 +50,7 @@ class RaceResult < ApplicationRecord
     when 2
       'Na startu'
     when 3
-      if race.laps
+      if race.xco?
         "#{ended_text} #{lap_times.length} #{lap_text(lap_times.length)}"
       else
         ended_text
@@ -68,13 +68,15 @@ class RaceResult < ApplicationRecord
 
   def live_time
     return { time: '- -', control_point: nil } if lap_times.empty?
+    label = race.xco? ? 'LAP' : 'KT'
     r_id = lap_times.last.dig('reader_id')
     time = control_point_time r_id
-    control_point_name = 'Finish' if r_id.to_s == '0'
+    control_point_name = 'Finish' if r_id.to_s == '0' && !race.xco?
+    control_point_name = "LAP #{lap_times.length + 1}" if race.xco?
     if control_point_name.nil? && race.control_points
       cp_index = race.control_points.find_index{ |cp| cp['reader_id'] == r_id }
       if cp_index
-        control_point_name = race.control_points[cp_index]['name'] || "KT #{cp_index + 1}"
+        control_point_name = race.control_points[cp_index]['name'] || "#{label} #{cp_index + 1}"
       end
     end
     { time: time, control_point: control_point_name }
@@ -111,9 +113,13 @@ class RaceResult < ApplicationRecord
     end
   end
 
-  def control_point_millis reader_id
-    lap_time = lap_times.find do |it|
-      it.with_indifferent_access['reader_id'].to_s == reader_id.to_s
+  def control_point_millis reader_id = nil
+    if reader_id.nil?
+      lap_time = lap_times.last
+    else
+      lap_time = lap_times.find do |it|
+        it.with_indifferent_access['reader_id'].to_s == reader_id.to_s
+      end
     end
     time = lap_time.is_a?(Hash) ? lap_time.with_indifferent_access[:time] : lap_time
     time&.to_i
@@ -121,6 +127,7 @@ class RaceResult < ApplicationRecord
 
   def lap_millis lap_position = nil
     return nil if lap_times.length.zero?
+    return control_point_millis if race.xco? && lap_position.nil?
     return control_point_millis 0 unless lap_position
     lap_time = lap_times[lap_position - 1]
     return nil unless lap_time
@@ -171,12 +178,16 @@ class RaceResult < ApplicationRecord
   end
 
   def insert_lap_time time, reader_id
-     index = lap_times.find_index{|it| it['reader_id'].to_s == reader_id.to_s}
-
-    if index
-      lap_times[index]['time'] = time
-    else
+    if race.xco?
       self.lap_times << { time: time, reader_id: reader_id }
+    else
+      index = lap_times.find_index{|it| it['reader_id'].to_s == reader_id.to_s}
+
+      if index
+        lap_times[index]['time'] = time
+      else
+        self.lap_times << { time: time, reader_id: reader_id }
+      end
     end
     self.status = 3
     self.save!
@@ -309,7 +320,7 @@ class RaceResult < ApplicationRecord
 
   def average_speed
     return unless status == 3
-    return if finish_delta.include? 'KT' # do not show speed of racers who haven't completed all control points
+    return if finish_delta.include?('KT') || finish_delta.include?('LAP') # do not show speed of racers who haven't completed all control points
     return unless category.track_length && lap_millis
     start_time = started_at || race.started_at
     return unless start_time

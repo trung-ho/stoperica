@@ -81,5 +81,9 @@
           LAP
           = index + 1
         = race_result.lap_time(index + 1)
+        - if race_result.lap_diff(index + 1)
+          .split
+            %b Lap Time
+            = race_result.lap_diff(index + 1)
 
 

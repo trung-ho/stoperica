@@ -96,6 +96,18 @@ class RaceResult < ApplicationRecord
     lap_time index + 1
   end
 
+  def lap_diff position = 0
+    return nil if position < 2
+    current = lap_millis(position)
+    previous = lap_millis(position - 1)
+    if current && previous
+      diff = current - previous
+      Time.at(diff).utc.strftime('%k:%M:%S')
+    else
+      nil
+    end
+  end
+
   def control_point_diff reader_id
     index = race.control_points.find_index do |it|
       it.with_indifferent_access['reader_id'].to_s == reader_id.to_s

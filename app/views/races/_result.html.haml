@@ -50,6 +50,7 @@
 
   - if @is_admin || @is_race_admin
     .mdl-cell.mdl-cell--2-col
+      = link_to 'Izmijeni', edit_race_result_url(race_result), class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
       = form_for race_result, method: :delete do |f|
         .actions
           = f.submit 'Odjavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect', onclick: "return confirm('Ovo ce izbrisati rezultat iz baze podataka. Molim potvrdi.')"

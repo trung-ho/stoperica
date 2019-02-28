@@ -76,6 +76,8 @@
             %a.mdl-navigation__link{:href => "/racers/login"} Login
 
       %main.mdl-layout__content
+        - if @banner
+          = render 'layouts/banner'
         .page-content
           %p.notice
             = notice

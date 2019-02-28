@@ -7,12 +7,14 @@ class RacesController < ApplicationController
   # GET /races
   # GET /races.json
   def index
+    @banner = true
     @races = Race.all.order(date: :desc)
   end
 
   # GET /races/1
   # GET /races/1.json
   def show
+    @banner = true
     @is_admin = current_user&.admin?
     @is_race_admin = race_admin?(@race.id)
     if (@is_admin || @is_race_admin) && @race.pool

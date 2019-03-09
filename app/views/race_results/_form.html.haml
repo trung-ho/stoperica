@@ -17,6 +17,6 @@
     = @race_result.pretty_status
   .field
     = f.label :lap_times
-    = f.text_area :lap_times
+    = f.text_area :lap_times, value: @race_result.lap_times.to_json
   .actions
     = f.submit 'Save'

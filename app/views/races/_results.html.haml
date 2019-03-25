@@ -4,12 +4,11 @@
     - if @race.league&.xczld? || @race.league&.running? || @race.league&.trail?
       .mdl-cell.mdl-cell--1-col Bodovi
     .mdl-cell.mdl-cell--1-col Startni broj
-    / .mdl-cell{ class: "mdl-cell--#{@race.league&.xczld? ? 1 : 2}-col" }
-    /   - if @race.uci_display?
-    /     UCI ID
+    - if @race.uci_display?
+      .mdl-cell.mdl-cell--2-col
+        UCI ID
     .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone Ime i Prezime
     .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Klub
-    .mdl-cell.mdl-cell--1-col Status
     - unless @race.laps.nil?
       - (1..@race.laps).each do |lap|
         .mdl-cell.mdl-cell--1-col= "KT #{lap}"

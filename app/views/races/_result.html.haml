@@ -16,9 +16,9 @@
       - else
         = "- -"
   .mdl-cell.mdl-cell--1-col= race_result.start_number&.value
-  / .mdl-cell{ class: "mdl-cell--#{@race.league&.xczld? ? 1 : 2}-col" }
-  /   - if @race.uci_display?
-  /     = race_result.racer.uci_id
+  - if @race.uci_display?
+    .mdl-cell.mdl-cell--2-col
+      %b= race_result.racer.uci_id
   .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone
     - if @is_admin
       = race_result.racer.year_of_birth
@@ -30,15 +30,17 @@
         = race_result.racer.full_name
   .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
     = race_result.racer.club.try(:name)
-  .mdl-cell.mdl-cell--1-col= race_result.pretty_status
   - unless @race.laps.nil?
     - (1..@race.laps).each do |lap|
       .mdl-cell.mdl-cell--1-col= race_result.lap_time lap
   .mdl-cell.mdl-cell--1-col
-    %b= race_result.finish_time
-    - if race_result.average_speed
-      %br
-      = race_result.average_speed
+    - if race_result.finish_time == '- -'
+      %b= race_result.pretty_status
+    - else
+      %b= race_result.finish_time
+      - if race_result.average_speed
+        %br
+        = race_result.average_speed
   - if @race.ended_at.blank?
     .mdl-cell.mdl-cell--1-col= '- -'
   - else

@@ -21,7 +21,7 @@ class Racer < ApplicationRecord
     if is_uci && uci_id === 'Jednodnevna'
       'Individual'
     else
-      club.name
+      club.try(:name)
     end
   end
 

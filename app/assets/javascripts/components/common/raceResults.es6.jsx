@@ -1,5 +1,7 @@
 const getClubName = (racer, isUci) => {
-  return isUci && racer.uci_id === 'Jednodnevna' ? 'Individual' : racer.club.name;
+  const isIndividual = isUci && racer.uci_id === 'Jednodnevna';
+  if (isIndividual) return 'Individual';
+  return racer.club ? racer.club.name : 'Individual';
 }
 
 class RaceResults extends React.Component {

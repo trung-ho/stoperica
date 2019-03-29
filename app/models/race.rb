@@ -114,7 +114,7 @@ class Race < ApplicationRecord
 
   def to_csv
     CSV.generate() do |csv|
-      csv << ['Startni broj', uci_display? ? 'UCI ID' : nil, 'Ime i prezime',
+      csv << ['Startni broj', uci_display? ? 'UCI ID' : nil, 'Prezime', 'Ime',
         'Klub', 'Država', 'Kategorija', 'Majica', 'Datum rodenja', 'Prebivalište',
         'Email', 'Mobitel', 'Personal Best']
       race_results.each do |race_result|
@@ -125,7 +125,7 @@ class Race < ApplicationRecord
 
   def to_start_list_csv
     CSV.generate() do |csv|
-      csv << ['Startni broj', uci_display? ? 'UCI ID' : nil, 'Ime i prezime', 'Klub']
+      csv << ['Startni broj', uci_display? ? 'UCI ID' : nil, 'Prezime', 'Ime', 'Klub']
       categories.each do |category|
         next if sorted_results[category].count.zero?
         csv << [category.name]
@@ -139,7 +139,7 @@ class Race < ApplicationRecord
   def to_results_csv
     CSV.generate() do |csv|
       csv << ['Pozicija', 'Startni broj', uci_display? ? 'UCI ID' : nil,
-        'Ime i prezime', 'Klub', 'Vrijeme', 'Zaostatak']
+        'Prezime', 'Ime', 'Klub', 'Vrijeme', 'Zaostatak']
       categories.each do |category|
         next if sorted_results[category].count.zero?
         csv << [category.name]

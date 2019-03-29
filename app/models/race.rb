@@ -9,7 +9,6 @@ class Race < ApplicationRecord
 
   enum race_type: [:mtb, :trcanje, :treking, :duatlon, :triatlon, :penjanje, :xco]
 
-  attr_accessor :sorted_results
   attr_accessor :control_points_raw
 
   def assign_positions

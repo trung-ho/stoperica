@@ -22,7 +22,7 @@
       %tr{ class: "cat-#{index}" }
         %td{ colspan: 20 }
           = category.name.upcase
-      - @sorted_results.select{ |rr| rr.category == category }.each do |rr|
+      - @race.sorted_results.select{ |rr| rr.category == category }.each do |rr|
         %tr
           %td
             %b= rr.position

@@ -1,6 +1,5 @@
 class RacesController < ApplicationController
   before_action :set_race, only: [:show, :embed, :edit, :update, :destroy, :assign_positions]
-  before_action :sort_results, only: [:show, :embed]
   before_action :check_race_result, only: [:show]
   before_action :only_admin, only: [:new, :edit, :destroy, :assign_positions]
 
@@ -25,7 +24,7 @@ class RacesController < ApplicationController
     respond_to do |format|
       format.html { render :show }
       format.json do
-        render json: @race, include: json_includes
+        render json: @race, include: json_includes, methods: :sorted_results
       end
       format.csv do
         if params[:start_list].present?
@@ -143,14 +142,9 @@ class RacesController < ApplicationController
 
   def json_includes
     [
-      { sorted_results: race_result_includes },
       { race_results: race_result_includes },
-      categories: { methods: [:started?, :started_at] },
+      categories: { methods: [:started?, :started_at] }
     ]
-  end
-
-  def sort_results
-    @sorted_results = @race.sorted_results params[:unsorted].present?
   end
 
   def race_result_includes

@@ -24,7 +24,7 @@
       .mdl-grid{ class: "cat-#{index}", onclick: "collapse('#collapse-#{category.id}', event)" }
         .mdl-cell.mdl-cell--12-col.collapse-trigger
           = category.name.upcase
-          %b= "(#{@sorted_results[category].size})"
+          %b= "(#{@race.sorted_results[category].size})"
 
           %i.material-icons.down.is-pulled-right expand_more
           %i.material-icons.up.is-pulled-right expand_less
@@ -42,7 +42,7 @@
               km &nbsp;
 
       .collapse{ id: "collapse-#{category.id}" }
-        - @sorted_results[category].each_with_index do |race_result, index|
+        - @race.sorted_results[category].each_with_index do |race_result, index|
           = render 'result', race_result: race_result, index: index
 
 

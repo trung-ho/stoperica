@@ -216,8 +216,8 @@ class RaceResult < ApplicationRecord
 
   def to_start_list_csv
     [
-      start_number&.value, racer.first_name, racer.last_name, racer.club_name(race.uci_display),
-      category.try(:name), race.uci_display? ? racer.uci_id : nil
+      start_number&.value, racer.first_name, racer.last_name,
+      racer.club_name(race.uci_display), race.uci_display? ? racer.uci_id : nil
     ]
   end
 

@@ -115,16 +115,75 @@ class Race < ApplicationRecord
 
   def to_csv
     CSV.generate() do |csv|
-      csv << ['Startni broj', 'Pozicija', 'Ime', 'Prezime', 'Klub', 'Kategorija',
-        'Velicina majice', 'Godiste', 'Prebivaliste', 'Email', 'Mobitel',
-        'Vrijeme', 'Zaostatak', 'Status', 'Personal Best 21.1 km', 'UCI ID']
+      csv << ['Startni broj', 'Ime', 'Prezime', 'Klub', 'Država', 'Kategorija',
+        'Majica', 'Datum rodenja', 'Prebivalište', 'Email', 'Mobitel',
+        'Personal Best', 'UCI ID']
       race_results.each do |race_result|
         csv << race_result.to_csv
       end
     end
   end
 
+  def to_start_list_csv
+    CSV.generate() do |csv|
+      csv << ['Startni broj', 'Ime', 'Prezime', 'Klub', 'Kategorija',
+        uci_display? ? 'UCI ID' : nil]
+      categories.each do |category|
+        next if sorted_results[category].count.zero?
+        csv << [category.name]
+        sorted_results[category].each do |race_result|
+          csv << race_result.to_start_list_csv
+        end
+      end
+    end
+  end
+
+  def to_results_csv
+    CSV.generate() do |csv|
+      csv << ['Pozicija', 'Startni broj', 'Ime', 'Prezime', 'Klub', 'Vrijeme',
+        'Zaostatak']
+      categories.each do |category|
+        next if sorted_results[category].count.zero?
+        csv << [category.name]
+        sorted_results[category].each do |race_result|
+          csv << race_result.to_results_csv
+        end
+      end
+    end
+  end
+
   def parse_json
     self.control_points = JSON.parse(control_points_raw) if control_points_raw.present?
+  end
+
+  def sorted_results unsorted = false
+    return if unsorted
+    if penjanje?
+      fallback = race_results.count
+      sorted_results = race_results.where.not(position: nil).order(:position)
+      rest = race_results.where(position: nil)
+      rest = rest.sort_by do |r|
+        [
+          r.climbs.dig('final', 'position') || fallback,
+          r.climbs.dig('q', 'position') || fallback,
+          r.climbs.dig('q2', 'position') || fallback,
+          r.climbs.dig('q1', 'position') || fallback
+        ]
+      end
+      sorted_results += rest
+      sorted_results = sorted_results
+    else
+      sorted_results = {}
+      categories.each do |category|
+        category_results = race_results.where(category: category)
+        if started_at.nil?
+          sorted_results[category] = category_results.order(created_at: :desc)
+        else
+          sorted_results[category] = category_results.where.not(position: nil).order(:position) +
+            category_results.where(position: nil).order(status: :desc)
+        end
+      end
+    end
+    sorted_results
   end
 end

@@ -27,7 +27,15 @@ class RacesController < ApplicationController
       format.json do
         render json: @race, include: json_includes
       end
-      format.csv { send_data @race.to_csv }
+      format.csv do
+        if params[:start_list].present?
+          send_data @race.to_start_list_csv, filename: "Startna lista #{@race.name}.csv"
+        elsif params[:results].present?
+          send_data @race.to_results_csv, filename: "Rezultati #{@race.name}.csv"
+        else
+          send_data @race.to_csv, filename: "Natjecatelji #{@race.name}.csv"
+        end
+      end
     end
   end
 
@@ -133,42 +141,16 @@ class RacesController < ApplicationController
     end
   end
 
-  def sort_results
-    return if params[:unsorted].present?
-    if @race.penjanje?
-      fallback = @race.race_results.count
-      @sorted_results = @race.race_results.where.not(position: nil).order(:position)
-      rest = @race.race_results.where(position: nil)
-      rest = rest.sort_by do |r|
-        [
-          r.climbs.dig('final', 'position') || fallback,
-          r.climbs.dig('q', 'position') || fallback,
-          r.climbs.dig('q2', 'position') || fallback,
-          r.climbs.dig('q1', 'position') || fallback
-        ]
-      end
-      @sorted_results += rest
-      @race.sorted_results = @sorted_results
-    else
-      @sorted_results = {}
-      @race.categories.each do |category|
-        category_results = @race.race_results.where(category: category)
-        if @race.started_at.nil?
-          @sorted_results[category] = category_results.order(created_at: :desc)
-        else
-          @sorted_results[category] = category_results.where.not(position: nil).order(:position) +
-            category_results.where(position: nil).order(status: :desc)
-        end
-      end
-    end
-  end
-
   def json_includes
     [
       { sorted_results: race_result_includes },
       { race_results: race_result_includes },
       categories: { methods: [:started?, :started_at] },
     ]
+  end
+
+  def sort_results
+    @sorted_results = @race.sorted_results params[:unsorted].present?
   end
 
   def race_result_includes

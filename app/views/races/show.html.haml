@@ -38,6 +38,16 @@
         Export CSV
 
   - if @is_admin || @is_race_admin
+    = link_to race_path(@race, format: "csv", params: { start_list: true }) do
+      .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
+        Startna lista CSV
+
+  - if @is_admin || @is_race_admin
+    = link_to race_path(@race, format: "csv", params: { results: true }) do
+      .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
+        Rezultati CSV
+
+  - if @is_admin || @is_race_admin
     = link_to assign_positions_race_path(@race) do
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
         Azuriraj

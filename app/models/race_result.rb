@@ -206,15 +206,25 @@ class RaceResult < ApplicationRecord
   end
 
   def to_csv
-    # ['Startni broj', 'Pozicija', 'Ime', 'Prezime', 'Klub',
-    # 'Kategorija', 'Velicina majice',
-    # 'Godiste', 'Prebivaliste', 'Email', 'Mobitel', 'Vrijeme', 'Zaostatak',
-    # 'Status', 'Personal Best', 'UCI ID']
     [
-      start_number&.value, position, racer.first_name, racer.last_name,
-      racer.club.try(:name), category.try(:name), racer.shirt_size,
-      racer.year_of_birth, racer.town, racer.email, racer.phone_number,
-      finish_time, finish_delta, status, racer.personal_best, racer.uci_id
+      start_number&.value, racer.first_name, racer.last_name, racer.club_name(race.uci_display),
+      racer.country_name, category.try(:name), racer.shirt_size, racer.birth_date,
+      racer.full_address, racer.email, racer.phone_number,
+      racer.personal_best.gsub(',', '.').gsub(';', ':'), racer.uci_id
+    ]
+  end
+
+  def to_start_list_csv
+    [
+      start_number&.value, racer.first_name, racer.last_name, racer.club_name(race.uci_display),
+      category.try(:name), race.uci_display? ? racer.uci_id : nil
+    ]
+  end
+
+  def to_results_csv
+    [
+      position, start_number&.value, racer.first_name, racer.last_name, racer.club_name(race.uci_display),
+      finish_time, finish_delta
     ]
   end
 

@@ -1,3 +1,7 @@
+const getClubName = (racer, isUci) => {
+  return isUci && racer.uci_id === 'Jednodnevna' ? 'Individual' : racer.club.name;
+}
+
 class RaceResults extends React.Component {
   constructor() {
     super();
@@ -31,6 +35,8 @@ class RaceResults extends React.Component {
 
   _renderSequential() {
     const newestFirst = this.state.newestFirst;
+    const isUci = this.state.race.uci_display;
+    console.log();
     return this.state.race.race_results.filter((a)=>{
         return a.live_time.time != '- -' && a.status == 3
       }).sort((a, b)=>{
@@ -55,7 +61,7 @@ class RaceResults extends React.Component {
           <td>{raceResult.start_number && raceResult.start_number.value}</td>
           <td>{raceResult.category.name.toUpperCase()}</td>
           <td>{`${raceResult.racer.first_name} ${raceResult.racer.last_name}`}</td>
-          <td>{raceResult.racer && raceResult.racer.club && raceResult.racer.club.name}</td>
+          <td>{raceResult.racer && raceResult.racer.club && getClubName(raceResult.racer, isUci)}</td>
           <td>{raceResult.live_time.time} {raceResult.live_time.control_point}</td>
           <td></td>
         </tr>)
@@ -70,7 +76,7 @@ class RaceResults extends React.Component {
           <td>{raceResult.start_number && raceResult.start_number.value}</td>
           <td>{raceResult.category.name.toUpperCase()}</td>
           <td>{`${raceResult.racer.first_name} ${raceResult.racer.last_name}`}</td>
-          <td>{raceResult.racer && raceResult.racer.club && raceResult.racer.club.name}</td>
+          <td>{raceResult.racer && raceResult.racer.club && getClubName(raceResult.racer, isUci)}</td>
           <td>{this._prettyStatus(raceResult.status)}</td>
         </tr>)
       });
@@ -108,7 +114,7 @@ class RaceResults extends React.Component {
             <td>{raceResult.start_number && raceResult.start_number.value}</td>
             <td>{raceResult.category.name.toUpperCase()}</td>
             <td>{`${raceResult.racer.first_name} ${raceResult.racer.last_name}`}</td>
-            <td>{raceResult.racer && raceResult.racer.club && raceResult.racer.club.name}</td>
+            <td>{raceResult.racer && raceResult.racer.club && getClubName(raceResult.racer, isUci)}</td>
             <td>{raceResult.live_time.time} {raceResult.live_time.control_point}</td>
             <td></td>
           </tr>)

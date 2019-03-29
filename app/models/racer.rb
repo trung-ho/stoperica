@@ -17,6 +17,14 @@ class Racer < ApplicationRecord
     "#{last_name.mb_chars.upcase} #{first_name}"
   end
 
+  def club_name is_uci = false
+    if is_uci && uci_id === 'Jednodnevna'
+      'Individual'
+    else
+      club.name
+    end
+  end
+
   def country_flag
     if country.present?
       Country.new(country).emoji_flag
@@ -31,5 +39,13 @@ class Racer < ApplicationRecord
     else
       ''
     end
+  end
+
+  def birth_date
+    "#{year_of_birth}-#{month_of_birth}-#{day_of_birth}"
+  end
+
+  def full_address
+    "#{address} #{zip_code} #{town} #{country_name}"
   end
 end

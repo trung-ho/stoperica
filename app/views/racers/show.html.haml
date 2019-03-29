@@ -8,7 +8,7 @@
   %b Klub:
   - if @racer.club.present?
     = link_to club_path(@racer.club) do
-      = @racer.club.try(:name)
+      = @racer.club_name
   - else
     Nema
 

@@ -29,7 +29,7 @@
       - else
         = race_result.racer.full_name
   .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
-    = race_result.racer.club.try(:name)
+    = race_result.racer.club_name(@race.uci_display?)
   - unless @race.laps.nil?
     - (1..@race.laps).each do |lap|
       .mdl-cell.mdl-cell--1-col= race_result.lap_time lap

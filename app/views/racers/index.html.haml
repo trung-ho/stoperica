@@ -45,10 +45,8 @@
     .mdl-cell.mdl-cell--3-col
       .emoji= racer.country_flag
       = link_to racer.full_name, racer
-    .mdl-cell.mdl-cell--2-col
-      = racer.year_of_birth
-    .mdl-cell.mdl-cell--2-col
-      = racer.club.try(:name) || '- -'
+    .mdl-cell.mdl-cell--2-col= racer.year_of_birth
+    .mdl-cell.mdl-cell--2-col= racer.club_name
     - if user_signed_in? && current_user.admin
       .mdl-cell.mdl-cell--1-col= racer.uci_id
       .mdl-cell.mdl-cell--1-col= racer.email

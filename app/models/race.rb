@@ -140,8 +140,8 @@ class Race < ApplicationRecord
 
   def to_results_csv
     CSV.generate() do |csv|
-      csv << ['Pozicija', 'Startni broj', 'Ime', 'Prezime', 'Klub', 'Vrijeme',
-        'Zaostatak']
+      csv << ['Pozicija', 'Startni broj', uci_display? ? 'UCI ID' : nil, 'Ime',
+        'Prezime', 'Klub', 'Vrijeme', 'Zaostatak']
       categories.each do |category|
         next if sorted_results[category].count.zero?
         csv << [category.name]

@@ -223,7 +223,8 @@ class RaceResult < ApplicationRecord
 
   def to_results_csv
     [
-      position, start_number&.value, racer.first_name, racer.last_name, racer.club_name(race.uci_display),
+      position, start_number&.value, race.uci_display? ? racer.uci_id : nil,
+      racer.first_name, racer.last_name, racer.club_name(race.uci_display),
       finish_time, finish_delta
     ]
   end

@@ -219,7 +219,7 @@ class RaceResult < ApplicationRecord
     [
       start_number&.value, race.uci_display? ? racer.uci_id : nil,
       racer.last_name.mb_chars.upcase, racer.first_name,
-      racer.club_name(race.uci_display)
+      racer.birth_date, racer.club_name(race.uci_display)
     ]
   end
 

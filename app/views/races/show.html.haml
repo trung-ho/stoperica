@@ -68,6 +68,24 @@
             %input{ type: 'checkbox', required: true }
             Ovim potvrđujem da sam pročitao i da se slažem s
             = link_to 'Izjavom o oslobađanju organizatora od odgovornosti', izjava_path, target: '_blank'
+        - if @race.id == 117
+          .waiver
+            %input{ type: 'checkbox', required: true }
+              #waiver
+                Ovim potvrđujem da sam pročitao i da se slažem s Izjavom o oslobađanju organizatora od odgovornosti
+              .mdl-tooltip.mdl-tooltip--large{ 'data-mdl-for': 'waiver', style: 'max-width: 90%' }
+                Ovom izjavom potvrđujem da na Utrci nastupam isključivo na vlastitu odgovornost, svjestan da sudjelovanje na ovoj utrci predstavlja potencijalnu opasnost koja uključuje rizik od raznih vrsta tjelesnih ozljeda i moguću smrt.
+                <br>
+                Prihvaćam da Organizator nije odgovoran za bilo koji oblik štete prema meni koji je nastao sudjelovanjem na natjecanju, posredno, neposredno, izdvojeno ili povezano, izazvan vlastitom nepažnjom i krivnjom, ili nepažnjom i krivnjom drugih natjecatelja ili trećih osoba, prije, za vrijeme ili nakon spomenutog natjecanja.
+                <br>
+                Osobno sam odgovoran/na za bilo koji oblik štete prema trećim osobama koju  prouzročim ili kojoj doprinesem vlastitom nepažnjom ili krivnjom.
+                <br>
+                Za vrijeme trajanja Utrke, te neposredno prije i poslije iste, poštivati ću službeno objavljena pravila, upute o sigurnom kretanju, i uvjete nastupa izdanih od strane organizatora, te upute sudaca, redara i osoba angažiranih u organizaciji utrke na terenu.
+                <br>
+                Odričem se prava da sudskim putem potražujem od organizatora naknadu bilo kojeg oblika za štete nastale sudjelovanjem na Utrci.
+                <br>
+                Prihvaćam da se za sve sporove ugovara nadležnost Općinskog suda u Zadru, prema zakonima Republike Hrvatske.
+                <br>
         .actions
           = f.submit 'Prijavi se', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
     - elsif user_signed_in? && @racer_has_race_result

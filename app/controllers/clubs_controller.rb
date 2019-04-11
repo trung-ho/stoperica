@@ -5,7 +5,7 @@ class ClubsController < ApplicationController
   # GET /clubs
   # GET /clubs.json
   def index
-    @clubs = Club.all
+    @clubs = Club.where.not(category: Club.categories[:pro])
   end
 
   # GET /clubs/1

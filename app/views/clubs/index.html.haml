@@ -7,7 +7,7 @@
 
 %table.clubs_table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
   %tbody
-    - Club.categories.each do |category|
+    - Club.categories.reject{|c| c == 'pro'}.each do |category|
       %tr.has-background-accent
         %td.is-capitalized{ colspan: current_user&.admin? ? 5 : 2 }
           %b= category[0]

@@ -7,7 +7,11 @@ class RacesController < ApplicationController
   # GET /races.json
   def index
     @banner = false
-    @races = Race.all.order(date: :desc)
+    if user_signed_in? && current_user.admin?
+      @races = Race.all.order(date: :desc).page(params[:page])
+    else
+      @races = Race.where.not(hidden: true).order(date: :desc).page(params[:page])
+    end
   end
 
   # GET /races/1
@@ -127,7 +131,7 @@ class RacesController < ApplicationController
       :name, :date, :laps, :easy_laps, :description_url, :send_email,
       :registration_threshold, :categories, :email_body, :lock_race_results,
       :uci_display, :race_type, :pool_id, :league_id, :control_points_raw,
-      :picture_url, :location_url
+      :picture_url, :location_url, :hidden
     )
   end
 

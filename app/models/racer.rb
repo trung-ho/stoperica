@@ -7,7 +7,7 @@ class Racer < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :phone_number, presence: true, uniqueness: true
 
-  paginates_per 100
+  paginates_per 80
 
   def full_name
     "#{first_name} #{last_name}"

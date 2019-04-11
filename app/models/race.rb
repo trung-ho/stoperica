@@ -11,6 +11,8 @@ class Race < ApplicationRecord
 
   attr_accessor :control_points_raw
 
+  paginates_per 12
+
   def assign_positions
     categories.each do |category|
       results = race_results

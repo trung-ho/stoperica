@@ -101,7 +101,7 @@
       %label Skriven
       = f.check_box :hidden
 
-  - unless @racer.id
+  - unless @racer.id || (user_signed_in? && current_user.admin?)
     .field
       = recaptcha_tags
 

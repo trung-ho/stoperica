@@ -41,7 +41,7 @@ class RacersController < ApplicationController
   # POST /racers
   # POST /racers.json
   def create
-    unless verify_recaptcha
+    unless verify_recaptcha || (user_signed_in? && current_user.admin?)
       redirect_to new_racer_url, notice: 'Recaptcha fail.'
       return
     end

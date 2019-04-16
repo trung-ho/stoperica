@@ -126,7 +126,7 @@ class RacersController < ApplicationController
       r = row.to_h
       dob = r['DATE_OF_BIRTH'].split('/')
       RaceResult.transaction do
-        club = Club.find_or_create_by(code: r['CLUB_CODE'], name: r['CLUB'])
+        club = Club.find_or_create_by(code: r['CLUB_CODE'], name: r['CLUB'], category: Club.categories[:pro])
         racer = Racer.find_or_create_by(uci_id: r['UCI_ID']) do |racer|
           racer.first_name = r['FIRST_NAME']
           racer.last_name = r['LAST_NAME']
@@ -138,6 +138,7 @@ class RacersController < ApplicationController
           racer.day_of_birth = dob[1]
           racer.year_of_birth = dob[2]
           racer.club_id = club.id
+          racer.country = Country.find_country_by_ioc(r['NATIONALITY'])&.alpha2
         end
         RaceResult.find_or_create_by(racer: racer, race_id: race_id, category: category, status: 1)
       end

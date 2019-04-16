@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   resources :start_numbers do
     collection do
      get :start_time
+     post :import
     end
   end
 end

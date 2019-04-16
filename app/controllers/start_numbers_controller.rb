@@ -69,6 +69,16 @@ class StartNumbersController < ApplicationController
     render json: { start_time: start_time }
   end
 
+  def import
+    file = params[:file]
+    pool_id = params[:pool_id]
+    CSV.foreach(file.path, headers: true) do |row|
+      data = row.to_h
+      StartNumber.create(pool_id: pool_id, value: data['BIB'], tag_id: data['TAG'])
+    end
+    redirect_to pool_path(pool_id)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_start_number

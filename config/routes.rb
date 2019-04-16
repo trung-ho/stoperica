@@ -36,6 +36,7 @@ Rails.application.routes.draw do
       get :login, to: 'racers#login_form'
       post :login
       get :search
+      post :import
     end
   end
   resources :start_numbers do

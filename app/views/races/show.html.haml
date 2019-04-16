@@ -26,6 +26,12 @@
   %h4
     Baza brojeva:
     = link_to @race.pool&.name, pool_path(@race.pool)
+  %hr
+  = form_tag import_racers_path, multipart: true do
+    = file_field_tag :file
+    = hidden_field_tag :race_id, @race.id
+    = submit_tag 'Import'
+  %hr
 
 .race-actions
   = link_to races_path do

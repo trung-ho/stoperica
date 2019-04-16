@@ -5,7 +5,13 @@ class ClubsController < ApplicationController
   # GET /clubs
   # GET /clubs.json
   def index
-    @clubs = Club.where.not(category: Club.categories[:pro])
+    if user_signed_in? && current_user.admin?
+      @clubs = Club.all
+      @categories = Club.categories
+    else
+      @clubs = Club.where.not(category: Club.categories[:pro])
+      @categories = Club.categories.reject{|c| c == 'pro'}
+    end
   end
 
   # GET /clubs/1

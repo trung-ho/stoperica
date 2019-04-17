@@ -132,11 +132,23 @@ class RaceResultsController < ApplicationController
     end
 
     race_result = RaceResult.find_by(race_id: race_ids, start_number: start_number)
+    if race_result.nil?
+      data = {
+        error: 'Bib not assigned.',
+        tag_id: params[:TAGID],
+        race_id: params[:RACEID],
+        start_number: start_number.value
+      }
+      return render json: data
+    end
+
     if race_result.race.ended_at || race_result.race.started_at.nil?
       data = {
         error: 'Race inactive',
         tag_id: params[:TAGID],
-        race_id: params[:RACEID]
+        race_id: params[:RACEID],
+        start_number: start_number.value,
+        racer: racer.full_name
       }
       return render json: data
     end

@@ -113,6 +113,7 @@ class RacesController < ApplicationController
   def assign_positions
     @race.assign_positions unless @race.league&.lead?
     @race.assign_points
+    @race.adjust_finish_time if @race.road?
     redirect_to @race
   end
 

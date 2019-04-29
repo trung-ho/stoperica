@@ -211,7 +211,7 @@ class RaceResult < ApplicationRecord
       racer.last_name.mb_chars.upcase, racer.first_name,
       racer.club_name(race.uci_display), racer.country_name, category.try(:name),
       racer.shirt_size, racer.birth_date, racer.full_address, racer.email,
-      racer.phone_number, racer.personal_best.gsub(',', '.').gsub(';', ':')
+      racer.phone_number, racer.personal_best&.gsub(',', '.')&.gsub(';', ':')
     ]
   end
 

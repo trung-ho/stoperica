@@ -2,7 +2,7 @@ class Club < ApplicationRecord
   belongs_to :user, optional: true
   has_many :racers
 
-  enum category: %i[biciklisticki triatlon atletski skole ostali penjacki trail-trekking trkacki-running pro]
+  enum category: %i[biciklisticki triatlon atletski skole ostali penjacki trail-trekking trkacki-running pro timovi]
 
   default_scope { order(name: :asc) }
 

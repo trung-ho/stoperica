@@ -148,7 +148,7 @@ class RaceResultsController < ApplicationController
         tag_id: params[:TAGID],
         race_id: params[:RACEID],
         start_number: start_number.value,
-        racer: racer.full_name
+        racer: race_result.racer.full_name
       }
       return render json: data
     end

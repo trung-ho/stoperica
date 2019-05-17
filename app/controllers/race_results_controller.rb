@@ -158,7 +158,7 @@ class RaceResultsController < ApplicationController
     race_result = race_result.insert_lap_time(millis, reader_id)
 
     data = {
-      finish_time: race_result.finish_time,
+      finish_time: race_result.live_time[:time],
       racer_name: race_result.racer.full_name,
       start_number: race_result.start_number.value,
       tag_id: race_result.start_number.tag_id,

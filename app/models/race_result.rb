@@ -203,6 +203,7 @@ class RaceResult < ApplicationRecord
     end
     self.status = 3
     self.save!
+    self
   end
 
   def to_csv

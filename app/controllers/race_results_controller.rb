@@ -155,7 +155,7 @@ class RaceResultsController < ApplicationController
 
     millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z').to_f
 
-    race_result.insert_lap_time(millis, reader_id)
+    race_result = race_result.insert_lap_time(millis, reader_id)
 
     data = {
       finish_time: race_result.finish_time,

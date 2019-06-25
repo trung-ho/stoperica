@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190209083235) do
+ActiveRecord::Schema.define(version: 20190416162307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 20190209083235) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "category", default: 0
+    t.string "code"
     t.index ["user_id"], name: "index_clubs_on_user_id"
   end
 
@@ -116,6 +117,7 @@ ActiveRecord::Schema.define(version: 20190209083235) do
     t.string "personal_best"
     t.string "country"
     t.string "uci_id"
+    t.boolean "hidden", default: false
     t.index ["club_id"], name: "index_racers_on_club_id"
     t.index ["user_id"], name: "index_racers_on_user_id"
   end
@@ -142,6 +144,7 @@ ActiveRecord::Schema.define(version: 20190209083235) do
     t.string "picture_url"
     t.string "location_url"
     t.float "points_multiplier", default: 1.0
+    t.boolean "hidden", default: false
     t.index ["league_id"], name: "index_races_on_league_id"
     t.index ["pool_id"], name: "index_races_on_pool_id"
   end

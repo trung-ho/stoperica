@@ -134,7 +134,7 @@ class RaceResult < ApplicationRecord
       end
     end
     time = lap_time.is_a?(Hash) ? lap_time.with_indifferent_access[:time] : lap_time
-    time&.to_i
+    time&.to_f
   end
 
   def lap_millis lap_position = nil
@@ -144,7 +144,7 @@ class RaceResult < ApplicationRecord
     lap_time = lap_times[lap_position - 1]
     return nil unless lap_time
     time = lap_time.is_a?(Hash) ? lap_time.with_indifferent_access[:time] : lap_time
-    time&.to_i
+    time&.to_f
   end
 
   # calling this method without lap param will return last lap time
@@ -203,6 +203,7 @@ class RaceResult < ApplicationRecord
     end
     self.status = 3
     self.save!
+    self
   end
 
   def to_csv
@@ -211,7 +212,7 @@ class RaceResult < ApplicationRecord
       racer.last_name.mb_chars.upcase, racer.first_name,
       racer.club_name(race.uci_display), racer.country_name, category.try(:name),
       racer.shirt_size, racer.birth_date, racer.full_address, racer.email,
-      racer.phone_number, racer.personal_best.gsub(',', '.').gsub(';', ':')
+      racer.phone_number, racer.personal_best&.gsub(',', '.')&.gsub(';', ':')
     ]
   end
 

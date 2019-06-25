@@ -71,6 +71,7 @@ class RaceResults extends React.Component {
   }
 
   _renderActive() {
+    const isUci = this.state.race.uci_display;
     return this.state.race.race_results.filter((a)=>{
         return a.live_time.time === '- -'
       }).map((raceResult)=>{
@@ -86,6 +87,7 @@ class RaceResults extends React.Component {
 
   _renderByCategory() {
     const { newestFirst, categories } = this.state;
+    const isUci = this.state.race.uci_display;
     let finishedTimes = this.state.race.race_results.filter((a)=>{
       return a.live_time.time != '- -' && a.status == 3
     });

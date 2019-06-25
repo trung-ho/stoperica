@@ -1,12 +1,16 @@
 class RacersController < ApplicationController
   before_action :set_racer, only: %i[edit update destroy]
-  before_action :only_admin, only: %i[edit destroy]
+  before_action :only_admin, only: %i[edit destroy import]
   protect_from_forgery unless: -> { action_name != 'login' && request.format.json? }
 
   # GET /racers
   # GET /racers.json
   def index
-    @racers = Racer.includes(:club).order(id: :desc).page(params[:page])
+    if user_signed_in? && current_user.admin?
+      @racers = Racer.includes(:club).order(id: :desc).page(params[:page])
+    else
+      @racers = Racer.includes(:club).where.not(hidden: true).order(id: :desc).page(params[:page])
+    end
   end
 
   # GET /racers
@@ -37,7 +41,7 @@ class RacersController < ApplicationController
   # POST /racers
   # POST /racers.json
   def create
-    unless verify_recaptcha
+    unless verify_recaptcha || (user_signed_in? && current_user.admin?)
       redirect_to new_racer_url, notice: 'Recaptcha fail.'
       return
     end
@@ -113,6 +117,35 @@ class RacersController < ApplicationController
     end
   end
 
+  def import
+    file = params[:file]
+    race_id = params[:race_id]
+    race = Race.find race_id
+    category = race.categories.first
+    CSV.foreach(file.path, headers: true) do |row|
+      r = row.to_h
+      dob = r['DATE_OF_BIRTH'].split('/')
+      RaceResult.transaction do
+        club = Club.find_or_create_by(code: r['CLUB_CODE'], name: r['CLUB'], category: Club.categories[:pro])
+        racer = Racer.find_or_create_by(uci_id: r['UCI_ID']) do |racer|
+          racer.first_name = r['FIRST_NAME']
+          racer.last_name = r['LAST_NAME']
+          racer.email = "#{r['LAST_NAME']}_#{r['FIRST_NAME']}@stoperica.live"
+          racer.phone_number = Digest::SHA1.hexdigest(racer.email)
+          racer.hidden = true
+          racer.gender = 2
+          racer.month_of_birth = dob[0]
+          racer.day_of_birth = dob[1]
+          racer.year_of_birth = dob[2]
+          racer.club_id = club.id
+          racer.country = Country.find_country_by_ioc(r['NATIONALITY'])&.alpha2
+        end
+        RaceResult.find_or_create_by(racer: racer, race_id: race_id, category: category, status: 1)
+      end
+    end
+    redirect_to race_path(race_id)
+  end
+
   private
 
   def set_racer
@@ -123,6 +156,6 @@ class RacersController < ApplicationController
     params.require(:racer).permit(:first_name, :last_name, :year_of_birth,
       :gender, :email, :phone_number, :club_id, :address, :zip_code, :town,
       :day_of_birth, :month_of_birth, :shirt_size, :personal_best, :uci_id,
-      :country)
+      :country, :hidden)
   end
 end

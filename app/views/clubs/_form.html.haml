@@ -11,6 +11,10 @@
       %input#name.mdl-textfield__input{type: 'text', name: 'club[name]', required: true, value: @club.name}
       %label.mdl-textfield__label{for: 'name'} Ime kluba
   .field
+    .mdl-textfield.mdl-js-textfield
+      %input#code.mdl-textfield__input{type: 'text', name: 'club[code]', value: @club.code}
+      %label.mdl-textfield__label{for: 'code'} Code
+  .field
     = f.select :category, options_for_select(Club.categories.collect { |s| [s[0].humanize, s[0]] }, selected: @club.category), {}
   .actions
     = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent', style: 'color: white;'

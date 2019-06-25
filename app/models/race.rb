@@ -7,9 +7,11 @@ class Race < ApplicationRecord
 
   before_validation :parse_json
 
-  enum race_type: [:mtb, :trcanje, :treking, :duatlon, :triatlon, :penjanje, :xco]
+  enum race_type: [:mtb, :trcanje, :treking, :duatlon, :triatlon, :penjanje, :xco, :road]
 
   attr_accessor :control_points_raw
+
+  paginates_per 12
 
   def assign_positions
     categories.each do |category|
@@ -18,7 +20,7 @@ class Race < ApplicationRecord
         .where(status: 3)
         .where(category: category)
         .select{ |rr| rr.lap_times.length > 0 }
-        .sort_by{ |rr| [rr.missed_control_points, -rr.lap_times.length, rr.finish_time] }
+        .sort_by{ |rr| [rr.missed_control_points, -rr.lap_times.length, rr.lap_time] }
       results.each_with_index do |rr, index|
         rr.update!(position: index + 1, finish_delta: rr.calc_finish_delta)
       end
@@ -108,6 +110,19 @@ class Race < ApplicationRecord
         data = clp.points
         data[id] = clp.club.points_in_race self
         clp.update(points: data)
+      end
+    end
+  end
+
+  def adjust_finish_time
+    res = race_results.where(status: 3).order(:position)
+    res.each_with_index do |rr, index|
+      next if index.zero?
+      prev = res[index - 1]
+      next unless prev.lap_millis && rr.lap_millis
+      diff = prev.lap_millis - rr.lap_millis
+      if diff < 1.1
+        rr.update_columns(finish_time: prev.finish_time, finish_delta: prev.finish_delta)
       end
     end
   end

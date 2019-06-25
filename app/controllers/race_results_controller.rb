@@ -132,21 +132,33 @@ class RaceResultsController < ApplicationController
     end
 
     race_result = RaceResult.find_by(race_id: race_ids, start_number: start_number)
+    if race_result.nil?
+      data = {
+        error: 'Bib not assigned.',
+        tag_id: params[:TAGID],
+        race_id: params[:RACEID],
+        start_number: start_number.value
+      }
+      return render json: data
+    end
+
     if race_result.race.ended_at || race_result.race.started_at.nil?
       data = {
         error: 'Race inactive',
         tag_id: params[:TAGID],
-        race_id: params[:RACEID]
+        race_id: params[:RACEID],
+        start_number: start_number.value,
+        racer: race_result.racer.full_name
       }
       return render json: data
     end
 
     millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z').to_f
 
-    race_result.insert_lap_time(millis, reader_id)
+    race_result = race_result.insert_lap_time(millis, reader_id)
 
     data = {
-      finish_time: race_result.finish_time,
+      finish_time: race_result.live_time[:time],
       racer_name: race_result.racer.full_name,
       start_number: race_result.start_number.value,
       tag_id: race_result.start_number.tag_id,

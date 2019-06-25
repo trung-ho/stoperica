@@ -25,6 +25,10 @@
     = f.label 'Datum prijava'
     = f.datetime_select :registration_threshold
   .field
+    = f.label 'Vrijeme starta'
+    = f.datetime_select :started_at, include_seconds: true, include_blank: true
+
+  .field
     = f.label :picture_url
     = f.text_field :picture_url
   .field
@@ -39,6 +43,9 @@
   .field
     %label UCI prikaz
     = f.check_box :uci_display
+  .field
+    %label Skrivena
+    = f.check_box :hidden
   .field
     %label Kontrolne tocke
     %br

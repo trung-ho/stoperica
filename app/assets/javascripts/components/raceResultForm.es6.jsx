@@ -23,7 +23,7 @@ class RaceResultForm extends React.Component {
     getOptions(count, key) {
       let options = [];
       for (var i = 0; i < count; i++) {
-        options.push(<option key={key + i} value={i}>{i}</option>);
+        options.push(<option key={key + i} value={i}>{i} {key}</option>);
       }
       return options;
     }
@@ -39,7 +39,7 @@ class RaceResultForm extends React.Component {
           time += hours*3600000;
           time += minutes*60000;
           time += seconds*1000;
-          time += millis;
+          time += millis*1;
 
           if(racerNumber && time) {
             RaceResultActions.newRaceResult(racerNumber, time, 3, readerId);
@@ -90,7 +90,7 @@ class RaceResultForm extends React.Component {
                   className="tiny"
                   onChange={ this.updateHours }
                 >
-                  {this.getOptions(6, 'hours')}
+                  {this.getOptions(6, 'h')}
                 </select>
                 <select
                   name="raceResultMinutes"
@@ -98,7 +98,7 @@ class RaceResultForm extends React.Component {
                   className="tiny"
                   onChange={ this.updateMinutes }
                 >
-                  {this.getOptions(60, 'minutes')}
+                  {this.getOptions(60, 'min')}
                 </select>
                 <select
                   name="raceResultSeconds"
@@ -106,7 +106,7 @@ class RaceResultForm extends React.Component {
                   className="tiny"
                   onChange={ this.updateSeconds }
                 >
-                  {this.getOptions(60, 'seconds')}
+                  {this.getOptions(60, 'sec')}
                 </select>
                 <select
                   name="raceResultMillis"

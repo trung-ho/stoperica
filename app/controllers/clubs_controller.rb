@@ -5,7 +5,13 @@ class ClubsController < ApplicationController
   # GET /clubs
   # GET /clubs.json
   def index
-    @clubs = Club.all
+    if user_signed_in? && current_user.admin?
+      @clubs = Club.all
+      @categories = Club.categories
+    else
+      @clubs = Club.where.not(category: Club.categories[:pro])
+      @categories = Club.categories.reject{|c| c == 'pro'}
+    end
   end
 
   # GET /clubs/1
@@ -67,6 +73,6 @@ class ClubsController < ApplicationController
   end
 
   def club_params
-    params.require(:club).permit(:name, :user_id, :category)
+    params.require(:club).permit(:name, :user_id, :category, :code)
   end
 end

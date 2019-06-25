@@ -10,3 +10,10 @@
             = race.name
         .mdl-card__actions.mdl-card--border
           = link_to race.ended_at.present? ? 'REZULTATI' : 'PRIJAVE', race
+
+= paginate @races
+
+:css
+  .pagination {
+    width: auto;
+  }

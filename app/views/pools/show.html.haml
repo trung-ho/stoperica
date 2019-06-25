@@ -10,6 +10,14 @@
 = link_to 'Edit', edit_pool_path(@pool)
 %br
 = link_to 'Back', pools_path
+%br
+%br
+
+= form_tag import_start_numbers_path, multipart: true do
+  = file_field_tag :file
+  = hidden_field_tag :pool_id, @pool.id
+  = submit_tag 'Import'
+
 
 %h1 Start Numbers
 

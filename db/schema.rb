@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190416162307) do
+ActiveRecord::Schema.define(version: 20190625150143) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -145,6 +145,7 @@ ActiveRecord::Schema.define(version: 20190416162307) do
     t.string "location_url"
     t.float "points_multiplier", default: 1.0
     t.boolean "hidden", default: false
+    t.boolean "millis_display"
     t.index ["league_id"], name: "index_races_on_league_id"
     t.index ["pool_id"], name: "index_races_on_pool_id"
   end

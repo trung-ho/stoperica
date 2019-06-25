@@ -158,9 +158,14 @@ class RaceResultsController < ApplicationController
       return render json: data
     end
 
-    millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z').to_f
+    date = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z')
+    millis = date.to_f
 
-    race_result = race_result.insert_lap_time(millis, reader_id)
+    if reader_id == '100'
+      race_result.update!(started_at: date)
+    else
+      race_result = race_result.insert_lap_time(millis, reader_id)
+    end
 
     data = {
       finish_time: race_result.live_time[:time],

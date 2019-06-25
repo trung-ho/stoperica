@@ -88,7 +88,7 @@ class RaceResult < ApplicationRecord
   end
 
   def control_point_time reader_id
-    index = lap_times.find_index do |it|
+    index = lap_times.rindex do |it|
       it.with_indifferent_access['reader_id'].to_s == reader_id.to_s
     end
 

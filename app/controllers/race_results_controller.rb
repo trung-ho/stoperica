@@ -172,7 +172,8 @@ class RaceResultsController < ApplicationController
       racer_name: race_result.racer.full_name,
       start_number: race_result.start_number.value,
       tag_id: race_result.start_number.tag_id,
-      alternate_tag_id: race_result.start_number.alternate_tag_id
+      alternate_tag_id: race_result.start_number.alternate_tag_id,
+      started_at: race_result.started_at
     }
 
     render json: data

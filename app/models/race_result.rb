@@ -190,7 +190,7 @@ class RaceResult < ApplicationRecord
   end
 
   def insert_lap_time time, reader_id
-    if race.xco?
+    if race.xco? || race.kronometar?
       self.lap_times << { time: time, reader_id: reader_id }
     else
       index = lap_times.find_index{|it| it['reader_id'].to_s == reader_id.to_s}

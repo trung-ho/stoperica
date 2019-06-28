@@ -44,7 +44,7 @@ class RaceResult < ApplicationRecord
   end
 
   def date_format
-    race.millis_display? ? '%k:%M:%S.%L' : '%k:%M:%S'
+    race.millis_display? ? '%k:%M:%S.%2N' : '%k:%M:%S'
   end
 
   def pretty_status

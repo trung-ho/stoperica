@@ -43,6 +43,10 @@ class RaceResult < ApplicationRecord
     end
   end
 
+  def date_format
+    race.millis_display? ? '%k:%M:%S.%2N' : '%k:%M:%S'
+  end
+
   def pretty_status
     case status
     when 1
@@ -88,7 +92,7 @@ class RaceResult < ApplicationRecord
   end
 
   def control_point_time reader_id
-    index = lap_times.find_index do |it|
+    index = lap_times.rindex do |it|
       it.with_indifferent_access['reader_id'].to_s == reader_id.to_s
     end
 
@@ -102,7 +106,7 @@ class RaceResult < ApplicationRecord
     previous = lap_millis(position - 1)
     if current && previous
       diff = current - previous
-      Time.at(diff).utc.strftime('%k:%M:%S')
+      Time.at(diff).utc.strftime(date_format)
     else
       nil
     end
@@ -119,7 +123,7 @@ class RaceResult < ApplicationRecord
     previous = control_point_millis(previous_reader_id)
     if current && previous
       diff = current - previous
-      Time.at(diff).utc.strftime('%k:%M:%S')
+      Time.at(diff).utc.strftime(date_format)
     else
       nil
     end
@@ -157,7 +161,7 @@ class RaceResult < ApplicationRecord
 
     ended_at = Time.at(lap_time)
     seconds = ended_at - start_time
-    Time.at(seconds).utc.strftime('%k:%M:%S')
+    Time.at(seconds).utc.strftime(date_format)
   end
 
   def set_finish_time
@@ -171,10 +175,11 @@ class RaceResult < ApplicationRecord
     reference_race_result = RaceResult.where(category: category, race: race, status: 3).order(:position).limit(1).first
     lap_diff = reference_race_result.lap_times.length - lap_times.length
 
+
     unless lap_times.empty?
       if lap_diff.zero?
         seconds = lap_millis - reference_race_result.lap_millis
-        Time.at(seconds).utc.strftime('+%k:%M:%S')
+        Time.at(seconds).utc.strftime("+#{date_format}")
       else
         "- #{lap_diff} #{lap_text(lap_diff)}"
       end

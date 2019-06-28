@@ -115,17 +115,22 @@ class RaceResultsController < ApplicationController
   # "TIME"=>"14.08.2017 13:07:14.36753 %2B02:00",
   # "RACEID"=>5,6,7
   # "READERID"=>"ABCD"
+  # "BIBID"=>"123"
   def from_device
     reader_id = params[:READERID]
     race_ids = params[:RACEID].split(',')
     pool_ids = Race.select(:pool_id, :id).find(race_ids).pluck(:pool_id).uniq
-    start_number = StartNumber.find_by(pool_id: pool_ids, tag_id: params[:TAGID].strip)
-    start_number = StartNumber.find_by(pool_id: pool_ids, alternate_tag_id: params[:TAGID].strip) if start_number.nil?
-
+    if params[:TAGID].present?
+      start_number = StartNumber.find_by(pool_id: pool_ids, tag_id: params[:TAGID].strip)
+      start_number = StartNumber.find_by(pool_id: pool_ids, alternate_tag_id: params[:TAGID].strip) if start_number.nil?
+    elsif params[:BIBID].present?
+      start_number = StartNumber.find_by(pool_id: pool_ids, value: params[:BIBID].strip)
+    end
     if start_number.nil?
       data = {
         error: 'Tag not in database',
         tag_id: params[:TAGID],
+        bib_id: params[:BIBID],
         race_id: params[:RACEID]
       }
       return render json: data
@@ -153,16 +158,22 @@ class RaceResultsController < ApplicationController
       return render json: data
     end
 
-    millis = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z').to_f
+    date = DateTime.strptime(params[:TIME], '%d.%m.%Y %H:%M:%S.%L %:z')
+    millis = date.to_f
 
-    race_result = race_result.insert_lap_time(millis, reader_id)
+    if reader_id == '100'
+      race_result.update!(started_at: date)
+    else
+      race_result = race_result.insert_lap_time(millis, reader_id)
+    end
 
     data = {
       finish_time: race_result.live_time[:time],
       racer_name: race_result.racer.full_name,
       start_number: race_result.start_number.value,
       tag_id: race_result.start_number.tag_id,
-      alternate_tag_id: race_result.start_number.alternate_tag_id
+      alternate_tag_id: race_result.start_number.alternate_tag_id,
+      started_at: race_result.started_at
     }
 
     render json: data

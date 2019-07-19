@@ -228,7 +228,7 @@ class RaceResultsController < ApplicationController
           status: :not_found,
           json: {
             status: 404,
-            error: "The races you were looking for doesn't exist."
+            error: "Not Found"
           }
         )
       elsif race_ids.size > 1 && (Race.where(id: race_ids, skip_auth: true).count != race_ids.size)
@@ -236,13 +236,13 @@ class RaceResultsController < ApplicationController
           status: :method_not_allowed,
           json: {
             status: 405,
-            error: "To Update multiple races, all of them should skip auth."
+            error: "To Update multiple races, all of them should skip auth"
           }
         )
       else
         race = Race.find(*race_ids)
         if !race.skip_auth && race.auth_token != params[:TOKEN].strip
-          render status: :forbidden, json: { status: 403, error: "You are not allowed to update this race." }
+          render status: :forbidden, json: { status: 403, error: "You are not allowed to update this race" }
         end
       end
     end

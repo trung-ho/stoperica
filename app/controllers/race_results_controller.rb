@@ -182,7 +182,7 @@ class RaceResultsController < ApplicationController
   end
 
   def check_token
-    render :ok, json: { status: :ok }
+    render :ok, json: { status: 200, message: :ok }
   end
 
   private
@@ -224,18 +224,25 @@ class RaceResultsController < ApplicationController
     def authorize_device
       race_ids = params[:RACEID].split(',')
       if race_ids.empty?
-        render status: :not_found, json: { error: "The races you were looking for doesn't exist." }
+        render(
+          status: :not_found,
+          json: {
+            status: 404,
+            error: "The races you were looking for doesn't exist."
+          }
+        )
       elsif race_ids.size > 1 && (Race.where(id: race_ids, skip_auth: true).count != race_ids.size)
         render(
           status: :method_not_allowed,
           json: {
+            status: 405,
             error: "To Update multiple races, all of them should skip auth."
           }
         )
       else
         race = Race.find(*race_ids)
         if !race.skip_auth && race.auth_token != params[:TOKEN].strip
-          render status: :forbidden, json: { error: "You are not allowed to update this race." }
+          render status: :forbidden, json: { status: 403, error: "You are not allowed to update this race." }
         end
       end
     end

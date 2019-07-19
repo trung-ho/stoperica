@@ -50,6 +50,9 @@
     %label Prikaz milisekundi
     = f.check_box :millis_display
   .field
+    %label Skip Auth for Devices
+    = f.check_box :skip_auth
+  .field
     %label Kontrolne tocke
     %br
     = f.text_area :control_points_raw, value: @race.control_points.to_json

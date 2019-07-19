@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       post :update_missed
       post :from_timing
       post :from_climbing
+      get :check_token
     end
   end
   resources :races do

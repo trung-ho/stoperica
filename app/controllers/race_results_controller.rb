@@ -2,6 +2,7 @@ class RaceResultsController < ApplicationController
   before_action :set_race_result, only: %i[show edit update destroy]
   before_action :check_admin, only: %i[index show new from_timing update_missed]
   before_action :set_start_number, only: %i[from_timing from_climbing]
+  before_action :authorize_device, only: %i[from_device check_token]
 
   protect_from_forgery except: %i[from_device from_climbing]
 
@@ -180,39 +181,62 @@ class RaceResultsController < ApplicationController
     render json: data
   end
 
+  def check_token
+    render :ok, json: { status: :ok }
+  end
+
   private
 
-  def check_admin
-    race_id = @race_result&.race_id || params[:race_id]
-    fail 'Access denied' unless current_user.admin? || race_admin?(race_id)
-  end
-
-  def set_race_result
-    @race_result = RaceResult.find(params[:id])
-  end
-
-  def set_start_number
-    @race = Race.find(params[:race_id])
-    @start_number = @race.pool.start_numbers.find_by!(value: params[:start_number])
-  end
-
-  def race_result_params
-    params.require(:race_result).permit(
-      :racer_id, :race_id, :status, :lap_times, :category_id, :climbs
-    )
-  end
-
-  def parse_reader_id reader_id
-    return reader_id if reader_id.is_a? Integer
-    reader_id&.strip.present? ? reader_id.strip : 0
-  end
-
-  def send_email
-    if @race_result.race.send_email
-      RacerMailer.race_details(
-        @race_result.racer,
-        @race_result.race
-      ).deliver_later
+    def check_admin
+      race_id = @race_result&.race_id || params[:race_id]
+      fail 'Access denied' unless current_user.admin? || race_admin?(race_id)
     end
-  end
+
+    def set_race_result
+      @race_result = RaceResult.find(params[:id])
+    end
+
+    def set_start_number
+      @race = Race.find(params[:race_id])
+      @start_number = @race.pool.start_numbers.find_by!(value: params[:start_number])
+    end
+
+    def race_result_params
+      params.require(:race_result).permit(
+        :racer_id, :race_id, :status, :lap_times, :category_id, :climbs
+      )
+    end
+
+    def parse_reader_id reader_id
+      return reader_id if reader_id.is_a? Integer
+      reader_id&.strip.present? ? reader_id.strip : 0
+    end
+
+    def send_email
+      if @race_result.race.send_email
+        RacerMailer.race_details(
+          @race_result.racer,
+          @race_result.race
+        ).deliver_later
+      end
+    end
+
+    def authorize_device
+      race_ids = params[:RACEID].split(',')
+      if race_ids.empty?
+        render status: :not_found, json: { error: "The races you were looking for doesn't exist." }
+      elsif race_ids.size > 1 && (Race.where(id: race_ids, skip_auth: true).count != race_ids.size)
+        render(
+          status: :method_not_allowed,
+          json: {
+            error: "To Update multiple races, all of them should skip auth."
+          }
+        )
+      else
+        race = Race.find(*race_ids)
+        if !race.skip_auth && race.auth_token != params[:TOKEN].strip
+          render status: :forbidden, json: { error: "You are not allowed to update this race." }
+        end
+      end
+    end
 end

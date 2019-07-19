@@ -8,6 +8,7 @@ class Race < ApplicationRecord
   has_many :racers, through: :race_results
 
   before_validation :parse_json
+  before_save :set_auth_token, on: :create
 
   enum race_type: [:mtb, :trcanje, :treking, :duatlon, :triatlon, :penjanje, :xco, :road]
 
@@ -202,4 +203,10 @@ class Race < ApplicationRecord
     end
     sorted_results
   end
+
+  private
+
+    def set_auth_token
+      self.auth_token = SecureRandom.hex(3)
+    end
 end

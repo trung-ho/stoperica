@@ -126,6 +126,7 @@ class RaceResultsController < ApplicationController
     elsif params[:BIBID].present?
       start_number = StartNumber.find_by(pool_id: pool_ids, value: params[:BIBID].strip)
     end
+    
     if start_number.nil?
       data = {
         error: 'Tag not in database',

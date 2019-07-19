@@ -1,9 +1,11 @@
 class Race < ApplicationRecord
+
+  belongs_to :league, optional: true
+  belongs_to :pool
+  
   has_many :race_results
   has_many :categories
   has_many :racers, through: :race_results
-  belongs_to :league, optional: true
-  belongs_to :pool
 
   before_validation :parse_json
 

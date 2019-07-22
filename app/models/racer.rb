@@ -9,6 +9,11 @@ class Racer < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :phone_number, presence: true, uniqueness: true
   validates :personal_best, format: /[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}/, allow_nil: true, allow_blank: true
+  validates :uci_id, format: /[0-9]{11}/, if: Proc.new { |racer| racer.is_biker == '1' }
+
+  attr_accessor :is_biker
+
+  before_save :set_uci_id
 
   paginates_per 80
 
@@ -51,4 +56,10 @@ class Racer < ApplicationRecord
   def full_address
     "#{address} #{zip_code} #{town} #{country_name}"
   end
+
+  private
+
+    def set_uci_id
+      self.uci_id = 'Jednodnevna' if self.is_biker == '0'
+    end
 end

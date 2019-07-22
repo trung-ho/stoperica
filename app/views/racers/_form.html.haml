@@ -75,13 +75,20 @@
     .mdl-textfield.mdl-js-textfield
       = f.country_select :country, priority_countries: ['HR', 'BA', 'SI', 'HU', 'CZ']
   .field
+    .mdl-textfield
+      %select#is_biker_select.is-capitalized{ name: 'racer[is_biker]' }
+        %option{value: "1", selected: true}
+          Ja sam licencirani biciklist
+        %option{value: "0"}
+          Nisam licencirani biciklist
+  .field#uci_id_field
     .mdl-textfield.mdl-js-textfield
-      %input#uci_id.mdl-textfield__input{type: 'text', name: 'racer[uci_id]', value: @racer.uci_id}
+      %input#uci_id.mdl-textfield__input{type: 'text', name: 'racer[uci_id]', value: @racer.uci_id, pattern: "[0-9]{11}", title: "Please enter 11 Digit UCI ID."}
       %label.mdl-textfield__label{for: 'uci_id'} UCI ID
   .field
     .mdl-textfield
       %select#category_select.is-capitalized{ name: 'racer[club_id]' }
-        %option{ disabled: true, value: nil, selected: true}
+        %option{disabled: true, value: nil, selected: true}
           Kategorija kluba
         - Club.categories.each do |category|
           %option.is-capitalized{ value: category[0], selected: @racer.club&.category == category }

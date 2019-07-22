@@ -182,7 +182,7 @@ class RaceResultsController < ApplicationController
   end
 
   def check_token
-    render :ok, json: { status: 200, message: :ok }
+    render :ok, json: { status: 200, message: "Authorization passed - '#{@race.name}'" }
   end
 
   private
@@ -222,7 +222,7 @@ class RaceResultsController < ApplicationController
     end
 
     def authorize_device
-      race_ids = params[:RACEID].split(',')
+      race_ids = params[:RACEID].to_s.split(',')
       if race_ids.empty?
         render(
           status: :not_found,
@@ -240,8 +240,8 @@ class RaceResultsController < ApplicationController
           }
         )
       else
-        race = Race.find(*race_ids)
-        if !race.skip_auth && race.auth_token != params[:TOKEN].strip
+        @race = Race.find(*race_ids)
+        if !@race.skip_auth && @race.auth_token != params[:TOKEN].to_s.strip
           render status: :forbidden, json: { status: 403, error: "You are not allowed to update this race" }
         end
       end

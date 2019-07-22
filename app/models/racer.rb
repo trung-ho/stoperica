@@ -8,6 +8,7 @@ class Racer < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true
   validates :phone_number, presence: true, uniqueness: true
+  validates :personal_best, format: /[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}/, allow_nil: true, allow_blank: true
 
   paginates_per 80
 

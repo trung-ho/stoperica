@@ -52,7 +52,7 @@
             = size
   .field
     .mdl-textfield.mdl-js-textfield
-      %input#personal_best.mdl-textfield__input{type: 'text', name: 'racer[personal_best]', value: @racer.personal_best}
+      %input#personal_best.mdl-textfield__input{type: 'text', name: 'racer[personal_best]', value: @racer.personal_best, pattern: "[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}", title: "Please use hh:mm:ss format for your perosnal best!"}
       %label.mdl-textfield__label{for: 'personal_best'} Personal Best 21.1 km
 
   .field

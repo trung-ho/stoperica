@@ -52,7 +52,9 @@
             = size
   .field
     .mdl-textfield.mdl-js-textfield
-      %input#personal_best.mdl-textfield__input{type: 'text', name: 'racer[personal_best]', value: @racer.personal_best, pattern: "[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}", title: "Please use hh:mm:ss format for your perosnal best!"}
+      = f.select :personal_best_hours, (0..2).to_a, prompt: "Hours"
+      = f.select :personal_best_minutes, (0..59).to_a, prompt: "Minutes"
+      = f.select :personal_best_seconds, (0..59).to_a, prompt: "seconds"
       %label.mdl-textfield__label{for: 'personal_best'} Personal Best 21.1 km
 
   .field
@@ -76,14 +78,14 @@
       = f.country_select :country, priority_countries: ['HR', 'BA', 'SI', 'HU', 'CZ']
   .field
     .mdl-textfield
-      %select#is_biker_select.is-capitalized{ name: 'racer[is_biker]' }
+      %select#is_biker_select{ name: 'racer[is_biker]' }
         %option{value: "1", selected: true}
-          Ja sam licencirani biciklist
+          Licencirani sam biciklist
         %option{value: "0"}
           Nisam licencirani biciklist
   .field#uci_id_field
     .mdl-textfield.mdl-js-textfield
-      %input#uci_id.mdl-textfield__input{type: 'text', name: 'racer[uci_id]', value: @racer.uci_id, pattern: "[0-9]{11}", title: "Please enter 11 Digit UCI ID."}
+      %input#uci_id.mdl-textfield__input{type: 'text', name: 'racer[uci_id]', value: @racer.uci_id, pattern: "[0-9\s]{11,14}", title: "Please enter 11 Digit UCI ID."}
       %label.mdl-textfield__label{for: 'uci_id'} UCI ID
   .field
     .mdl-textfield

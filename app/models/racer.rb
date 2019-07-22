@@ -8,12 +8,11 @@ class Racer < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true
   validates :phone_number, presence: true, uniqueness: true
-  validates :personal_best, format: /[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}/, allow_nil: true, allow_blank: true
-  validates :uci_id, format: /[0-9]{11}/, if: Proc.new { |racer| racer.is_biker == '1' }
+  validates :uci_id, format: /[0-9\s]{11,14}/, if: Proc.new { |racer| racer.is_biker == '1' }
 
-  attr_accessor :is_biker
+  attr_accessor :is_biker, :personal_best_hours, :personal_best_minutes, :personal_best_seconds
 
-  before_save :set_uci_id
+  before_save :set_uci_id, :set_personal_best
 
   paginates_per 80
 
@@ -60,6 +59,17 @@ class Racer < ApplicationRecord
   private
 
     def set_uci_id
-      self.uci_id = 'Jednodnevna' if self.is_biker == '0'
+      if self.is_biker == '0'
+        self.uci_id = 'Jednodnevna'
+      else
+        self.uci_id = uci_id.gsub(' ', '')
+      end
+    end
+
+    def set_personal_best
+      # Minutes and seconds are enough...
+      if !self.personal_best_minutes.blank? && !self.personal_best_seconds.blank?
+        self.personal_best = "#{self.personal_best_hours}:#{self.personal_best_minutes}:#{self.personal_best_seconds}"
+      end
     end
 end

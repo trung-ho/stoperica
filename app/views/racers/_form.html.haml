@@ -90,7 +90,7 @@
         %option{ disabled: true, selected: @racer.club.nil? }
           Klub
         - Club.all.each do |club|
-          %option{ value: club.id, selected: @racer.club.try(:id) == club.id, data: { category: club.category } }
+          %option{ value: club.id, selected: @racer.club.try(:id) == club.id, data: { category: Club.categories[club.category] } }
             = club.name
 
   .field

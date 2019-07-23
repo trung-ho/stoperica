@@ -12,7 +12,7 @@ class Racer < ApplicationRecord
 
   attr_accessor :is_biker, :personal_best_hours, :personal_best_minutes, :personal_best_seconds
 
-  before_save :set_uci_id, :set_personal_best
+  before_save :set_uci_id, :set_personal_best, :set_club
 
   paginates_per 80
 
@@ -58,6 +58,10 @@ class Racer < ApplicationRecord
 
   private
 
+    def individual_club_id
+      Club.where(name: 'Individual').first&.id
+    end
+
     def set_uci_id
       if self.is_biker == '0'
         self.uci_id = 'Jednodnevna'
@@ -71,5 +75,12 @@ class Racer < ApplicationRecord
       if !self.personal_best_minutes.blank? && !self.personal_best_seconds.blank?
         self.personal_best = "#{self.personal_best_hours}:#{self.personal_best_minutes}:#{self.personal_best_seconds}"
       end
+    end
+
+    # Instead of naming racers (who doesn't have a club_id) an Individual...
+    # the genius has a club entry named 'Individual'. :facepalm:
+    # So now if a racer doesn't select a club on signup we assign him to the 'Individual' club. Yay!
+    def set_club
+      self.club_id = individual_club_id if self.club_id.blank?
     end
 end

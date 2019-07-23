@@ -157,6 +157,6 @@ class RacersController < ApplicationController
       :gender, :email, :phone_number, :club_id, :address, :zip_code, :town,
       :day_of_birth, :month_of_birth, :shirt_size, :uci_id, :country,
       :hidden, :is_biker, :personal_best_hours, :personal_best_minutes,
-      :personal_best_seconds)
+      :personal_best_seconds, :category)
   end
 end

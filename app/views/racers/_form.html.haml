@@ -77,12 +77,12 @@
   .field
     .caption Ako niste individualac, odaberite kategoriju i klub
     .mdl-textfield.pb-0
-      %select#category_select.is-capitalized{ name: 'racer[club_id]' }
+      %select#category_select.is-capitalized{ name: 'racer[category]' }
         %option{disabled: true, value: nil, selected: true}
           Kategorija kluba
-        - Club.categories.each do |category|
-          %option.is-capitalized{ value: category[0], selected: @racer.club&.category == category }
-            = category[0]
+        - Club.categories.each do |category, value|
+          %option.is-capitalized{ value: value, selected: @racer.club&.category == category }
+            = category
 
   .field
     .mdl-textfield.pt-0

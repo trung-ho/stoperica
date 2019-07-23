@@ -45,6 +45,8 @@
             - else
               %a.mdl-navigation__link{:href => "/racers/new"} Registracija
               %a.mdl-navigation__link{:href => "/racers/login"} Login
+            = link_to "https://www.facebook.com/stoperica.live/", :target => "_blank", :class => "mdl-navigation__link" do
+              = image_tag 'facebook_icon', alt: 'Facebook', size: '30'
 
       .mdl-layout__drawer
         %a.mdl-layout-title{:href => "/"}
@@ -74,6 +76,8 @@
           - else
             %a.mdl-navigation__link{:href => "/racers/new"} Registracija
             %a.mdl-navigation__link{:href => "/racers/login"} Login
+          = link_to "https://www.facebook.com/stoperica.live/", :target => "_blank", :class => "mdl-navigation__link" do
+            = image_tag 'facebook_icon', alt: 'Facebook', size: '30'
 
       %main.mdl-layout__content
         - if @banner

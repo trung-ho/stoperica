@@ -8,10 +8,20 @@ class RacesController < ApplicationController
   def index
     @banner = false
     if user_signed_in? && current_user.admin?
-      @races = Race.all.order(date: :desc).page(params[:page])
+      @races = Race.where("date >= now()").order(date: :asc).page(params[:page])
     else
-      @races = Race.where.not(hidden: true).order(date: :desc).page(params[:page])
+      @races = Race.where.not(hidden: true).where("date >= now()").order(date: :asc).page(params[:page])
     end
+  end
+
+  def finished
+    @banner = false
+    if user_signed_in? && current_user.admin?
+      @races = Race.where("date < now()").order(date: :desc).page(params[:page])
+    else
+      @races = Race.where.not(hidden: true).where("date < now()").order(date: :desc).page(params[:page])
+    end
+    render :index
   end
 
   # GET /races/1

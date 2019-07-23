@@ -4,7 +4,7 @@
 %h4
   Vrijeme utrke:
   %b
-    = l @race.date, format: :short
+    = l @race.date, format: :long
 
 - if @race.location_url.present?
   %h4
@@ -22,7 +22,7 @@
   %h4
     Prijave otvorene do:
     %b#raceResultLocked{ class: @race.lock_race_results ? 'shame' : '' }
-      = l @race.registration_threshold, format: :short
+      = l @race.registration_threshold, format: :long
     - if @race.lock_race_results
       .mdl-tooltip.mdl-tooltip--large{for: "raceResultLocked"}
         %b Napomena:

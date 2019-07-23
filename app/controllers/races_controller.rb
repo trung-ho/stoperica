@@ -3,25 +3,21 @@ class RacesController < ApplicationController
   before_action :check_race_result, only: [:show]
   before_action :only_admin, only: [:new, :edit, :destroy, :assign_positions]
 
-  # GET /races
-  # GET /races.json
+
+  # Order is:
+  #   Upcoming -> asc
+  #   Finished -> desc
+  # Uncharacteristic? I know... But client is alway right!
   def index
     @banner = false
     if user_signed_in? && current_user.admin?
-      @races = Race.where("date >= now()").order(date: :asc).page(params[:page])
+      races = Race.where("date >= now()").order(date: :asc)
+      races += Race.where("date < now()").order(date: :desc)
     else
-      @races = Race.where.not(hidden: true).where("date >= now()").order(date: :asc).page(params[:page])
+      races = Race.where.not(hidden: true).where("date >= now()").order(date: :asc)
+      races += Race.where.not(hidden: true).where("date < now()").order(date: :desc)
     end
-  end
-
-  def finished
-    @banner = false
-    if user_signed_in? && current_user.admin?
-      @races = Race.where("date < now()").order(date: :desc).page(params[:page])
-    else
-      @races = Race.where.not(hidden: true).where("date < now()").order(date: :desc).page(params[:page])
-    end
-    render :index
+    @races = Kaminari.paginate_array(races).page(params[:page])
   end
 
   # GET /races/1

@@ -1,8 +1,3 @@
-%p{style: 'text-align: right'}
-  - if action_name == 'index'
-    = link_to 'Finished Races', finished_races_path, class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
-  - else
-    = link_to 'Upcoming Races', races_path, class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
 #races.mdl-grid
   - @races.each do |race|
     .mdl-cell.mdl-cell--3-col.mdl-cell--12-col-phone.mdl-cell--6-col-tablet

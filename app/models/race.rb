@@ -148,7 +148,7 @@ class Race < ApplicationRecord
           'Klub', 'Država', 'Kategorija', 'Majica', 'Datum rodenja', 'Prebivalište',
           'Email', 'Mobitel', 'Personal Best']
         race_results.each do |race_result|
-          sheet.add_row << race_result.to_csv
+          sheet.add_row race_result.to_csv
         end
       end
     end.to_stream.string

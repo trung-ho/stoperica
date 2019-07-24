@@ -1,5 +1,5 @@
 class RacesController < ApplicationController
-  before_action :set_race, only: [:show, :embed, :edit, :update, :destroy, :assign_positions]
+  before_action :set_race, only: [:show, :embed, :edit, :update, :destroy, :assign_positions, :export]
   before_action :check_race_result, only: [:show]
   before_action :only_admin, only: [:new, :edit, :destroy, :assign_positions]
 
@@ -26,24 +26,33 @@ class RacesController < ApplicationController
     @banner = false
     @is_admin = current_user&.admin?
     @is_race_admin = race_admin?(@race.id)
+    
     if (@is_admin || @is_race_admin) && @race.pool
       @start_numbers = @race.pool.start_numbers.sort_by{|sn| [sn.value.to_i]}.collect{|sn| [sn.value, sn.value]}
     else
       @start_numbers = []
     end
+
     respond_to do |format|
       format.html { render :show }
       format.json do
         render json: @race, include: json_includes, methods: :sorted_results
       end
-      format.csv do
-        if params[:start_list].present?
-          send_data @race.to_start_list_csv, filename: "Startna lista #{@race.name}.csv"
-        elsif params[:results].present?
-          send_data @race.to_results_csv, filename: "Rezultati #{@race.name}.csv"
-        else
-          send_data @race.to_csv, filename: "Natjecatelji #{@race.name}.csv"
-        end
+    end
+  end
+
+  def export
+    ext = params[:format]
+    respond_to do |format|
+      case params[:type]
+      when 'all'
+        format.send(ext) { send_data @race.send("to_#{ext}"), filename: "Natjecatelji #{@race.name}.#{ext}" }
+      when 'start_list'
+        format.send(ext) { send_data @race.send("to_start_list_#{ext}"), filename: "Startna lista #{@race.name}.#{ext}" }
+      when 'result'
+        format.send(ext) { send_data @race.send("to_results_#{ext}"), filename: "Rezultati #{@race.name}.#{ext}" }
+      else
+        format.send(ext) { send_data @race.send("to_results_#{ext}", true), filename: "Rezultati #{@race.name}.#{ext}" }
       end
     end
   end

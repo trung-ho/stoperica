@@ -212,29 +212,23 @@ class RaceResult < ApplicationRecord
   end
 
   def to_csv
-    [
-      start_number&.value, race.uci_display? ? racer.uci_id : nil,
-      racer.last_name.mb_chars.upcase, racer.first_name,
-      racer.club_name(race.uci_display), racer.country_name, category.try(:name),
-      racer.shirt_size, racer.birth_date, racer.full_address, racer.email,
-      racer.phone_number, racer.personal_best&.gsub(',', '.')&.gsub(';', ':')
-    ]
+    [start_number&.value].tap { |h| h.push(racer.uci_id) if race.uci_display? } +
+      [
+        racer.last_name.mb_chars.upcase, racer.first_name,
+        racer.club_name(race.uci_display), racer.country_name, category.try(:name),
+        racer.shirt_size, racer.birth_date, racer.full_address, racer.email,
+        racer.phone_number, racer.personal_best&.gsub(',', '.')&.gsub(';', ':')
+      ]
   end
 
   def to_start_list_csv
-    [
-      start_number&.value, race.uci_display? ? racer.uci_id : nil,
-      racer.last_name.mb_chars.upcase, racer.first_name,
-      racer.birth_date, racer.club_name(race.uci_display)
-    ]
+    [start_number&.value].tap { |h| h.push(racer.uci_id) if race.uci_display? } +
+      [racer.last_name.mb_chars.upcase, racer.first_name, racer.birth_date, racer.club_name(race.uci_display)]
   end
 
-  def to_results_csv
-    [
-      position, start_number&.value, race.uci_display? ? racer.uci_id : nil,
-      racer.last_name.mb_chars.upcase, racer.first_name,
-      racer.club_name(race.uci_display), finish_time, finish_delta
-    ]
+  def to_results_csv(uci_display = false)
+    [position, start_number&.value].tap { |h| h.push(racer.uci_id) if uci_display || race.uci_display? } +
+      [racer.last_name.mb_chars.upcase, racer.first_name, racer.club_name(race.uci_display), finish_time, finish_delta]
   end
 
   def calculate_climbing_positions

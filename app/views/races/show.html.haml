@@ -45,18 +45,6 @@
       Natrag
 
   - if @is_admin || @is_race_admin
-    = link_to race_path(@race, format: "csv") do
-      .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
-        Export CSV
-
-    = link_to race_path(@race, format: "csv", params: { start_list: true }) do
-      .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
-        Startna lista CSV
-
-    = link_to race_path(@race, format: "csv", params: { results: true }) do
-      .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
-        Rezultati CSV
-
     = link_to assign_positions_race_path(@race) do
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
         Azuriraj
@@ -64,6 +52,16 @@
     = link_to edit_race_path(@race) do
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
         Izmijeni
+
+- if @is_admin || @is_race_admin
+  .race-actions
+    %span
+      Preuzimanje podataka
+
+    = form_with url: export_race_path(@race) do
+      = select_tag 'type', options_for_select([['Svi podaci', 'all'], ['Startna lista', 'start_list'], ['Rezultati', 'result'], ['Rezultati_UCI', 'result_with_uci']])
+      = select_tag 'format', options_for_select([['Csv', 'csv',], ['Xlsx', 'xlsx']])
+      = submit_tag 'Izvoz', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
 
   - if DateTime.now < @race.registration_threshold
     - if user_signed_in? && !@racer_has_race_result

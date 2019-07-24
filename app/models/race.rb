@@ -131,8 +131,8 @@ class Race < ApplicationRecord
   end
 
   def to_csv
-    CSV.generate() do |csv|
-      csv << ['Startni broj', uci_display? ? 'UCI ID' : nil, 'Prezime', 'Ime',
+    CSV.generate do |csv|
+      csv << ['Startni broj'].tap { |h| h.push('UCI ID') if uci_display? } + ['Prezime', 'Ime',
         'Klub', 'Država', 'Kategorija', 'Majica', 'Datum rodenja', 'Prebivalište',
         'Email', 'Mobitel', 'Personal Best']
       race_results.each do |race_result|
@@ -141,9 +141,22 @@ class Race < ApplicationRecord
     end
   end
 
+  def to_xlsx
+    Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(:name => "Svi podaci") do |sheet|
+        sheet.add_row ['Startni broj'].tap { |h| h.push('UCI ID') if uci_display? } + ['Prezime', 'Ime',
+          'Klub', 'Država', 'Kategorija', 'Majica', 'Datum rodenja', 'Prebivalište',
+          'Email', 'Mobitel', 'Personal Best']
+        race_results.each do |race_result|
+          sheet.add_row << race_result.to_csv
+        end
+      end
+    end.to_stream.string
+  end
+
   def to_start_list_csv
-    CSV.generate() do |csv|
-      csv << ['Startni broj', uci_display? ? 'UCI ID' : nil, 'Prezime', 'Ime',
+    CSV.generate do |csv|
+      csv << ['Startni broj'].tap { |h| h.push('UCI ID') if uci_display? } + ['Prezime', 'Ime',
         'Datum rodenja', 'Klub']
       categories.each do |category|
         next if sorted_results[category].count.zero?
@@ -155,18 +168,50 @@ class Race < ApplicationRecord
     end
   end
 
-  def to_results_csv
-    CSV.generate() do |csv|
-      csv << ['Pozicija', 'Startni broj', uci_display? ? 'UCI ID' : nil,
-        'Prezime', 'Ime', 'Klub', 'Vrijeme', 'Zaostatak']
+  def to_start_list_xlsx
+    Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(:name => "Startna lista") do |sheet|
+        sheet.add_row ['Startni broj'].tap { |h| h.push('UCI ID') if uci_display? } + ['Prezime', 'Ime',
+          'Datum rodenja', 'Klub']
+        categories.each do |category|
+          next if sorted_results[category].count.zero?
+          sheet.add_row [category.name]
+          sorted_results[category].each do |race_result|
+            sheet.add_row race_result.to_start_list_csv
+          end
+        end
+      end
+    end.to_stream.string
+  end
+
+  def to_results_csv(uci_display = false)
+    CSV.generate do |csv|
+      csv << ['Pozicija', 'Startni broj'].tap { |h| h.push('UCI ID') if uci_display? || uci_display } + 
+        ['Prezime', 'Ime', 'Klub', 'Vrijeme', 'Zaostatak']
       categories.each do |category|
         next if sorted_results[category].count.zero?
         csv << [category.name]
         sorted_results[category].each do |race_result|
-          csv << race_result.to_results_csv
+          csv << race_result.to_results_csv(uci_display)
         end
       end
     end
+  end
+
+  def to_results_xlsx(uci_display = false)
+    Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(:name => "Rezultati") do |sheet|
+        sheet.add_row ['Pozicija', 'Startni broj'].tap { |h| h.push('UCI ID') if uci_display? || uci_display } + 
+          ['Prezime', 'Ime', 'Klub', 'Vrijeme', 'Zaostatak']
+        categories.each do |category|
+          next if sorted_results[category].count.zero?
+          sheet.add_row [category.name]
+          sorted_results[category].each do |race_result|
+            sheet.add_row race_result.to_results_csv(uci_display)
+          end
+        end
+      end
+    end.to_stream.string
   end
 
   def parse_json

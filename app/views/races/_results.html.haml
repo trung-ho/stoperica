@@ -16,8 +16,19 @@
     .mdl-cell.mdl-cell--1-col Zaostatak
 
   - if params[:absolute]
-    - @race.race_results.sort_by{ |rr| [rr.missed_control_points, -rr.lap_times.length, rr.finish_time] }.each_with_index do |race_result, index|
-      = render 'result', race_result: race_result, index: index
+    - @race.sort_results_by_distance.each_with_index do |(length, race_result), index|
+      .mdl-grid{ class: "cat-#{index}", onclick: "collapse('#collapse-track-#{length}', event)" }
+        .mdl-cell.mdl-cell--12-col.collapse-trigger
+          %i.material-icons.down.is-pulled-right expand_more
+          %i.material-icons.up.is-pulled-right expand_less
+
+          %span.is-pulled-right
+            %i.material-icons navigation
+            = (length.to_f/1000).round 1
+            km &nbsp;
+
+      .collapse{ id: "collapse-track-#{length}" }
+        = render 'result', race_result: race_result, index: index
 
   - else
     - @race.categories.order(id: :asc).each_with_index do |category, index|

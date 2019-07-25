@@ -1,14 +1,17 @@
 class RaceResult < ApplicationRecord
+
   belongs_to :racer
   belongs_to :race
   belongs_to :category
   belongs_to :start_number, optional: true
-  attr_accessor :racer_start_number
 
   validate :disallow_duplicates
+
   before_validation :set_finish_time
   after_save :calculate_climbing_positions, if: :saved_change_to_climbs?
   after_save :assign_league_number
+
+  attr_accessor :racer_start_number
 
   def disallow_duplicates
     return if self.id

@@ -22,10 +22,11 @@
           %i.material-icons.down.is-pulled-right expand_more
           %i.material-icons.up.is-pulled-right expand_less
 
-          %span.is-pulled-right
-            %i.material-icons navigation
-            = (length.to_f/1000).round 1
-            km &nbsp;
+          - if length
+            %span.is-pulled-right
+              %i.material-icons navigation
+              = (length.to_f/1000).round 1
+              km &nbsp;
 
       .collapse{ id: "collapse-track-#{length}" }
         - race_results.each_with_index do |race_result, i|

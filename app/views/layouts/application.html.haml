@@ -22,10 +22,12 @@
             = image_tag 'logo.png', height: 50
           .mdl-layout-spacer
           %nav.mdl-navigation.mdl-layout--large-screen-only
-            %a.mdl-navigation__link{:href => "/natjecanja"} Natjecanja
+            = link_to "https://www.facebook.com/stoperica.live/", :target => "_blank", :class => "mdl-navigation__link" do
+              = image_tag 'facebook_icon.png', alt: 'Facebook', size: '30'
+            %a.mdl-navigation__link{:href => "/races"} Utrke
             %a.mdl-navigation__link{:href => "/racers"} Natjecatelji
             %a.mdl-navigation__link{:href => "/clubs"} Klubovi
-            %a.mdl-navigation__link{:href => "/races"} Utrke
+            %a.mdl-navigation__link{:href => "/natjecanja"} Natjecanja
             %a.mdl-navigation__link{:href => "/live"} Live
             - if user_signed_in?
               - if RaceAdmin.exists? racer: current_user&.racer
@@ -46,17 +48,17 @@
               %a.mdl-navigation__link{:href => "/racers/new"} Registracija
               %a.mdl-navigation__link{:href => "/racers/login"} Login
             %a.mdl-navigation__link{:href => "/info"} Info
-            = link_to "https://www.facebook.com/stoperica.live/", :target => "_blank", :class => "mdl-navigation__link" do
-              = image_tag 'facebook_icon.png', alt: 'Facebook', size: '30'
 
       .mdl-layout__drawer
         %a.mdl-layout-title{:href => "/"}
           = image_tag 'logo.png', height: 35
         %nav.mdl-navigation
-          %a.mdl-navigation__link{:href => "/natjecanja"} Natjecanja
+          = link_to "https://www.facebook.com/stoperica.live/", :target => "_blank", :class => "mdl-navigation__link" do
+            = image_tag 'facebook_icon.png', alt: 'Facebook', size: '30'
+          %a.mdl-navigation__link{:href => "/races"} Utrke
           %a.mdl-navigation__link{:href => "/racers"} Natjecatelji
           %a.mdl-navigation__link{:href => "/clubs"} Klubovi
-          %a.mdl-navigation__link{:href => "/races"} Utrke
+          %a.mdl-navigation__link{:href => "/natjecanja"} Natjecanja
           %a.mdl-navigation__link{:href => "/live"} Live
           - if user_signed_in?
             - if RaceAdmin.exists? racer: current_user&.racer
@@ -78,8 +80,6 @@
             %a.mdl-navigation__link{:href => "/racers/new"} Registracija
             %a.mdl-navigation__link{:href => "/racers/login"} Login
           %a.mdl-navigation__link{:href => "/info"} Info
-          = link_to "https://www.facebook.com/stoperica.live/", :target => "_blank", :class => "mdl-navigation__link" do
-            = image_tag 'facebook_icon.png', alt: 'Facebook', size: '30'
 
       %main.mdl-layout__content
         - if @banner

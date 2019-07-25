@@ -1,16 +1,13 @@
-%h1
+%h2
   FAQ
 %p#faq1
-  %a{style: 'cursor: pointer;'}
+  %a.cu-p
     Kako se prijaviti na utrku?
-  %i.material-icons.down.is-pulled-right#expand-more expand_more
-  %i.material-icons.up.is-pulled-right#expand-less{style: "display: none;"} expand_less
+  %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
+  %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
 
 
 #info{style: "display: none;"}
-  %h1
-    Informacije
-
   %p
     Za prijave na utrke potrebna je
     = link_to 'registracija', new_racer_path
@@ -39,7 +36,7 @@
   %p
     Za prikaz na mobilnim uređajima koristite
     %a{ href: 'https://www.google.com/chrome/browser/mobile/' }
-      Google Chrome web pregledniku.
+      Google Chrome web preglednik.
 
 %hr
 
@@ -56,7 +53,7 @@
   %br
   Posjedujemo raznovrsnu mjernu opremu, od kojih je dio samostalno osmišljen i izgrađen, te predstavlja inovativna rješenja na tržištu.
 
-%h1
+%h2
   Reference
 
 %h3
@@ -64,15 +61,15 @@
 
 %p
   = image_tag 'info/finish-line-2.png', style: 'width: 100%;'
-  = link_to 'Nacionalno prvenstvo - kronometar', race_path(122)
-  = link_to 'XCM kup Hrvatske', race_path(113)
+  = link_to 'Nacionalno prvenstvo - kronometar', race_path(122), class: 'mr-1'
+  = link_to 'XCM kup Hrvatske', race_path(113), class: 'mr-1'
   = link_to 'XCO Šušnjevača  XCZLD 2018/19', race_path(112)
 
 %h3
   Trail & trekking
 %p  
   = image_tag 'info/trail.png', style: 'width: 100%;'
-  = link_to 'Masters of trail', league_path('strka-trail-liga-2019')
+  = link_to 'Masters of trail', league_path('strka-trail-liga-2019'), class: 'mr-1'
   = link_to 'STrka Trail Liga 2019', race_path(113)
 
 %h3
@@ -80,9 +77,8 @@
 
 %p
   = image_tag 'info/finish-line.png', style: 'width: 100%;'
-  = link_to 'Polumaraton Nin - Zadar', race_path(113)
+  = link_to 'Polumaraton Nin - Zadar', race_path(113), class: 'mr-1'
   = link_to 'Polumaraton Nin-Zadar bodovanje klubova', league_path('polumaraton-nin-zadar')
-
 
 %h3
   Sportsko penjanje
@@ -92,14 +88,22 @@
   = link_to 'Prvenstvo Hrvatske 2018 - SP Težinsko', race_path(94)
 
 %p
-  Štoperica, obrt za usluge
-  %br
-  Stankovci 267, 23422 Stankovci
+  %b
+    Štoperica, obrt za usluge
+    %br
+    Stankovci 267, 23422 Stankovci
 
 %p
-  |\/|  stoperica.timing@gmail.com * mail icon and phone icon (C)
+  %i.material-icons.down mail
+  %span.va-tb
+    stoperica.timing@gmail.com
   %br
-  (C) 0919872304  0989085311
+  %i.material-icons.down local_phone
+  %span.va-tb
+    0919872304
+  %i.material-icons.down local_phone
+  %span.va-tb
+    0989085311
 
 %p
   OIB: 39751832773

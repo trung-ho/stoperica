@@ -16,7 +16,7 @@
     .mdl-cell.mdl-cell--1-col Zaostatak
 
   - if params[:absolute]
-    - @race.sort_results_by_distance.each_with_index do |(length, race_result), index|
+    - @race.sort_results_by_distance.each_with_index do |(length, race_results), index|
       .mdl-grid{ class: "cat-#{index}", onclick: "collapse('#collapse-track-#{length}', event)" }
         .mdl-cell.mdl-cell--12-col.collapse-trigger
           %i.material-icons.down.is-pulled-right expand_more
@@ -28,7 +28,8 @@
             km &nbsp;
 
       .collapse{ id: "collapse-track-#{length}" }
-        = render 'result', race_result: race_result, index: index
+        - race_results.each_with_index do |race_result, i|
+          = render 'result', race_result: race_result, index: i
 
   - else
     - @race.categories.order(id: :asc).each_with_index do |category, index|

@@ -63,14 +63,15 @@
   = image_tag 'info/finish-line-2.png', style: 'width: 100%;'
   = link_to 'Nacionalno prvenstvo - kronometar', race_path(122), class: 'mr-1'
   = link_to 'XCM kup Hrvatske', race_path(113), class: 'mr-1'
-  = link_to 'XCO Šušnjevača  XCZLD 2018/19', race_path(112)
+  = link_to 'XCO Šušnjevača', race_path(112), class: 'mr-1'
+  = link_to 'XCZLD 2018/19', league_path('xczld-2018-19')
 
 %h3
   Trail & trekking
 %p  
   = image_tag 'info/trail.png', style: 'width: 100%;'
-  = link_to 'Masters of trail', league_path('strka-trail-liga-2019'), class: 'mr-1'
-  = link_to 'STrka Trail Liga 2019', race_path(113)
+  = link_to 'Masters of trail', race_path(113), class: 'mr-1'
+  = link_to 'STrka Trail Liga 2019', league_path('strka-trail-liga-2019')
 
 %h3
   Trčanje
@@ -96,7 +97,7 @@
 %p
   %i.material-icons.down mail
   %span.va-tb
-    stoperica.timing@gmail.com
+    = link_to 'stoperica.timing@gmail.com', 'mailto:stoperica.timing@gmail.com'
   %br
   %i.material-icons.down local_phone
   %span.va-tb

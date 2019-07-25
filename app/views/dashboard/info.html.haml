@@ -1,69 +1,114 @@
 %h1
-  Informacije
+  FAQ
+%p#faq1
+  %a{style: 'cursor: pointer;'}
+    Kako se prijaviti na utrku?
+  %i.material-icons.down.is-pulled-right#expand-more expand_more
+  %i.material-icons.up.is-pulled-right#expand-less{style: "display: none;"} expand_less
 
-%p
-  Za prijave na utrke potrebna je
-  = link_to 'registracija', new_racer_path
-  na stranici.
 
-%p
-  Da biste izvršili prijavu za utrku potrebno je:
+#info{style: "display: none;"}
+  %h1
+    Informacije
 
-%ul
-  %li biti prijavljen na stranicu,
-  %li
-    u izborniku
-    = link_to 'utrke', races_path
-    odabrati utrku na koju se želite prijaviti,
-  %li u prijavama utrke odaberite kategoriju, te potvrdite na "Prijavi se".
+  %p
+    Za prijave na utrke potrebna je
+    = link_to 'registracija', new_racer_path
+    na stranici.
 
-%p
-  Ukoliko ste se odjavili sa stranice, za ponovnu prijavu koristite e-mail
-  adresu i broj mobitela u formatu koji ste unijeli prilikom registracije.
+  %p
+    Da biste izvršili prijavu za utrku potrebno je:
 
-%p
-  Za sve probleme, molimo kontaktirajte nas na
-  %a{ href: 'mailto:stoperica.timing@gmail.com' }
-    e-mail.
+  %ul
+    %li biti prijavljen na stranicu,
+    %li
+      u izborniku
+      = link_to 'utrke', races_path
+      odabrati utrku na koju se želite prijaviti,
+    %li u prijavama utrke odaberite kategoriju, te potvrdite na "Prijavi se".
 
-%p
-  Na mobilnim uređajima stranica se najbolje prikazuje na
-  %a{ href: 'https://www.google.com/chrome/browser/mobile/' }
-    Google Chrome web pregledniku.
+  %p
+    Ukoliko ste se odjavili sa stranice, za ponovnu prijavu koristite e-mail
+    adresu i broj mobitela u formatu koji ste unijeli prilikom registracije.
+
+  %p
+    Za sve probleme, molimo kontaktirajte nas na
+    %a{ href: 'mailto:stoperica.timing@gmail.com' }
+      e-mail.
+
+  %p
+    Za prikaz na mobilnim uređajima koristite
+    %a{ href: 'https://www.google.com/chrome/browser/mobile/' }
+      Google Chrome web pregledniku.
 
 %hr
 
 %h1
-  Information
+  O nama
 
 %p
-  For registration on races, site
-  = link_to 'registration', new_racer_path
-  is required.
+  Timing platforma Stoperica.live temelji se na jedinstvenoj pohrani rezultata natjecatelja u bazu i njihovoj obradi.
+  %br
+  Prema zahtjevu organizatora možemo kreirati automatski sustav bodovanja natjecatelja, klubova ili cjelokupne lige.
 
 %p
-  To make a race registration you need
+  Cjelokupan sustav razvijan je samostalno, uz korištenje tehnologije visokih performansi.
+  %br
+  Posjedujemo raznovrsnu mjernu opremu, od kojih je dio samostalno osmišljen i izgrađen, te predstavlja inovativna rješenja na tržištu.
 
-%ul
-  %li to be logged on the page and
-  %li
-    select the race from the
-    = link_to 'race menu', races_path
-  %li
-    choose a category on race details page and confirm your application on the
-    "Prijavi se" button.
+%h1
+  Reference
 
-%p
-  If you log out of the site, please use the e-mail address and mobile phone
-  number in the format you entered when registering to re-apply.
+%h3
+  Biciklizam
 
 %p
-  For any problems, please contact us on
-  %a{ href: 'mailto:stoperica.timing@gmail.com' }
-    e-mail.
+  = image_tag 'info/finish-line-2.png', style: 'width: 100%;'
+  = link_to 'Nacionalno prvenstvo - kronometar', race_path(122)
+  = link_to 'XCM kup Hrvatske', race_path(113)
+  = link_to 'XCO Šušnjevača  XCZLD 2018/19', race_path(112)
+
+%h3
+  Trail & trekking
+%p  
+  = image_tag 'info/trail.png', style: 'width: 100%;'
+  = link_to 'Masters of trail', league_path('strka-trail-liga-2019')
+  = link_to 'STrka Trail Liga 2019', race_path(113)
+
+%h3
+  Trčanje
 
 %p
-  On mobile devices, the page is best viewed on
-  %a{ href: 'https://www.google.com/chrome/browser/mobile/' }
-    Google Chrome web browser.
+  = image_tag 'info/finish-line.png', style: 'width: 100%;'
+  = link_to 'Polumaraton Nin - Zadar', race_path(113)
+  = link_to 'Polumaraton Nin-Zadar bodovanje klubova', league_path('polumaraton-nin-zadar')
 
+
+%h3
+  Sportsko penjanje
+
+%p
+  = image_tag 'info/finish-line.png', style: 'width: 100%;'
+  = link_to 'Prvenstvo Hrvatske 2018 - SP Težinsko', race_path(94)
+
+%p
+  Štoperica, obrt za usluge
+  %br
+  Stankovci 267, 23422 Stankovci
+
+%p
+  |\/|  stoperica.timing@gmail.com * mail icon and phone icon (C)
+  %br
+  (C) 0919872304  0989085311
+
+%p
+  OIB: 39751832773
+  %br
+  Matični broj obrta: 97958085
+  %br
+  Bankovni račun: HR6023600001102757273
+  %br
+  Poslovna banka: Zagrebačka banka d.d.
+
+%a{href: '/terms'}
+  Izjava o zaštiti podataka

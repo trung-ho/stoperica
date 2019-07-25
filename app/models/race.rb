@@ -252,10 +252,11 @@ class Race < ApplicationRecord
   def sort_results_by_distance
     sorted_results = {}
     categories.pluck(:track_length).uniq.sort.each do |track_length|
-      category_results[track_length] = race_results.joins(:category).where(track_length: track_length)
+      sorted_results[track_length] = race_results.joins(:category).where(track_length: track_length)
         .where.not(position: nil).order(:position) + race_results.joins(:category).where(track_length: track_length)
         .where(position: nil).order(status: :desc)
     end
+    sorted_results
   end
 
   private

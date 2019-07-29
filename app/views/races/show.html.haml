@@ -109,7 +109,7 @@
 
 - if @is_admin || @is_race_admin
   = render 'admin_race_result_form'
-- elsif @current_racer.club_admin? && DateTime.now < @race.registration_threshold
+- elsif @current_racer&.club_admin? && DateTime.now < @race.registration_threshold
   = render 'club_admin_form'
 
 %h4

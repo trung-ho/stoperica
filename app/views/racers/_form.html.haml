@@ -103,7 +103,7 @@
           Licencirani sam biciklist
   .field#uci_id_field{style: 'display: none;'}
     .mdl-textfield.mdl-js-textfield
-      %input#uci_id.mdl-textfield__input{type: 'text', name: 'racer[uci_id]', value: @racer.uci_id, pattern: "[0-9\s]{11,14}", title: "Please enter 11 Digit UCI ID."}
+      %input#uci_id.mdl-textfield__input{type: 'text', name: 'racer[uci_id]', value: @racer.uci_id, pattern: "[0-9\s]{11,14}|Jednodnevna", title: "Please enter 11 Digit UCI ID."}
       %label.mdl-textfield__label{for: 'uci_id'} UCI ID
 
   .field

@@ -14,6 +14,8 @@ class Racer < ApplicationRecord
 
   before_save :set_uci_id, :set_personal_best, :set_club
 
+  scope :club_admins, -> { where(club_admin: true) }
+
   paginates_per 80
 
   def full_name

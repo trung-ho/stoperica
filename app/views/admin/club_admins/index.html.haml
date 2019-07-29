@@ -1,0 +1,20 @@
+%h1 Club Admins
+
+%table.wide_table
+  %thead
+    %tr
+      %th Racer
+      %th Club
+      %th{colspan: 2} Actions
+  %tbody
+    - @club_admins.each do |club_admin|
+      %tr.text-center
+        %td= club_admin.full_name
+        %td= club_admin.club&.name
+        %td= link_to 'Show', admin_club_admin_path(club_admin)
+        / %td
+        /   = form_for club_admin, url: admin_club_admin_path(club_admin), method: :delete do |f|
+        /     = f.submit 'Remove Admin'
+%br
+
+= link_to 'New Race Admin', new_admin_club_admin_path

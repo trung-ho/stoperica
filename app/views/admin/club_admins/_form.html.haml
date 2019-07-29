@@ -1,0 +1,44 @@
+= form_with model: club_admin, url: url_for(action: club_admin.new_record? ? :create : :update), local: true do |f|
+  .field
+    %select#club_select{ name: 'racer[club_id]' }
+      %option{ disabled: true }
+        Klub
+      - Club.all.each do |club|
+        %option{ value: club.id, selected: club_admin.club_id == club.id }
+          = club.name
+    %select#racer_select{ name: 'id' }
+      %option{ disabled: true}
+        Racer
+      - Racer.all.each do |racer|
+        %option{ value: racer.id, selected: club_admin.id == racer.id, data: { club: racer.club_id } }
+          = racer.full_name
+  .actions
+    = f.submit
+
+:javascript
+  var clubSelect = document.querySelector('#club_select');
+  var racerSelect = document.querySelector('#racer_select');
+  var options = racerSelect.options;
+  var optionsValues = [];
+  for(var i = 1; i < options.length; i++) {
+    optionsValues.push(options[i]);
+  }
+  options.length = 1;
+
+  clubSelect.addEventListener('change', function(event) {
+    var club = event.target.value;
+    var filteredOptions = [];
+    options.length = 1;
+
+    for(var i = 0; i < optionsValues.length; i++) {
+      var option = optionsValues[i];
+      if (option.dataset.club === club) {
+        filteredOptions.push(option);
+      }
+    }
+
+    for(var i = 0; i < filteredOptions.length; i++) {
+      options.add(filteredOptions[i]);
+    }
+  });
+

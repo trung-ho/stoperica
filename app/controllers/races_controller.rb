@@ -26,6 +26,11 @@ class RacesController < ApplicationController
     @banner = false
     @is_admin = current_user&.admin?
     @is_race_admin = race_admin?(@race.id)
+
+    if @is_club_admin = @current_racer&.club_admin?
+      @club_racers = Racer.left_joins(:race_results).where('race_results.id IS NULL')
+        .where(club_id: @current_racer.club_id)
+    end
     
     if (@is_admin || @is_race_admin) && @race.pool
       @start_numbers = @race.pool.start_numbers.sort_by{|sn| [sn.value.to_i]}.collect{|sn| [sn.value, sn.value]}
@@ -153,9 +158,8 @@ class RacesController < ApplicationController
 
   def check_race_result
     # TODO rijesi ovo groblje
-    has_race_result = current_user&.racer&.races&.include?(@race)
-    @racer_has_race_result = has_race_result
-    if has_race_result
+    @racer_has_race_result = current_racer&.races&.include?(@race)
+    if @racer_has_race_result
       @race_result = current_user.racer.race_results.where(race: @race).first
     end
   end

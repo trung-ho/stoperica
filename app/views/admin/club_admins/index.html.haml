@@ -1,5 +1,7 @@
 %h1 Club Admins
 
+= link_to 'New Race Admin', new_admin_club_admin_path
+
 %table.wide_table
   %thead
     %tr
@@ -15,6 +17,3 @@
         / %td
         /   = form_for club_admin, url: admin_club_admin_path(club_admin), method: :delete do |f|
         /     = f.submit 'Remove Admin'
-%br
-
-= link_to 'New Race Admin', new_admin_club_admin_path

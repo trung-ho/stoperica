@@ -1,6 +1,7 @@
-= form_for RaceResult.new do |f|
-  = f.select :racer_id, @club_racers.collect { |r| [r.full_name, r.id] }
-  = f.hidden_field :race_id, value: @race.id
-  = f.hidden_field :status, value: 1
-  = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}
-  = f.submit 'Prijavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+.race-actions
+  = form_for RaceResult.new do |f|
+    = f.select :racer_id, @club_racers.collect { |r| [r.full_name, r.id] }
+    = f.hidden_field :race_id, value: @race.id
+    = f.hidden_field :status, value: 1
+    = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}
+    = f.submit 'Prijavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'

@@ -63,6 +63,16 @@
       = select_tag 'format', options_for_select([['Xlsx', 'xlsx'], ['Csv', 'csv']])
       = submit_tag 'Izvoz', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
 
+%a{ href: @race.description_url, target: '_blank' }
+  %h4
+    Dodatne informacije
+
+- if @is_admin || @is_race_admin
+  = render 'admin_race_result_form'
+- elsif @current_racer&.club_admin? && DateTime.now < @race.registration_threshold
+  = render 'club_admin_form'
+
+.race-actions
   - if DateTime.now < @race.registration_threshold
     - if user_signed_in? && !@racer_has_race_result
       = form_for RaceResult.new do |f|
@@ -93,8 +103,7 @@
                 <br>
                 Prihvaćam da se za sve sporove ugovara nadležnost Općinskog suda u Zadru, prema zakonima Republike Hrvatske.
                 <br>
-        .actions
-          = f.submit 'Prijavi se', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
+        = f.submit 'Prijavi se', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
     - elsif user_signed_in? && @racer_has_race_result
       - unless @race.lock_race_results
         = form_for @race_result, method: 'DELETE' do |f|
@@ -103,15 +112,6 @@
     - else
       = link_to 'Login za prijavu', login_racers_path(redirect: "/races/#{@race.id}"), class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect', style: 'margin: 0'
 
-%a{ href: @race.description_url, target: '_blank' }
-  %h4
-    Dodatne informacije
-
-- if @is_admin || @is_race_admin
-  = render 'admin_race_result_form'
-- elsif @current_racer&.club_admin? && DateTime.now < @race.registration_threshold
-  = render 'club_admin_form'
-
 %h4
   Natjecatelji
 
@@ -119,8 +119,6 @@
   %label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect{for: "poredak"}
     %input#poredak.mdl-switch__input{checked: params[:absolute], type: "checkbox"}
     %span.mdl-switch__label Generalni poredak
-  %br
-  %br
 
 %p
   = render 'race_results_count'

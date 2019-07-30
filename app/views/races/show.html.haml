@@ -76,7 +76,7 @@
   - elsif @race.description_url.present?
     = link_to @race.description_url, target: '_blank', id: 'additional-information' do
       %h4 Dodatne informacije
-  - else
+  - elsif @race.displayable_description.present?
     #add-info-toggler
       %h4.cu-p.d-i
         Dodatne informacije
@@ -84,7 +84,7 @@
       %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
     #additional-information{style: "display: none;"}
       %href
-      = @race.description_text.html_safe
+      = @race.description_text.to_s.html_safe
 
 - if @is_admin || @is_race_admin
   = render 'admin_race_result_form'

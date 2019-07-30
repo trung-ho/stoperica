@@ -262,7 +262,7 @@ class Race < ApplicationRecord
   end
 
   def displayable_description
-    Nokogiri(self.description_text).text
+    Nokogiri(self.description_text.to_s).text
   end
 
   private

@@ -35,10 +35,13 @@
     = f.label :location_url
     = f.text_field :location_url
   .field
-    = f.label 'URL raspisa'
+    = f.label :description_text, 'Opis'
+    = f.text_area :description_text
+  .field
+    = f.label :description_url, 'URL raspisa'
     = f.text_field :description_url
   .field
-    = f.label 'Onemoguci odjavu'
+    = f.label :lock_race_results, 'Onemoguci odjavu'
     = f.check_box :lock_race_results
   .field
     %label UCI prikaz

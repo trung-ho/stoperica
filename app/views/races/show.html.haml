@@ -63,9 +63,8 @@
       = select_tag 'format', options_for_select([['Xlsx', 'xlsx'], ['Csv', 'csv']])
       = submit_tag 'Izvoz', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
 
-%a{ href: @race.description_url, target: '_blank' }
-  %h4
-    Dodatne informacije
+%h4
+  = additional_information(@race)
 
 - if @is_admin || @is_race_admin
   = render 'admin_race_result_form'

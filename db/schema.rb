@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190729093943) do
+ActiveRecord::Schema.define(version: 20190730123203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -149,6 +149,7 @@ ActiveRecord::Schema.define(version: 20190729093943) do
     t.boolean "millis_display"
     t.string "auth_token"
     t.boolean "skip_auth", default: false
+    t.text "description_text"
     t.index ["auth_token"], name: "index_races_on_auth_token"
     t.index ["league_id"], name: "index_races_on_league_id"
     t.index ["pool_id"], name: "index_races_on_pool_id"

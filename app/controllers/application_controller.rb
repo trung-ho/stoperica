@@ -6,7 +6,10 @@ class ApplicationController < ActionController::Base
   protected
 
     def only_admin
-      fail 'Access denied' unless current_user&.admin?
+      unless current_user&.admin?
+        flash[:error] = "You are not authorized to access these resources!"
+        redirect_to root_path
+      end
     end
 
     def race_admin? race_id

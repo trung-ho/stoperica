@@ -63,8 +63,28 @@
       = select_tag 'format', options_for_select([['Xlsx', 'xlsx'], ['Csv', 'csv']])
       = submit_tag 'Izvoz', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
 
-%h4
-  = additional_information(@race)
+.mb-3
+  - if @race.displayable_description.present? && @race.description_url.present?
+    #add-info-toggler
+      %h4.cu-p.d-i
+        Dodatne informacije
+      %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
+      %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
+    #additional-information{style: "display: none;"}
+      %hr
+      = link_to @race.description_text.html_safe, @race.description_url, target: '_blank'
+  - elsif @race.description_url.present?
+    = link_to @race.description_url, target: '_blank', id: 'additional-information' do
+      %h4 Dodatne informacije
+  - else
+    #add-info-toggler
+      %h4.cu-p.d-i
+        Dodatne informacije
+      %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
+      %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
+    #additional-information{style: "display: none;"}
+      %href
+      = @race.description_text.html_safe
 
 - if @is_admin || @is_race_admin
   = render 'admin_race_result_form'

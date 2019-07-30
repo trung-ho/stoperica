@@ -34,9 +34,12 @@
   .field
     = f.label :location_url
     = f.text_field :location_url
+  .field.hidden
+    = f.text_field :description_text
   .field
-    = f.label :description_text, 'Opis'
-    = f.text_area :description_text
+    = f.label "Opis"
+    #quill-for-description
+      = raw @race.description_text
   .field
     = f.label :description_url, 'URL raspisa'
     = f.text_field :description_url
@@ -66,7 +69,7 @@
     = f.label :email_body
     = f.text_field :email_body
   .field
-    #quill= raw @race.email_body
+    #quill-for-email-body= raw @race.email_body
   .actions
     = f.submit 'Spremi'
 
@@ -91,7 +94,14 @@
       ['clean']                                         // remove formatting button
     ];
 
-    var quill = new Quill('#quill', {
+    var quillEmailBody = new Quill('#quill-for-email-body', {
+      modules: {
+        toolbar: toolbarOptions
+      },
+      theme: 'snow'
+    });
+
+    var quillDescription = new Quill('#quill-for-description', {
       modules: {
         toolbar: toolbarOptions
       },
@@ -100,6 +110,9 @@
 
     var form = document.querySelector('.edit_race');
     form.onsubmit = function() {
-      var postContentInput = document.querySelector('#race_email_body');
-      postContentInput.value = quill.root.innerHTML;
+      var emailBodyField = document.querySelector('#race_email_body');
+      emailBodyField.value = quillEmailBody.root.innerHTML;
+
+      var descriptionField = document.querySelector('#race_description_text');
+      descriptionField.value = quillDescription.root.innerHTML;
     };

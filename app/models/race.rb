@@ -261,6 +261,10 @@ class Race < ApplicationRecord
     sorted_results
   end
 
+  def displayable_description
+    Nokogiri(self.description_text).text
+  end
+
   private
 
     def set_auth_token

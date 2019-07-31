@@ -89,6 +89,7 @@
 
       [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
       [{ 'font': [] }],
+      ['link'],
       [{ 'align': [] }],
 
       ['clean']                                         // remove formatting button
@@ -98,14 +99,16 @@
       modules: {
         toolbar: toolbarOptions
       },
-      theme: 'snow'
+      theme: 'snow',
+      bounds: document.body
     });
 
     var quillDescription = new Quill('#quill-for-description', {
       modules: {
         toolbar: toolbarOptions
       },
-      theme: 'snow'
+      theme: 'snow',
+      bounds: document.body
     });
 
     var form = document.querySelector('.edit_race');

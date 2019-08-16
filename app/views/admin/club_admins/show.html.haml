@@ -1,0 +1,8 @@
+%p
+  %b Club:
+  = @club_admin.club&.name
+%p
+  %b Admin:
+  = @club_admin.full_name
+
+= link_to 'Back', admin_club_admins_path

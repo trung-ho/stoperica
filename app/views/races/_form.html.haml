@@ -34,11 +34,17 @@
   .field
     = f.label :location_url
     = f.text_field :location_url
+  .field.hidden
+    = f.text_field :description_text
   .field
-    = f.label 'URL raspisa'
+    = f.label "Opis"
+    #quill-for-description
+      = raw @race.description_text
+  .field
+    = f.label :description_url, 'URL raspisa'
     = f.text_field :description_url
   .field
-    = f.label 'Onemoguci odjavu'
+    = f.label :lock_race_results, 'Onemoguci odjavu'
     = f.check_box :lock_race_results
   .field
     %label UCI prikaz
@@ -50,6 +56,9 @@
     %label Prikaz milisekundi
     = f.check_box :millis_display
   .field
+    %label Skip Auth for Devices
+    = f.check_box :skip_auth
+  .field
     %label Kontrolne tocke
     %br
     = f.text_area :control_points_raw, value: @race.control_points.to_json
@@ -60,7 +69,7 @@
     = f.label :email_body
     = f.text_field :email_body
   .field
-    #quill= raw @race.email_body
+    #quill-for-email-body= raw @race.email_body
   .actions
     = f.submit 'Spremi'
 
@@ -80,20 +89,33 @@
 
       [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
       [{ 'font': [] }],
+      ['link'],
       [{ 'align': [] }],
 
       ['clean']                                         // remove formatting button
     ];
 
-    var quill = new Quill('#quill', {
+    var quillEmailBody = new Quill('#quill-for-email-body', {
       modules: {
         toolbar: toolbarOptions
       },
-      theme: 'snow'
+      theme: 'snow',
+      bounds: document.body
+    });
+
+    var quillDescription = new Quill('#quill-for-description', {
+      modules: {
+        toolbar: toolbarOptions
+      },
+      theme: 'snow',
+      bounds: document.body
     });
 
     var form = document.querySelector('.edit_race');
     form.onsubmit = function() {
-      var postContentInput = document.querySelector('#race_email_body');
-      postContentInput.value = quill.root.innerHTML;
+      var emailBodyField = document.querySelector('#race_email_body');
+      emailBodyField.value = quillEmailBody.root.innerHTML;
+
+      var descriptionField = document.querySelector('#race_description_text');
+      descriptionField.value = quillDescription.root.innerHTML;
     };

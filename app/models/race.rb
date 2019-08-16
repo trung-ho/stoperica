@@ -1,11 +1,14 @@
 class Race < ApplicationRecord
+
+  belongs_to :league, optional: true
+  belongs_to :pool
+  
   has_many :race_results
   has_many :categories
   has_many :racers, through: :race_results
-  belongs_to :league, optional: true
-  belongs_to :pool
 
   before_validation :parse_json
+  before_save :set_auth_token
 
   enum race_type: [:mtb, :trcanje, :treking, :duatlon, :triatlon, :penjanje, :xco, :road]
 
@@ -128,8 +131,8 @@ class Race < ApplicationRecord
   end
 
   def to_csv
-    CSV.generate() do |csv|
-      csv << ['Startni broj', uci_display? ? 'UCI ID' : nil, 'Prezime', 'Ime',
+    CSV.generate do |csv|
+      csv << ['Startni broj'].tap { |h| h.push('UCI ID') if uci_display? } + ['Prezime', 'Ime',
         'Klub', 'Država', 'Kategorija', 'Majica', 'Datum rodenja', 'Prebivalište',
         'Email', 'Mobitel', 'Personal Best']
       race_results.each do |race_result|
@@ -138,9 +141,22 @@ class Race < ApplicationRecord
     end
   end
 
+  def to_xlsx
+    Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(:name => "Svi podaci") do |sheet|
+        sheet.add_row ['Startni broj'].tap { |h| h.push('UCI ID') if uci_display? } + ['Prezime', 'Ime',
+          'Klub', 'Država', 'Kategorija', 'Majica', 'Datum rodenja', 'Prebivalište',
+          'Email', 'Mobitel', 'Personal Best']
+        race_results.each do |race_result|
+          sheet.add_row race_result.to_csv
+        end
+      end
+    end.to_stream.string
+  end
+
   def to_start_list_csv
-    CSV.generate() do |csv|
-      csv << ['Startni broj', uci_display? ? 'UCI ID' : nil, 'Prezime', 'Ime',
+    CSV.generate do |csv|
+      csv << ['Startni broj'].tap { |h| h.push('UCI ID') if uci_display? } + ['Prezime', 'Ime',
         'Datum rodenja', 'Klub']
       categories.each do |category|
         next if sorted_results[category].count.zero?
@@ -152,25 +168,57 @@ class Race < ApplicationRecord
     end
   end
 
-  def to_results_csv
-    CSV.generate() do |csv|
-      csv << ['Pozicija', 'Startni broj', uci_display? ? 'UCI ID' : nil,
-        'Prezime', 'Ime', 'Klub', 'Vrijeme', 'Zaostatak']
+  def to_start_list_xlsx
+    Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(:name => "Startna lista") do |sheet|
+        sheet.add_row ['Startni broj'].tap { |h| h.push('UCI ID') if uci_display? } + ['Prezime', 'Ime',
+          'Datum rodenja', 'Klub']
+        categories.each do |category|
+          next if sorted_results[category].count.zero?
+          sheet.add_row [category.name]
+          sorted_results[category].each do |race_result|
+            sheet.add_row race_result.to_start_list_csv
+          end
+        end
+      end
+    end.to_stream.string
+  end
+
+  def to_results_csv(uci_display = false)
+    CSV.generate do |csv|
+      csv << ['Pozicija', 'Startni broj'].tap { |h| h.push('UCI ID') if uci_display? || uci_display } + 
+        ['Prezime', 'Ime', 'Klub', 'Vrijeme', 'Zaostatak']
       categories.each do |category|
         next if sorted_results[category].count.zero?
         csv << [category.name]
         sorted_results[category].each do |race_result|
-          csv << race_result.to_results_csv
+          csv << race_result.to_results_csv(uci_display)
         end
       end
     end
+  end
+
+  def to_results_xlsx(uci_display = false)
+    Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(:name => "Rezultati") do |sheet|
+        sheet.add_row ['Pozicija', 'Startni broj'].tap { |h| h.push('UCI ID') if uci_display? || uci_display } + 
+          ['Prezime', 'Ime', 'Klub', 'Vrijeme', 'Zaostatak']
+        categories.each do |category|
+          next if sorted_results[category].count.zero?
+          sheet.add_row [category.name]
+          sorted_results[category].each do |race_result|
+            sheet.add_row race_result.to_results_csv(uci_display)
+          end
+        end
+      end
+    end.to_stream.string
   end
 
   def parse_json
     self.control_points = JSON.parse(control_points_raw) if control_points_raw.present?
   end
 
-  def sorted_results unsorted = false
+  def sorted_results(unsorted = false)
     return if unsorted
     if penjanje?
       fallback = race_results.count
@@ -200,4 +248,26 @@ class Race < ApplicationRecord
     end
     sorted_results
   end
+
+  def sort_results_by_distance
+    sorted_results = {}
+    categories.pluck(:track_length).uniq.sort.each do |track_length|
+      sorted_results[track_length] = race_results.joins(:category)
+        .where(categories: {track_length: track_length})
+        .sort_by {|rr| [
+          rr.missed_control_points, -rr.lap_times.length, rr.finish_time
+        ]}
+    end
+    sorted_results
+  end
+
+  def displayable_description
+    Nokogiri(self.description_text.to_s).text
+  end
+
+  private
+
+    def set_auth_token
+      self.auth_token = SecureRandom.hex(3) if self.auth_token.blank?
+    end
 end

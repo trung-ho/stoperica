@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190625150143) do
+ActiveRecord::Schema.define(version: 20190730123203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(version: 20190625150143) do
     t.string "country"
     t.string "uci_id"
     t.boolean "hidden", default: false
+    t.boolean "club_admin", default: false
     t.index ["club_id"], name: "index_racers_on_club_id"
     t.index ["user_id"], name: "index_racers_on_user_id"
   end
@@ -146,6 +147,10 @@ ActiveRecord::Schema.define(version: 20190625150143) do
     t.float "points_multiplier", default: 1.0
     t.boolean "hidden", default: false
     t.boolean "millis_display"
+    t.string "auth_token"
+    t.boolean "skip_auth", default: false
+    t.text "description_text"
+    t.index ["auth_token"], name: "index_races_on_auth_token"
     t.index ["league_id"], name: "index_races_on_league_id"
     t.index ["pool_id"], name: "index_races_on_pool_id"
   end

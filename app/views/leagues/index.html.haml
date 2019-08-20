@@ -28,4 +28,9 @@
         .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
           = link_to race.ended_at.present? ? 'REZULTATI' : 'PRIJAVE', race
 
-
+:javascript
+  function collapse(selector, e) {
+    var el = document.querySelector(selector);
+    el.classList.toggle('collapsed');
+    e.target.classList.toggle('collapsed');
+  }

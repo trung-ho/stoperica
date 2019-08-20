@@ -41,4 +41,5 @@ group :development do
   gem 'bullet'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'solargraph'
 end

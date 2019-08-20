@@ -8,20 +8,24 @@
       = link_to 'Izmijeni', edit_league_path(league)
   %hr
 
-  .mdl-grid.is-heading
-    .mdl-cell.mdl-cell--6-col.mdl-cell--2-col-phone Utrka
+  .mdl-grid.is-heading{ onclick: "collapse('#collapse-track-#{league.id}', event)" }
+    .mdl-cell.mdl-cell--5-col.mdl-cell--2-col-phone Utrka
     .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Datum
     .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Prijave do
     .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Prijave/Rezultati
+    .mdl-cell.mdl-cell--1-col.collapse-trigger
+      %i.material-icons.down.is-pulled-right expand_more
+      %i.material-icons.up.is-pulled-right expand_less
 
-  - league.races.order(date: :desc).each do |race|
-    .mdl-grid
-      .mdl-cell.mdl-cell--6-col.mdl-cell--2-col-phone= race.name
-      .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
-        = l race.date, format: :short
-      .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
-        = l race.registration_threshold, format: :short
-      .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
-        = link_to race.ended_at.present? ? 'REZULTATI' : 'PRIJAVE', race
+  .collapse{ id: "collapse-track-#{league.id}" }
+    - league.races.order(date: :desc).each do |race|
+      .mdl-grid
+        .mdl-cell.mdl-cell--6-col.mdl-cell--2-col-phone= race.name
+        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
+          = l race.date, format: :short
+        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
+          = l race.registration_threshold, format: :short
+        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
+          = link_to race.ended_at.present? ? 'REZULTATI' : 'PRIJAVE', race
 
 

@@ -2,14 +2,10 @@
   %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.size
   %span.mdl-chip__text Ukupno
 
-  %h1=@country_count
 - @country_count.each do |country,count|
-  %h1=country
-  %h1=count
-    
-  / %h1=@country
-  / %h1=@count
-
+  %span.mdl-chip.mdl-chip--contact
+    %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white=count
+    %span.mdl-chip__text.emoji= Country.new(country).emoji_flag
 
 - if @race.ended_at
   - unless @race.race_results.where(status: 3).size.zero?
@@ -20,12 +16,12 @@
   - unless @race.race_results.where(status: 4).size.zero?
     %span.mdl-chip.mdl-chip--contact
       %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.where(status: 4).size
-      %span.mdl-chip__text DNF
+      %span.mdl-chip__text Nije završio
 
   - unless @race.race_results.where(status: 5).size.zero?
     %span.mdl-chip.mdl-chip--contact
       %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.where(status: 5).size
-      %span.mdl-chip__text DSQ
+      %span.mdl-chip__text Diskvalificiran
 
 
   - unless @race.race_results.where(status: 6).size.zero?
@@ -36,4 +32,4 @@
   - unless @race.race_results.where(start_number_id: nil).size.zero?
     %span.mdl-chip.mdl-chip--contact
       %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.where(start_number_id: nil).size
-      %span.mdl-chip__text{ title: 'Natjecatelji koji se nisu pojavili na utrci.' } DNP
+      %span.mdl-chip__text{ title: 'Natjecatelji koji se nisu pojavili na utrci.' } Nije prisustvovao

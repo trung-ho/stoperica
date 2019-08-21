@@ -3,8 +3,6 @@ default: &default
   encoding: unicode
   pool: 5
   database: stoperica
-  username: postgres
-  password: amrood123
 
 development:
   <<: *default

@@ -1,13 +1,13 @@
 %h2
   FAQ
-%p#faq1
+%p.text-hidden
   %a.cu-p
     Kako se prijaviti na utrku?
-  %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
-  %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
+  %i.material-icons.down.is-pulled-right.cu-p.expand-more expand_more
+  %i.material-icons.up.is-pulled-right.cu-p.expand-less{style: "display: none;"} expand_less
 
 
-#info{style: "display: none;"}
+%div{style: "display: none;"}
   %p
     Za prijave na utrke potrebna je
     = link_to 'registracija', new_racer_path
@@ -56,37 +56,55 @@
 %h2
   Reference
 
-%h3
+%h3.text-hidden
   Biciklizam
+  %i.material-icons.down.is-pulled-right.cu-p.expand-more expand_more
+  %i.material-icons.up.is-pulled-right.cu-p.expand-less{style: "display: none;"} expand_less
 
-%p
-  = image_tag 'info/finish-line-2.png', style: 'width: 100%;'
-  = link_to 'Nacionalno prvenstvo - kronometar', race_path(122), class: 'mr-1'
-  = link_to 'XCM kup Hrvatske', race_path(113), class: 'mr-1'
-  = link_to 'XCO Šušnjevača', race_path(112), class: 'mr-1'
-  = link_to 'XCZLD 2018/19', league_path('xczld-2018-19')
 
-%h3
+#info{style: "display: none;"}
+  %p
+    = image_tag 'info/finish-line-2.png', style: 'width: 100%;'
+    = link_to 'Nacionalno prvenstvo - kronometar', race_path(122), class: 'mr-1'
+    = link_to 'XCM kup Hrvatske', race_path(113), class: 'mr-1'
+    = link_to 'XCO Šušnjevača', race_path(112), class: 'mr-1'
+    = link_to 'XCZLD 2018/19', league_path('xczld-2018-19')
+%hr
+
+%h3.text-hidden
   Trail & trekking
-%p  
-  = image_tag 'info/trail.png', style: 'width: 100%;'
-  = link_to 'Masters of trail', race_path(113), class: 'mr-1'
-  = link_to 'STrka Trail Liga 2019', league_path('strka-trail-liga-2019')
+  %i.material-icons.down.is-pulled-right.cu-p.expand-more expand_more
+  %i.material-icons.up.is-pulled-right.cu-p.expand-less{style: "display: none;"} expand_less
 
-%h3
+#info{style: "display: none;"}
+  %p  
+    = image_tag 'info/trail.png', style: 'width: 100%;'
+    = link_to 'Masters of trail', race_path(113), class: 'mr-1'
+    = link_to 'STrka Trail Liga 2019', league_path('strka-trail-liga-2019')
+%hr
+%h3.text-hidden
   Trčanje
+  %i.material-icons.down.is-pulled-right.cu-p.expand-more expand_more
+  %i.material-icons.up.is-pulled-right.cu-p.expand-less{style: "display: none;"} expand_less
 
-%p
-  = image_tag 'info/finish-line.png', style: 'width: 100%;'
-  = link_to 'Polumaraton Nin - Zadar', race_path(113), class: 'mr-1'
-  = link_to 'Polumaraton Nin-Zadar bodovanje klubova', league_path('polumaraton-nin-zadar')
-
-%h3
+#info{style: "display: none;"}
+  %p
+    = image_tag 'info/finish-line.png', style: 'width: 100%;'
+    = link_to 'Polumaraton Nin - Zadar', race_path(113), class: 'mr-1'
+    = link_to 'Polumaraton Nin-Zadar bodovanje klubova', league_path('polumaraton-nin-zadar')
+%hr
+%h3.text-hidden
   Sportsko penjanje
+  %i.material-icons.down.is-pulled-right.cu-p.expand-more expand_more
+  %i.material-icons.up.is-pulled-right.cu-p.expand-less{style: "display: none;"} expand_less
 
-%p
-  = image_tag 'info/finish-line.png', style: 'width: 100%;'
-  = link_to 'Prvenstvo Hrvatske 2018 - SP Težinsko', race_path(94)
+#info{style: "display: none;"}
+  %p
+    = image_tag 'info/climbing.jpg', style: 'width: 100%;'
+    = link_to 'Prvenstvo Hrvatske 2018 - SP Težinsko', race_path(94), class: 'mr-1'
+    %a{:href => 'https://www.facebook.com/marulianus/videos/426804711236376/'}>Razvili smo mjerni sustav za potrebu državnog prvenstva Republike Hrvatske u brzinskom penjanju. 
+%hr
+
 
 %p
   %b

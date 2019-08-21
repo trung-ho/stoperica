@@ -17,7 +17,7 @@ class RacesController < ApplicationController
       races = Race.where.not(hidden: true).where("date >= now()").order(date: :asc)
       races += Race.where.not(hidden: true).where("date < now()").order(date: :desc)
     end
-    @races = Kaminari.paginate_array(races).page(params[:page])
+    @races = Kaminari.paginate_array(races).page(params[:page]).per(Race::PAGINATE_PER)
   end
 
   # GET /races/1

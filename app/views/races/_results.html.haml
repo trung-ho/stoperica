@@ -1,5 +1,7 @@
 #raceResults
   .mdl-grid.is-heading
+    - if @is_admin || @is_race_admin
+      .mdl-cell--2-offset
     .mdl-cell.mdl-cell--1-col Mjesto
     - if @race.league&.xczld? || @race.league&.running? || @race.league&.trail?
       .mdl-cell.mdl-cell--1-col Bodovi

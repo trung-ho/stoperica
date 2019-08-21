@@ -1,10 +1,19 @@
 .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
+  - if @is_admin || @is_race_admin
+
+    - if @race.pool.present?
+      #adminFormContainer.mdl-cell.mdl-cell--2-col
+        = form_for race_result, html: { id: 'start_number_form' } do |f|
+          = f.select :start_number, options_for_select(@start_numbers, race_result.start_number&.value), include_blank: true
+          = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: race_result.category_id
+          = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
   .mdl-cell.mdl-cell--1-col
     - if race_result.status == 3 && @race.ended_at.present?
       %b= index + 1
 
       - if index <= 2
         = render partial: 'trophy', locals: { index: index }
+
 
   - if @race.league&.xczld? || @race.league&.trail?
     .mdl-cell.mdl-cell--1-col= race_result.points
@@ -19,7 +28,7 @@
   - if @race.uci_display?
     .mdl-cell.mdl-cell--2-col
       %b= race_result.racer.uci_id
-  .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone
+  .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
     - if @is_admin
       = race_result.racer.year_of_birth
     = link_to race_result.racer do
@@ -62,13 +71,6 @@
       = form_for race_result, method: :delete do |f|
         .actions
           = f.submit 'Odjavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect', onclick: "return confirm('Ovo ce izbrisati rezultat iz baze podataka. Molim potvrdi.')"
-
-    - if @race.pool.present?
-      #adminFormContainer.mdl-cell.mdl-cell--8-col
-        = form_for race_result do |f|
-          = f.select :start_number, options_for_select(@start_numbers, race_result.start_number&.value), include_blank: true
-          = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: race_result.category_id
-          = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
 
 - if @race.treking? && race_result.lap_times && race_result.status == 3 && @race.control_points
   .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }

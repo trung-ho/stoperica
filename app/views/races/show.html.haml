@@ -133,7 +133,7 @@
 
 %h4
   Natjecatelji
-
+  %br
 - if @race.started_at
   %label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect{for: "poredak"}
     %input#poredak.mdl-switch__input{checked: params[:absolute], type: "checkbox"}
@@ -143,10 +143,10 @@
   = render 'race_results_count'
 
 
-- if @race.penjanje?
-  = render 'climbing_results'
-- else
-  = render 'results'
+/ - if @race.penjanje?
+/   = render 'climbing_results'
+/ - else
+/   = render 'results'
 
 :javascript
   var forms = document.querySelectorAll('#adminFormContainer form.edit_race_result');

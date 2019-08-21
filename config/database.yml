@@ -2,6 +2,9 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
+  database: stoperica
+  username: postgres
+  password: amrood123
 
 development:
   <<: *default
@@ -13,6 +16,4 @@ test:
 
 production:
   <<: *default
-  database: stoperica
-  username: rails
   password: <%= ENV['EXAMPLE_DATABASE_PASSWORD'] %>

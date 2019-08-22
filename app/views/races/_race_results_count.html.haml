@@ -2,6 +2,11 @@
   %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.size
   %span.mdl-chip__text Ukupno
 
+- @country_count.each do |country,count|
+  %span.mdl-chip.mdl-chip--contact
+    %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white=count
+    %span.mdl-chip__text.emoji= Country.new(country).emoji_flag
+
 - if @race.ended_at
   - unless @race.race_results.where(status: 3).size.zero?
     %span.mdl-chip.mdl-chip--contact

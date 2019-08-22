@@ -190,7 +190,7 @@
       = link_to 'Login za prijavu', login_racers_path(redirect: "/races/#{@race.id}"), class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect', style: 'margin: 0'   
 %h4
   Natjecatelji
-
+  %br
 - if @race.started_at
   %label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect{for: "poredak"}
     %input#poredak.mdl-switch__input{checked: params[:absolute], type: "checkbox"}

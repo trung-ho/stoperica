@@ -1,10 +1,10 @@
-%h1
+%h1.text-hidden
   = @race.name
-  %p#faq1
+  %p
     - if @is_admin || @is_race_admin
 
-      %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
-      %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
+      %i.material-icons.down.is-pulled-right.cu-p.expand-more expand_more
+      %i.material-icons.up.is-pulled-right.cu-p.expand-less{style: "display: none;"} expand_less
  
 - if @is_admin || @is_race_admin
 

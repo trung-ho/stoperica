@@ -6,6 +6,10 @@
   %span.mdl-chip.mdl-chip--contact
     %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white=count
     %span.mdl-chip__text.emoji= Country.new(country).emoji_flag
+- if !@race.ended_at
+  %span.mdl-chip.mdl-chip--contact
+    %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @total_shirts_assigned
+    %span.mdl-chip__text S brojem 
 
 - if @race.ended_at
   - unless @race.race_results.where(status: 3).size.zero?

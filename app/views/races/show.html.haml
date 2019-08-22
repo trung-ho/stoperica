@@ -1,9 +1,10 @@
-%h1.text-hidden
+%h1.text-hidden.cu-p
   = @race.name
-  - if @is_admin || @is_race_admin
-    %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
-    %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
- 
+  %p  
+    - if @is_admin || @is_race_admin
+      %i.material-icons.down.is-pulled-right.cu-p.expand-more expand_more
+      %i.material-icons.up.is-pulled-right.cu-p.expand-less{style: "display: none;"} expand_less
+
 - if @is_admin || @is_race_admin
 
   #info{style: "display: none;"}

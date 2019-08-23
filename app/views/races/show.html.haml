@@ -1,11 +1,10 @@
-%h1
+%h1.text-hidden.cu-p
   = @race.name
-  %p#faq1
+  %p  
     - if @is_admin || @is_race_admin
+      %i.material-icons.down.is-pulled-right.cu-p.expand-more expand_more
+      %i.material-icons.up.is-pulled-right.cu-p.expand-less{style: "display: none;"} expand_less
 
-      %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
-      %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
- 
 - if @is_admin || @is_race_admin
 
   #info{style: "display: none;"}
@@ -95,10 +94,6 @@
           %href
           = @race.description_text.to_s.html_safe
 
-    - if @is_admin || @is_race_admin
-      = render 'admin_race_result_form'
-    - elsif @current_racer&.club_admin? && DateTime.now < @race.registration_threshold
-      = render 'club_admin_form'
 
     .race-actions
       - if DateTime.now < @race.registration_threshold
@@ -138,6 +133,10 @@
               .actions
                 = f.submit 'Odjavi se', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
   %hr
+  - if @is_admin || @is_race_admin
+    = render 'admin_race_result_form'
+  - elsif @current_racer&.club_admin? && DateTime.now < @race.registration_threshold
+    = render 'club_admin_form'
 - else
   %h4
     Vrijeme utrke:

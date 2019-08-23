@@ -27,6 +27,8 @@ class RacesController < ApplicationController
     @is_admin = current_user&.admin?
     @is_race_admin = race_admin?(@race.id)
     @country_count = Racer.joins(:races).group(:country).order('count_all desc').count
+    @total_shirts_assigned = @race.race_results.joins(:start_number).count
+
 
     if @is_club_admin = @current_racer&.club_admin?
       @club_racers = Racer.left_joins(:race_results).where('race_results.id IS NULL')

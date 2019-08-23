@@ -14,7 +14,8 @@ class Race < ApplicationRecord
 
   attr_accessor :control_points_raw
 
-  paginates_per 12
+  PAGINATE_PER = 12
+  paginates_per PAGINATE_PER
 
   def assign_positions
     categories.each do |category|

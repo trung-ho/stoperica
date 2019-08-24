@@ -32,11 +32,6 @@
             - if user_signed_in?
               - if RaceAdmin.exists? racer: current_user&.racer
                 %a.mdl-navigation__link{:href => "/timing"} Timing
-              - if current_user.admin?
-                %a.mdl-navigation__link{:href => "/timing"} Timing
-                %a.mdl-navigation__link{:href => "/pools"} Brojevi
-                %a.mdl-navigation__link{:href => "/race_admins"} Race Admins
-                %a.mdl-navigation__link{:href => "/categories"} Kategorije
               - if current_user.racer.present?
                 = link_to racer_path(current_user.try(:racer)), class: 'mdl-navigation__link' do
                   = current_user.racer.try(:first_name)
@@ -48,7 +43,14 @@
               %a.mdl-navigation__link{:href => "/racers/new"} Registracija
               %a.mdl-navigation__link{:href => "/racers/login"} Login
             %a.mdl-navigation__link{:href => "/info"} Info
-
+            - if current_user&.admin?
+              %button#menu-drop-down.mdl-button.mdl-js-button{style: "color: rgb(66,66,66) !important;"}
+                Admin
+              %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "menu-drop-down"}  
+                %a.mdl-navigation__link{:href => "/timing"} Timing
+                %a.mdl-navigation__link{:href => "/pools"} Brojevi
+                %a.mdl-navigation__link{:href => "/race_admins"} RaceAdmins
+                %a.mdl-navigation__link{:href => "/categories"} Kategorije
       .mdl-layout__drawer
         %a.mdl-layout-title{:href => "/"}
           = image_tag 'logo.png', height: 35

@@ -190,14 +190,29 @@
 %h4
   Natjecatelji
   %br
-- if @race.started_at
-  %label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect{for: "poredak"}
-    %input#poredak.mdl-switch__input{checked: params[:absolute], type: "checkbox"}
-    %span.mdl-switch__label Generalni poredak
+
+.mb-1
+  - if @race.started_at
+    %span.d-ib.mr-3
+      %label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect{for: "poredak"}
+        %input#poredak.mdl-switch__input{checked: params[:absolute], type: "checkbox"}
+        %span.mdl-switch__label Generalni poredak
+
+  %span.d-ib
+    %label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect{for: "poredak1"}
+      %input#poredak1.mdl-switch__input{checked: params[:flags], type: "checkbox"}
+      %span.mdl-switch__label Zastave
+
+- if params[:flags] == 'true'
+  - @country_count.each do |country,count|
+    %span.mdl-chip.mdl-chip--contact
+      %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white
+        = count
+      %span.mdl-chip__text.emoji
+        = Country.new(country).emoji_flag
 
 %p
   = render 'race_results_count'
-
 
 - if @race.penjanje?
   = render 'climbing_results'
@@ -243,6 +258,19 @@
 :javascript
   document.querySelector('#poredak').addEventListener('click', function(event) {
     var checked = event.target.checked;
-    if (checked) window.location.search = 'absolute=true';
-    else window.location.search = '';
+    if (checked) {
+      window.location.search += '&absolute=true';
+    } else {
+      window.location.search = window.location.search.replace(/&absolute=true/, "");
+    }
+  });
+
+:javascript
+  document.querySelector('#poredak1').addEventListener('click', function(event) {
+    var checked = event.target.checked;
+    if (checked) {
+      window.location.search += '&flags=true';
+    } else {
+      window.location.search = window.location.search.replace(/&flags=true/, "");
+    }
   });

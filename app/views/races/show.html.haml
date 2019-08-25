@@ -201,7 +201,7 @@
   %span.d-ib
     %label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect{for: "poredak1"}
       %input#poredak1.mdl-switch__input{checked: params[:flags], type: "checkbox"}
-      %span.mdl-switch__label Zastave
+      %span.mdl-switch__label Prikaži države
 
 - if params[:flags] == 'true'
   - @country_count.each do |country,count|

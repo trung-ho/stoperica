@@ -33,7 +33,7 @@ class RacesController < ApplicationController
     if @is_club_admin = @current_racer&.club_admin?
       @club_racers = Racer.left_joins(:race_results)
         .where('race_results.id IS NULL OR race_results.race_id != ?', @race.id)
-        .where(club_id: @current_racer.club_id)
+        .where(club_id: @current_racer.club_id).distinct
     end
     
     if (@is_admin || @is_race_admin) && @race.pool

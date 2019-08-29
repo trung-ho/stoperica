@@ -94,10 +94,7 @@
 
     = render 'application'
   %hr
-  - if @is_admin || @is_race_admin
-    = render 'admin_race_result_form'
-  - elsif @current_racer&.club_admin? && DateTime.now < @race.registration_threshold
-    = render 'club_admin_form'
+  = render 'admin_race_result_form'
 - else
   %h4
     Vrijeme utrke:
@@ -145,8 +142,10 @@
       #additional-information{style: "display: none;"}
         %href
         = @race.description_text.to_s.html_safe
-  = render 'application'
-
+  - if @current_racer&.club_admin? && DateTime.now < @race.registration_threshold
+    = render 'club_admin_form'
+  - else
+    = render 'application'
 
 %h4
   Natjecatelji

@@ -29,11 +29,11 @@ class RacesController < ApplicationController
     @country_count = @race.racers.group(:country).order('count_all desc').count
     @total_shirts_assigned = @race.race_results.joins(:start_number).count
 
-
     if @is_club_admin = @current_racer&.club_admin?
-      @club_racers = Racer.left_joins(:race_results)
-        .where('race_results.id IS NULL OR race_results.race_id != ?', @race.id)
-        .where(club_id: @current_racer.club_id).distinct
+      @club_racers = Racer.where.not(
+        id: Racer.joins(:race_results).where('race_results.race_id = ?', @race.id)
+          .where(club_id: @current_racer.club_id)
+      ).where(club_id: @current_racer.club_id)
     end
     
     if (@is_admin || @is_race_admin) && @race.pool

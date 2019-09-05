@@ -1,19 +1,21 @@
 %h1 Club Admins
 
-= link_to 'New Club Admin', new_admin_club_admin_path
+= link_to 'New Club Admin', new_admin_club_admin_path, class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect mb-2'
 
-%table.wide_table
+%table.wide_table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
   %thead
     %tr
       %th Racer
       %th Club
-      %th{colspan: 2} Actions
+      %th
+      %th
   %tbody
     - @club_admins.each do |club_admin|
       %tr.text-center
         %td= club_admin.full_name
         %td= club_admin.club&.name
-        %td= link_to 'Show', admin_club_admin_path(club_admin)
-        / %td
-        /   = form_for club_admin, url: admin_club_admin_path(club_admin), method: :delete do |f|
-        /     = f.submit 'Remove Admin'
+        %td
+          = link_to 'Show', admin_club_admin_path(club_admin)
+        %td
+          = form_for club_admin, url: admin_club_admin_path(club_admin), method: :delete do |f|
+            = f.submit 'Izbrisi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'

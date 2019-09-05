@@ -142,7 +142,7 @@
       #additional-information{style: "display: none;"}
         %href
         = @race.description_text.to_s.html_safe
-  - if @current_racer&.club_admin? && DateTime.now < @race.registration_threshold
+  - if @current_racer&.club_admin? && DateTime.now < @race.registration_threshold && @club_racers.to_a.size > 0
     = render 'club_admin_form'
   - else
     = render 'application'

@@ -81,7 +81,7 @@
   .field {
     select {
       width: 100px;
-      padding: 3px;
+      padding: 3px;   
     }
   }
 }
@@ -104,6 +104,10 @@
     input[type=submit] {
       width: 1rem;
     }
+  }
+
+  #start_number_form {
+    display: flex;
   }
 }
 

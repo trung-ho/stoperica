@@ -1,4 +1,4 @@
-= form_with model: club_admin, url: url_for(action: club_admin.new_record? ? :create : :update), local: true do |f|
+= form_with model: club_admin, url: url_for(action: :create), local: true do |f|
   .field
     %select#club_select{ name: 'racer[club_id]' }
       %option{ disabled: true }
@@ -9,7 +9,7 @@
     %select#racer_select{ name: 'id' }
       %option{ disabled: true}
         Racer
-      - Racer.all.each do |racer|
+      - Racer.not_club_admins.each do |racer|
         %option{ value: racer.id, selected: club_admin.id == racer.id, data: { club: racer.club_id } }
           = racer.full_name
   .actions
@@ -23,7 +23,6 @@
   for(var i = 1; i < options.length; i++) {
     optionsValues.push(options[i]);
   }
-  options.length = 1;
 
   clubSelect.addEventListener('change', function(event) {
     var club = event.target.value;

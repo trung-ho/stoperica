@@ -17,7 +17,7 @@ class RacesController < ApplicationController
       races = Race.where.not(hidden: true).where("date >= now()").order(date: :asc)
       races += Race.where.not(hidden: true).where("date < now()").order(date: :desc)
     end
-    @races = Kaminari.paginate_array(races).page(params[:page])
+    @races = Kaminari.paginate_array(races).page(params[:page]).per(Race::PAGINATE_PER)
   end
 
   # GET /races/1
@@ -26,10 +26,14 @@ class RacesController < ApplicationController
     @banner = false
     @is_admin = current_user&.admin?
     @is_race_admin = race_admin?(@race.id)
+    @country_count = @race.racers.group(:country).order('count_all desc').count
+    @total_shirts_assigned = @race.race_results.joins(:start_number).count
 
     if @is_club_admin = @current_racer&.club_admin?
-      @club_racers = Racer.left_joins(:race_results).where('race_results.id IS NULL')
-        .where(club_id: @current_racer.club_id)
+      @club_racers = Racer.where.not(
+        id: Racer.joins(:race_results).where('race_results.race_id = ?', @race.id)
+          .where(club_id: @current_racer.club_id)
+      ).where(club_id: @current_racer.club_id)
     end
     
     if (@is_admin || @is_race_admin) && @race.pool

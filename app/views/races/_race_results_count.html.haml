@@ -1,6 +1,10 @@
 %span.mdl-chip.mdl-chip--contact
   %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.size
   %span.mdl-chip__text Ukupno
+- if !@race.ended_at
+  %span.mdl-chip.mdl-chip--contact
+    %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @total_shirts_assigned
+    %span.mdl-chip__text S brojem
 
 - if @race.ended_at
   - unless @race.race_results.where(status: 3).size.zero?
@@ -11,20 +15,20 @@
   - unless @race.race_results.where(status: 4).size.zero?
     %span.mdl-chip.mdl-chip--contact
       %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.where(status: 4).size
-      %span.mdl-chip__text DNF
+      %span.mdl-chip__text Nije završio
 
   - unless @race.race_results.where(status: 5).size.zero?
     %span.mdl-chip.mdl-chip--contact
       %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.where(status: 5).size
-      %span.mdl-chip__text DSQ
+      %span.mdl-chip__text Diskvalificiran
 
 
   - unless @race.race_results.where(status: 6).size.zero?
     %span.mdl-chip.mdl-chip--contact
       %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.where(status: 6).size
-      %span.mdl-chip__text DNS
+      %span.mdl-chip__text  Nije startao
 
   - unless @race.race_results.where(start_number_id: nil).size.zero?
     %span.mdl-chip.mdl-chip--contact
       %span.mdl-chip__contact.mdl-color--blue.mdl-color-text--white= @race.race_results.where(start_number_id: nil).size
-      %span.mdl-chip__text{ title: 'Natjecatelji koji se nisu pojavili na utrci.' } DNP
+      %span.mdl-chip__text{ title: 'Natjecatelji koji se nisu pojavili na utrci.' } Nije prisustvovao

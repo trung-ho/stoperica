@@ -38,6 +38,14 @@
   margin-right: 1rem;
 }
 
+.mr-2 {
+  margin-right: 2rem;
+}
+
+.mr-3 {
+  margin-right: 3rem;
+}
+
 .p-0 {
   padding: 0;
 }
@@ -50,7 +58,10 @@
   padding-top: 0;
 }
 
-
 .d-i {
   display: inline;
+}
+
+.d-ib {
+  display: inline-block;
 }

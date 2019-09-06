@@ -1,5 +1,7 @@
 #raceResults
   .mdl-grid.is-heading
+    - if @is_admin || @is_race_admin
+      .mdl-cell--2-offset
     .mdl-cell.mdl-cell--1-col Mjesto
     - if @race.league&.xczld? || @race.league&.running? || @race.league&.trail?
       .mdl-cell.mdl-cell--1-col Bodovi
@@ -7,7 +9,7 @@
     - if @race.uci_display?
       .mdl-cell.mdl-cell--2-col
         UCI ID
-    .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone Ime i Prezime
+    .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Ime i Prezime
     .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Klub
     - unless @race.laps.nil?
       - (1..@race.laps).each do |lap|

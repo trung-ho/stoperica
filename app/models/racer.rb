@@ -10,11 +10,13 @@ class Racer < ApplicationRecord
   validates :phone_number, presence: true, uniqueness: true
   validates :uci_id, format: /[0-9\s]{11,14}/, if: Proc.new { |racer| racer.is_biker == '1' }
 
-  attr_accessor :is_biker, :personal_best_hours, :personal_best_minutes, :personal_best_seconds
+  attr_accessor :personal_best_hours, :personal_best_minutes, :personal_best_seconds
+  attr_writer :is_biker
 
   before_save :set_uci_id, :set_personal_best, :set_club
 
   scope :club_admins, -> { where(club_admin: true) }
+  scope :not_club_admins, -> { where.not(club_admin: true) }
 
   paginates_per 80
 
@@ -56,6 +58,20 @@ class Racer < ApplicationRecord
 
   def full_address
     "#{address} #{zip_code} #{town} #{country_name}"
+  end
+
+  def is_biker
+    return @is_biker if @is_biker
+
+    if !self.uci_id || self.uci_id == 'Jednodnevna'
+      '0'
+    else
+      '1'
+    end
+  end
+
+  def is_biker?
+    self.is_biker == '1'
   end
 
   private

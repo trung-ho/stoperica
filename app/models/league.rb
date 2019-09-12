@@ -45,7 +45,6 @@ class League < ApplicationRecord
       []
     end
   end
-
   def general_rank
     rank = {}
     base_time = Time.parse "0:0:0"
@@ -75,5 +74,4 @@ class League < ApplicationRecord
   def self.seconds_to_str(seconds)
     [(seconds / 3600).to_i, (seconds / 60 % 60).to_i, (seconds % 60).to_i].join(":")
   end
-
 end

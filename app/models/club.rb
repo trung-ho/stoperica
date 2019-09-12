@@ -13,5 +13,4 @@ class Club < ApplicationRecord
     additional = RaceResult.includes(:racer).where(racer: racers, race: race).sum(:additional_points)
     points + additional
   end
-
 end

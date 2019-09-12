@@ -12,8 +12,6 @@
     - if @league.xczld? || @league.trail?
       %a.mdl-tabs__tab{href: "#natjecatelji-panel", class: "#{ @league.trail? ? 'is-active' : '' }"} Natjecatelji
     %a.mdl-tabs__tab{href: "#utrke-panel"} Utrke
-  
-
 
   - unless @league.trail?
     #klubovi-panel.mdl-tabs__panel.is-active
@@ -52,11 +50,7 @@
                  
           .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
             %li.mdl-list__item.mdl-list__item--two-line
-              %b.mdl-list__item-secondary-info
-                / - total_time = rank[1][0] - @base_time
-                / = total_time
-                / = rank[1][0].strftime("%H:%M :%S")
-                
+              %b.mdl-list__item-secondary-info               
                 = League.seconds_to_str(rank[1][0] - @base_time)
         
     
@@ -74,10 +68,6 @@
           = l race.date, format: :short
         .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone
           = link_to race.ended_at.present? ? 'REZULTATI' : 'PRIJAVE', race
-       
-
-
-              
 
 :javascript
   function collapse(selector, e) {

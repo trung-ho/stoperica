@@ -15,15 +15,11 @@
   - if @league.xczld? || @league.trail?
 
     #natjecatelji-panel.mdl-tabs__panel
-         
       .mdl-grid.is-heading
-      
         .mdl-cell.mdl-cell--10-col.mdl-cell--4-col-phone Racers
         .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Total Time
-
       .mdl-grid
-        -@ranks.each_with_index do |rank, i|
-          
+        - @ranks.each_with_index do |rank, i|
           - @racer = Racer.find rank[0]
          
           .mdl-cell.mdl-cell--10-col.mdl-cell--2-col-phone

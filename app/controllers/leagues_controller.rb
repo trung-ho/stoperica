@@ -11,7 +11,7 @@ class LeaguesController < ApplicationController
   # GET /leagues/1
   # GET /leagues/1.json
   def show
-    @ranks,@base_time = @league.general_rank
+    @ranks, @base_time = @league.general_rank
   end
 
   # GET /leagues/new

@@ -12,6 +12,8 @@ class LeaguesController < ApplicationController
   # GET /leagues/1.json
   def show
     @categories = @league.xczld? ? Category.categories.except(:muskarci) : Category.generics
+    @ranks,@base_time = @league.general_rank
+    
   end
 
   # GET /leagues/new

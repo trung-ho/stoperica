@@ -12,6 +12,8 @@
     - if @league.xczld? || @league.trail?
       %a.mdl-tabs__tab{href: "#natjecatelji-panel", class: "#{ @league.trail? ? 'is-active' : '' }"} Natjecatelji
     %a.mdl-tabs__tab{href: "#utrke-panel"} Utrke
+    %a.mdl-tabs__tab{href: "#racers-panel"} Top Racer
+
 
   - unless @league.trail?
     #klubovi-panel.mdl-tabs__panel.is-active
@@ -44,18 +46,58 @@
                 = results.sum{ |r| r.points || 0 }
 
   #utrke-panel.mdl-tabs__panel
+
     .mdl-grid.is-heading
       .mdl-cell.mdl-cell--6-col.mdl-cell--2-col-phone Utrka
       .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Datum
       .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Prijave/Rezultati
 
-    - @league.races.order(date: :desc).each do |race|
+    - @league.races.order(date: :desc).each do |race| 
       .mdl-grid
         .mdl-cell.mdl-cell--6-col.mdl-cell--2-col-phone= race.name
         .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone
           = l race.date, format: :short
         .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone
           = link_to race.ended_at.present? ? 'REZULTATI' : 'PRIJAVE', race
+
+  #racers-panel.mdl-tabs__panel{ class: "#{ @league.trail? ? 'is-active' : '' }" }
+     
+    .mdl-grid.is-heading
+    
+      .mdl-cell.mdl-cell--8-col.mdl-cell--2-col-phone Racers
+      .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Total Time
+      .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Total Races
+
+    .mdl-grid
+      -@ranks.each_with_index do |rank, i|
+        
+        - @racer = Racer.find rank[0]
+       
+        .mdl-cell.mdl-cell--8-col.mdl-cell--2-col-phone
+          %li.mdl-list__item.mdl-list__item--two-line
+            %span.mdl-list__item-primary-content
+              .mdl-list__item-icon
+                = i + 1
+              .emoji= @racer.country_flag
+              = link_to @racer.uci_name, racer_path(@racer)
+              %span.mdl-list__item-sub-title= @racer.club&.name
+               
+        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
+          %li.mdl-list__item.mdl-list__item--two-line
+            %b.mdl-list__item-secondary-info
+              / - total_time = rank[1][0] - @base_time
+              / = total_time
+              / = rank[1][0].strftime("%H:%M :%S")
+              
+              = League.seconds_to_str(rank[1][0] - @base_time)
+        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone 
+          %li.mdl-list__item.mdl-list__item--two-line
+            %b.mdl-list__item-secondary-info
+              = rank[1][1]
+              
+
+
+              
 
 :javascript
   function collapse(selector, e) {

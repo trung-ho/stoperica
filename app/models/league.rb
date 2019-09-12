@@ -1,6 +1,7 @@
 class League < ApplicationRecord
   has_many :races
   has_many :club_league_points
+  has_many :clubs, through: :club_league_points
   enum league_type: [:xczld, :lead, :running, :trail]
   before_validation :generate_slug
 
@@ -44,4 +45,35 @@ class League < ApplicationRecord
       []
     end
   end
+
+  def general_rank
+    rank = {}
+    base_time = Time.parse "0:0:0"
+    races.includes(:race_results).each do |race|
+      race.race_results.each do |result|
+        if result.finish_time.to_i > 0
+          finish_time = Time.parse(result.finish_time)
+        else
+          next
+        end
+
+        total_time = rank[result.racer_id]&.[](0)
+        if total_time.nil?
+          rank[result.racer_id] = [finish_time, 1]
+        else
+          rank[result.racer_id][0] = total_time + finish_time.hour.hours + finish_time.min.minutes + finish_time.sec.seconds
+          rank[result.racer_id][1] += 1 
+        
+        end 
+      end
+    end
+
+    r = rank.sort_by { |k, time| [(time[0] - base_time), -time[1]] }
+    return r, base_time
+  end
+
+  def self.seconds_to_str(seconds)
+    [(seconds / 3600).to_i, (seconds / 60 % 60).to_i, (seconds % 60).to_i].join(":")
+  end
+
 end

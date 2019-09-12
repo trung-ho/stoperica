@@ -143,6 +143,9 @@ class RacesController < ApplicationController
 
   private
 
+
+
+
   def set_race
     if action_name == 'show'
       @race = Race.includes(:league, :categories, race_results: [{ racer: :club }, :start_number]).find(params[:id])

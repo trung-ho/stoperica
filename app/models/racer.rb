@@ -23,7 +23,7 @@ class Racer < ApplicationRecord
   def full_name
     "#{first_name} #{last_name}"
   end
-
+  
   def uci_name
     "#{last_name.mb_chars.upcase} #{first_name}"
   end

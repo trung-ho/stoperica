@@ -12,7 +12,7 @@
     - if @league.xczld? || @league.trail?
       %a.mdl-tabs__tab{href: "#natjecatelji-panel", class: "#{ @league.trail? ? 'is-active' : '' }"} Natjecatelji
     %a.mdl-tabs__tab{href: "#utrke-panel"} Utrke
-    %a.mdl-tabs__tab{href: "#racers-panel"} Top Racer
+  
 
 
   - unless @league.trail?
@@ -28,23 +28,38 @@
           %b.mdl-cell.mdl-cell--4-col.mdl-cell--2-col-phone= cp.total
 
   - if @league.xczld? || @league.trail?
-    #natjecatelji-panel.mdl-tabs__panel{ class: "#{ @league.trail? ? 'is-active' : '' }" }
-      - @categories.each_with_index do |cat, index|
-        %h4.collapse-trigger{ class: "cat-#{index}", onclick: "collapse('#collapse-#{index}', event)"}
-          = cat[0].upcase
-          %i.material-icons.down.is-pulled-right expand_more
-          %i.material-icons.up.is-pulled-right expand_less
-        %ol.mdl-list.collapse{ id: "collapse-#{index}" }
-          - @league.racers[cat[0]]&.sort_by{|k, v| v.sum{|r| -(r.points || 0)}}&.each_with_index do |(_, results), index|
+
+    #natjecatelji-panel.mdl-tabs__panel
+         
+      .mdl-grid.is-heading
+      
+        .mdl-cell.mdl-cell--10-col.mdl-cell--4-col-phone Racers
+        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Total Time
+
+      .mdl-grid
+        -@ranks.each_with_index do |rank, i|
+          
+          - @racer = Racer.find rank[0]
+         
+          .mdl-cell.mdl-cell--10-col.mdl-cell--2-col-phone
             %li.mdl-list__item.mdl-list__item--two-line
               %span.mdl-list__item-primary-content
-                .mdl-list__item-icon= index + 1
-                .emoji= results[0].racer.country_flag
-                = link_to results[0].racer.uci_name, racer_path(results[0].racer)
-                %span.mdl-list__item-sub-title= results[0].racer.club&.name
+                .mdl-list__item-icon
+                  = i + 1
+                .emoji= @racer.country_flag
+                = link_to @racer.uci_name, racer_path(@racer)
+                %span.mdl-list__item-sub-title= @racer.club&.name
+                 
+          .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
+            %li.mdl-list__item.mdl-list__item--two-line
               %b.mdl-list__item-secondary-info
-                = results.sum{ |r| r.points || 0 }
-
+                / - total_time = rank[1][0] - @base_time
+                / = total_time
+                / = rank[1][0].strftime("%H:%M :%S")
+                
+                = League.seconds_to_str(rank[1][0] - @base_time)
+        
+    
   #utrke-panel.mdl-tabs__panel
 
     .mdl-grid.is-heading
@@ -59,42 +74,7 @@
           = l race.date, format: :short
         .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone
           = link_to race.ended_at.present? ? 'REZULTATI' : 'PRIJAVE', race
-
-  #racers-panel.mdl-tabs__panel{ class: "#{ @league.trail? ? 'is-active' : '' }" }
-     
-    .mdl-grid.is-heading
-    
-      .mdl-cell.mdl-cell--8-col.mdl-cell--2-col-phone Racers
-      .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Total Time
-      .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Total Races
-
-    .mdl-grid
-      -@ranks.each_with_index do |rank, i|
-        
-        - @racer = Racer.find rank[0]
        
-        .mdl-cell.mdl-cell--8-col.mdl-cell--2-col-phone
-          %li.mdl-list__item.mdl-list__item--two-line
-            %span.mdl-list__item-primary-content
-              .mdl-list__item-icon
-                = i + 1
-              .emoji= @racer.country_flag
-              = link_to @racer.uci_name, racer_path(@racer)
-              %span.mdl-list__item-sub-title= @racer.club&.name
-               
-        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
-          %li.mdl-list__item.mdl-list__item--two-line
-            %b.mdl-list__item-secondary-info
-              / - total_time = rank[1][0] - @base_time
-              / = total_time
-              / = rank[1][0].strftime("%H:%M :%S")
-              
-              = League.seconds_to_str(rank[1][0] - @base_time)
-        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone 
-          %li.mdl-list__item.mdl-list__item--two-line
-            %b.mdl-list__item-secondary-info
-              = rank[1][1]
-              
 
 
               

@@ -12,8 +12,8 @@ class LeaguesController < ApplicationController
   # GET /leagues/1.json
   def show
     @ranks, @base_time = @league.general_rank
-    @race_count = @league.races.count
-    @racer_count = @league.club_league_points.count
+    @races_count = @league.races.count
+    @racers_count = @ranks.size
   end
 
   # GET /leagues/new

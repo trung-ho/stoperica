@@ -5,13 +5,12 @@
 
 .mdl-tabs.mdl-js-tabs.mdl-js-ripple-effect
   .mdl-tabs__tab-bar
-    - if @racer_count >=1
-      %a.mdl-tabs__tab.is-active{href: "#natjecatelji-panel", class: "#{ @league.trail? ? 'is-active' : '' }"} Natjecatelji
-      %a.mdl-tabs__tab{href: "#utrke-panel"} Utrke
-    -elsif @racer_count == 0 && @race_count ==1
-      %a.mdl-tabs__tab.is-active{href: "#utrke-panel"} Utrke
+    - if @racers_count > 0
+      %a.mdl-tabs__tab.is-active{href: "#natjecatelji-panel"} Natjecatelji
+    - if @races_count > 0
+      %a.mdl-tabs__tab{hr8ef: "#utrke-panel", class: @racers_count > 0 ? '' : 'is-active' } Utrke
 
-  -if @racer_count >= 1
+  - if @racers_count > 0
     #natjecatelji-panel.mdl-tabs__panel.is-active
       .mdl-grid.is-heading
         .mdl-cell.mdl-cell--10-col.mdl-cell--4-col-phone Racers
@@ -34,28 +33,12 @@
               %b.mdl-list__item-secondary-info               
                 = League.seconds_to_str(rank[1][0] - @base_time) 
 
-    -if @race_count >=1
-      #utrke-panel.mdl-tabs__panel
-        .mdl-grid.is-heading
-          .mdl-cell.mdl-cell--6-col.mdl-cell--2-col-phone Utrka
-          .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Datum
-          .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Prijave/Rezultati
-
-        - @league.races.order(date: :desc).each do |race| 
-          .mdl-grid
-            .mdl-cell.mdl-cell--6-col.mdl-cell--2-col-phone= race.name
-            .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone
-              = l race.date, format: :short
-            .mdl-cell.mdl-cell--3-col.mdl-cell--2-col-phone
-              = link_to race.ended_at.present? ? 'REZULTATI' : 'PRIJAVE', race
-        
-  -elsif @racer_count == 0 && @race_count >= 1
-    #utrke-panel.mdl-tabs__panel.is-active
+  - if @races_count > 0
+    #utrke-panel.mdl-tabs__panel{ class: @racers_count > 0 ? '' : 'is-active' }
       .mdl-grid.is-heading
         .mdl-cell.mdl-cell--6-col.mdl-cell--2-col-phone Utrka
         .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Datum
         .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Prijave/Rezultati
-
       - @league.races.order(date: :desc).each do |race| 
         .mdl-grid
           .mdl-cell.mdl-cell--6-col.mdl-cell--2-col-phone= race.name

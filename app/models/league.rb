@@ -72,6 +72,8 @@ class League < ApplicationRecord
   end
 
   def self.seconds_to_str(seconds)
-    [(seconds / 3600).to_i, (seconds / 60 % 60).to_i, (seconds % 60).to_i].join(":")
+   ["%.2i" % (seconds / 3600).to_i, "%.2i" % (seconds / 60 % 60).to_i, "%.2i" % (seconds % 60).to_i].join(":")
+    
+  
   end
 end

@@ -8,35 +8,32 @@
 .mdl-tabs.mdl-js-tabs.mdl-js-ripple-effect
   .mdl-tabs__tab-bar
     
-    - if @league.xczld? || @league.trail?
-      %a.mdl-tabs__tab{href: "#natjecatelji-panel", class: "#{ @league.trail? ? 'is-active' : '' }"} Natjecatelji
+    %a.mdl-tabs__tab.is-active{href: "#natjecatelji-panel", class: "#{ @league.trail? ? 'is-active' : '' }"} Natjecatelji
     %a.mdl-tabs__tab{href: "#utrke-panel"} Utrke
 
-  - if @league.xczld? || @league.trail?
-
-    #natjecatelji-panel.mdl-tabs__panel
-      .mdl-grid.is-heading
-        .mdl-cell.mdl-cell--10-col.mdl-cell--4-col-phone Racers
-        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Total Time
-      .mdl-grid
-        - @ranks.each_with_index do |rank, i|
-          - @racer = Racer.find rank[0]
-         
-          .mdl-cell.mdl-cell--10-col.mdl-cell--2-col-phone
-            %li.mdl-list__item.mdl-list__item--two-line
-              %span.mdl-list__item-primary-content
-                .mdl-list__item-icon
-                  = i + 1
-                .emoji= @racer.country_flag
-                = link_to @racer.uci_name, racer_path(@racer)
-                %span.mdl-list__item-sub-title= @racer.club&.name
-                 
-          .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
-            %li.mdl-list__item.mdl-list__item--two-line
-              %b.mdl-list__item-secondary-info               
-                = League.seconds_to_str(rank[1][0] - @base_time)       
-    
-  #utrke-panel.mdl-tabs__panel.is-active
+  #natjecatelji-panel.mdl-tabs__panel.is-active
+    .mdl-grid.is-heading
+      .mdl-cell.mdl-cell--10-col.mdl-cell--4-col-phone Racers
+      .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Total Time
+    .mdl-grid
+      - @ranks.each_with_index do |rank, i|
+        - @racer = Racer.find rank[0]
+       
+        .mdl-cell.mdl-cell--10-col.mdl-cell--2-col-phone
+          %li.mdl-list__item.mdl-list__item--two-line
+            %span.mdl-list__item-primary-content
+              .mdl-list__item-icon
+                = i + 1
+              .emoji= @racer.country_flag
+              = link_to @racer.uci_name, racer_path(@racer)
+              %span.mdl-list__item-sub-title= @racer.club&.name
+               
+        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
+          %li.mdl-list__item.mdl-list__item--two-line
+            %b.mdl-list__item-secondary-info               
+              = League.seconds_to_str(rank[1][0] - @base_time)       
+  
+  #utrke-panel.mdl-tabs__panel
 
     .mdl-grid.is-heading
       .mdl-cell.mdl-cell--6-col.mdl-cell--2-col-phone Utrka

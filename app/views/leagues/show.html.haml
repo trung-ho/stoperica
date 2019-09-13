@@ -8,7 +8,7 @@
     - if @racers_count > 0
       %a.mdl-tabs__tab.is-active{href: "#natjecatelji-panel"} Natjecatelji
     - if @races_count > 0
-      %a.mdl-tabs__tab{hr8ef: "#utrke-panel", class: @racers_count > 0 ? '' : 'is-active' } Utrke
+      %a.mdl-tabs__tab{href: "#utrke-panel", class: @racers_count > 0 ? '' : 'is-active' } Utrke
 
   - if @racers_count > 0
     #natjecatelji-panel.mdl-tabs__panel.is-active

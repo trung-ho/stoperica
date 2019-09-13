@@ -6,35 +6,52 @@
 .mdl-tabs.mdl-js-tabs.mdl-js-ripple-effect
   .mdl-tabs__tab-bar
     - if @racers_count > 0
-      %a.mdl-tabs__tab.is-active{href: "#natjecatelji-panel"} Natjecatelji
+      - if @league.xczld? || @league.trail? || @league.stage_compatitors_only?
+        %a.mdl-tabs__tab.is-active{href: "#natjecatelji-panel"} Natjecatelji
     - if @races_count > 0
       %a.mdl-tabs__tab{href: "#utrke-panel", class: @racers_count > 0 ? '' : 'is-active' } Utrke
 
   - if @racers_count > 0
-    #natjecatelji-panel.mdl-tabs__panel.is-active
-      .mdl-grid.is-heading
-        .mdl-cell.mdl-cell--10-col.mdl-cell--4-col-phone Racers
-        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Total Time
-      .mdl-grid
-        - @ranks.each_with_index do |rank, i|
-          - @racer = Racer.find rank[0]
-         
-          .mdl-cell.mdl-cell--10-col.mdl-cell--2-col-phone
-            %li.mdl-list__item.mdl-list__item--two-line
-              %span.mdl-list__item-primary-content
-                .mdl-list__item-icon
-                  = i + 1
-                .emoji= @racer.country_flag
-                = link_to @racer.uci_name, racer_path(@racer)
-                %span.mdl-list__item-sub-title= @racer.club&.name
-                 
-          .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
-            %li.mdl-list__item.mdl-list__item--two-line
-              %b.mdl-list__item-secondary-info               
-                = League.seconds_to_str(rank[1][0] - @base_time) 
+    - if @league.xczld? || @league.trail? || @league.stage_compatitors_only?
+      #natjecatelji-panel.mdl-tabs__panel.is-active
+        - @categories.each_with_index do |cat, index|
+          %h4.collapse-trigger{ class: "cat-#{index}", onclick: "collapse('#collapse-#{index}', event)"}
+            = cat[0].upcase
+            %i.material-icons.down.is-pulled-right expand_more
+            %i.material-icons.up.is-pulled-right expand_less
+          %ol.mdl-list.collapse{ id: "collapse-#{index}" }
+            - @league.racers[cat[0]]&.sort_by{|k, v| v.sum{|r| -(r.points || 0)}}&.each_with_index do |(_, results), index|
+              %li.mdl-list__item.mdl-list__item--two-line
+                %span.mdl-list__item-primary-content
+                  .mdl-list__item-icon= index + 1
+                  .emoji= results[0].racer.country_flag
+                  = link_to results[0].racer.uci_name, racer_path(results[0].racer)
+                  %span.mdl-list__item-sub-title= results[0].racer.club&.name
+                %b.mdl-list__item-secondary-info
+                  = results.sum{ |r| r.points || 0 }
+          .mdl-grid.is-heading
+          .mdl-cell.mdl-cell--10-col.mdl-cell--4-col-phone Racers
+          .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Total Time
+        .mdl-grid
+          - @ranks.each_with_index do |rank, i|
+            - @racer = Racer.find rank[0]
+           
+            .mdl-cell.mdl-cell--10-col.mdl-cell--2-col-phone
+              %li.mdl-list__item.mdl-list__item--two-line
+                %span.mdl-list__item-primary-content
+                  .mdl-list__item-icon
+                    = i + 1
+                  .emoji= @racer.country_flag
+                  = link_to @racer.uci_name, racer_path(@racer)
+                  %span.mdl-list__item-sub-title= @racer.club&.name
+                   
+            .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
+              %li.mdl-list__item.mdl-list__item--two-line
+                %b.mdl-list__item-secondary-info               
+                  = League.seconds_to_str(rank[1][0] - @base_time) 
 
   - if @races_count > 0
-    #utrke-panel.mdl-tabs__panel{ class: @racers_count > 0 ? '' : 'is-active' }
+    #utrke-panel.mdl-tabs__panel{ class: @league.xczld? || @league.trail? || @league.stage_compatitors_only? ? '' : 'is-active' }
       .mdl-grid.is-heading
         .mdl-cell.mdl-cell--6-col.mdl-cell--2-col-phone Utrka
         .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Datum

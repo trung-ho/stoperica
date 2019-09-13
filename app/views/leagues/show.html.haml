@@ -12,8 +12,8 @@
       %a.mdl-tabs__tab{href: "#utrke-panel", class: @racers_count > 0 ? '' : 'is-active' } Utrke
 
   - if @racers_count > 0
-    - if @league.xczld? || @league.trail? || @league.stage_compatitors_only?
-      #natjecatelji-panel.mdl-tabs__panel.is-active
+    #natjecatelji-panel.mdl-tabs__panel.is-active
+      - if @league.xczld? || @league.trail? 
         - @categories.each_with_index do |cat, index|
           %h4.collapse-trigger{ class: "cat-#{index}", onclick: "collapse('#collapse-#{index}', event)"}
             = cat[0].upcase
@@ -29,7 +29,9 @@
                   %span.mdl-list__item-sub-title= results[0].racer.club&.name
                 %b.mdl-list__item-secondary-info
                   = results.sum{ |r| r.points || 0 }
-          .mdl-grid.is-heading
+
+      - if @league.stage_compatitors_only?
+        .mdl-grid.is-heading
           .mdl-cell.mdl-cell--10-col.mdl-cell--4-col-phone Racers
           .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Total Time
         .mdl-grid

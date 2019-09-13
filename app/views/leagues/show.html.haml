@@ -6,7 +6,7 @@
 .mdl-tabs.mdl-js-tabs.mdl-js-ripple-effect
   .mdl-tabs__tab-bar
     - if @racers_count > 0
-      - if @league.xczld? || @league.trail? || @league.stage_compatitors_only?
+      - if @league.xczld? || @league.trail? || @league.stage_competitors_only?
         %a.mdl-tabs__tab.is-active{href: "#natjecatelji-panel"} Natjecatelji
     - if @races_count > 0
       %a.mdl-tabs__tab{href: "#utrke-panel", class: @racers_count > 0 ? '' : 'is-active' } Utrke
@@ -30,7 +30,7 @@
                 %b.mdl-list__item-secondary-info
                   = results.sum{ |r| r.points || 0 }
 
-      - if @league.stage_compatitors_only?
+      - if @league.stage_competitors_only?
         .mdl-grid.is-heading
           .mdl-cell.mdl-cell--10-col.mdl-cell--4-col-phone Racers
           .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Total Time
@@ -53,7 +53,7 @@
                   = League.seconds_to_str(rank[1][0] - @base_time) 
 
   - if @races_count > 0
-    #utrke-panel.mdl-tabs__panel{ class: @league.xczld? || @league.trail? || @league.stage_compatitors_only? ? '' : 'is-active' }
+    #utrke-panel.mdl-tabs__panel{ class: @league.xczld? || @league.trail? || @league.stage_competitors_only? ? '' : 'is-active' }
       .mdl-grid.is-heading
         .mdl-cell.mdl-cell--6-col.mdl-cell--2-col-phone Utrka
         .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone Datum

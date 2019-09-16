@@ -49,7 +49,7 @@ class League < ApplicationRecord
   def general_rank
     rank = {}
     base_time = Time.parse "0:0:0"
-    races.includes(:race_results).each do |race|
+    races.includes(race_results: :category).each do |race|
       race.race_results.each do |result|
         if result.finish_time.to_i > 0
           finish_time = Time.parse(result.finish_time)
@@ -57,12 +57,14 @@ class League < ApplicationRecord
           next
         end
 
-        total_time = rank.dig(result.category_id, result.racer_id)&.[](0)
+        category = result.category.category
+
+        total_time = rank.dig(category, result.racer_id)&.[](0)
         if total_time.nil?
-          rank[result.category_id] = {result.racer_id => [finish_time, 1]}
+          rank[category] = {result.racer_id => [finish_time, 1]}
         else
-          rank[result.category_id][result.racer_id][0] = total_time + finish_time.hour.hours + finish_time.min.minutes + finish_time.sec.seconds
-          rank[result.category_id][result.racer_id][1] += 1 
+          rank[category][result.racer_id][0] = total_time + finish_time.hour.hours + finish_time.min.minutes + finish_time.sec.seconds
+          rank[category][result.racer_id][1] += 1 
         end 
       end
     end

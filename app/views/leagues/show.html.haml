@@ -37,7 +37,7 @@
             %i.material-icons.down.is-pulled-right expand_more
             %i.material-icons.up.is-pulled-right expand_less
           %ol.mdl-list.collapse{ id: "collapse-#{index}" }
-            - @ranks[cat[1]].each_with_index do |rank, i|
+            - @ranks[cat[0]].each_with_index do |rank, i|
               - @racer = Racer.find rank[0]
               %li.mdl-list__item.mdl-list__item--two-line
                 %span.mdl-list__item-primary-content

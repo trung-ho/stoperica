@@ -45,6 +45,7 @@ class League < ApplicationRecord
       []
     end
   end
+
   def general_rank
     rank = {}
     base_time = Time.parse "0:0:0"
@@ -56,18 +57,17 @@ class League < ApplicationRecord
           next
         end
 
-        total_time = rank[result.racer_id]&.[](0)
+        total_time = rank.dig(result.category_id, result.racer_id)&.[](0)
         if total_time.nil?
-          rank[result.racer_id] = [finish_time, 1]
+          rank[result.category_id] = {result.racer_id => [finish_time, 1]}
         else
-          rank[result.racer_id][0] = total_time + finish_time.hour.hours + finish_time.min.minutes + finish_time.sec.seconds
-          rank[result.racer_id][1] += 1 
-        
+          rank[result.category_id][result.racer_id][0] = total_time + finish_time.hour.hours + finish_time.min.minutes + finish_time.sec.seconds
+          rank[result.category_id][result.racer_id][1] += 1 
         end 
       end
     end
 
-    r = rank.sort_by { |k, time| [(time[0] - base_time), -time[1]] }
+    r = rank.each { |_, r| r.sort_by! { |_, time| [(time[0] - base_time), -time[1]] } }
     return r, base_time
   end
 

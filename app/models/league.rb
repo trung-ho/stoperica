@@ -60,12 +60,16 @@ class League < ApplicationRecord
         category = result.category.category
 
         total_time = rank.dig(category, result.racer_id)&.[](0)
-        if total_time.nil?
-          rank[category] = {result.racer_id => [finish_time, 1]}
+        if total_time.blank?
+          if rank[category].blank?
+            rank[category] = {result.racer_id => [finish_time, 1]}
+          else
+            rank[category][result.racer_id] = [finish_time, 1]
+          end
         else
           rank[category][result.racer_id][0] = total_time + finish_time.hour.hours + finish_time.min.minutes + finish_time.sec.seconds
           rank[category][result.racer_id][1] += 1 
-        end 
+        end
       end
     end
 

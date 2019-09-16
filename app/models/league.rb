@@ -51,7 +51,7 @@ class League < ApplicationRecord
     base_time = Time.parse "0:0:0"
     races.includes(race_results: :category).each do |race|
       race.race_results.each do |result|
-        if result.finish_time.to_i > 0
+        if result.finish_time.length > 3
           finish_time = Time.parse(result.finish_time)
         else
           next

@@ -67,13 +67,11 @@ class League < ApplicationRecord
       end
     end
 
-    r = rank.each { |_, r| r.sort_by! { |_, time| [(time[0] - base_time), -time[1]] } }
+    r = rank.each { |k, rr| rank[k] = rr.sort_by { |_, time| [(time[0] - base_time), -time[1]] } }
     return r, base_time
   end
 
   def self.seconds_to_str(seconds)
    ["%.2i" % (seconds / 3600).to_i, "%.2i" % (seconds / 60 % 60).to_i, "%.2i" % (seconds % 60).to_i].join(":")
-    
-  
   end
 end

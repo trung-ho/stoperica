@@ -73,7 +73,7 @@ class League < ApplicationRecord
       end
     end
 
-    r = rank.each { |k, rr| rank[k] = rr.sort_by { |_, time| [(time[0] - base_time), -time[1]] } }
+    r = rank.each { |k, rr| rank[k] = rr.sort_by { |_, time| [-time[1], (time[0] - base_time)] } }
     return r, base_time
   end
 

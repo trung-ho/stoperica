@@ -1,6 +1,8 @@
 class Club < ApplicationRecord
   belongs_to :user, optional: true
   has_many :racers
+  has_many :club_league_points
+  has_many :leagues , through: :club_league_points
 
   enum category: %i[biciklisticki triatlon atletski skole ostali penjacki trail-trekking trkacki-running pro timovi]
 

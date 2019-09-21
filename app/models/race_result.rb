@@ -360,4 +360,5 @@ class RaceResult < ApplicationRecord
     dur = seconds/3600
     "#{(len/dur).round 1} km/h"
   end
+  
 end

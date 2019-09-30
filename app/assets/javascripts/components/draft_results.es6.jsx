@@ -29,8 +29,8 @@ class DraftResults extends React.Component {
         <table className="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
           <thead>
             <tr>
-              <td>Startni broj</td>
-              <td>Status utrke</td>
+              <td>Broj</td>
+              <td>Racer</td>
               <td>Vrijeme</td>
               <td>Status</td>
               <td></td>
@@ -38,7 +38,9 @@ class DraftResults extends React.Component {
           </thead>
           <tbody>
             {
-              this.state.draftResults.map((result)=>{
+              this.state.draftResults.sort((a, b) => {
+                return b - a;
+              }).map((result) => {
                 return <DraftResult key={`draft-result-${result.racerNumber}-${result.time}`} result={result} />;
               })
             }

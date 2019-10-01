@@ -76,8 +76,12 @@ class TimingDashboard extends React.Component {
           <RaceResultForm />
           {
             DraftResultStore.getRaceType() == 'treking' ?
-            (<hr/>
-              <MissedControlPointsForm/>)
+            (
+              <div>
+                <hr/>
+                <MissedControlPointsForm/>
+              </div>
+            )
             :
             null
           }

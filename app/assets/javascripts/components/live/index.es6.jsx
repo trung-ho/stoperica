@@ -13,10 +13,13 @@ class LiveResults extends React.Component {
       '/races/get_live',
       (data) => {
         if(data != null) {
-          if (data[0].race_id) {
+          if (data[0] && data[0].race_id) {
             this.setState({raceId: data[0].race_id});
-          } else {
+          } else if (data[0]) {
             this.setState({raceId: data[0].id});
+          }
+          else {
+            this.setState({message: 'Nema aktivne utrke.'});  
           }
 
           RaceResultActions.startRace(data);

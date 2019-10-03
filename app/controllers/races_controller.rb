@@ -77,7 +77,7 @@ class RacesController < ApplicationController
             .merge(c.race_results.first.slice(:started_at))
         end
     else
-      if race ? [race.slice(:id, :name, :started_at)] : []
+      race ? [race.slice(:id, :name, :started_at)] : []
     end
     render json: response
   end

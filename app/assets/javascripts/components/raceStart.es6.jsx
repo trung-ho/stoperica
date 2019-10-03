@@ -17,7 +17,8 @@ class RaceStart extends React.Component {
       `/races/${raceId}.json`,
       data => {
         if(data.started_at) {
-          RaceResultActions.startRace(new Date(data.started_at));
+          const {id, started_at, name} = data;
+          RaceResultActions.startRace([{id, name, started_at}]);
           this.setState({ raceStarted: true });
         }
         RaceResultActions.setRace(data);
@@ -54,7 +55,18 @@ class RaceStart extends React.Component {
           selectedCategories: [],
           categories: updatedCategories
         });
-        RaceResultActions.startRace(new Date(data.started_at));
+
+        if (updatedCategories.length > 0) {
+          let categories = updatedCategories.map((cat) => {
+            return (({ id, race_id, name, started_at }) => ({ id, race_id, name, started_at }))(cat);
+          });
+          RaceResultActions.startRace(categories);
+        } else {
+          RaceResultActions.startRace(
+            [(({ id, race_id, name, started_at }) => ({ id, race_id, name, started_at }))(selectedRace)]
+          );
+        }
+
         RaceResultActions.setRace(selectedRace);
         const startedCategories = categories.map(c => {
           if (selectedCategories.includes(c.id.toString())) return c.name;
@@ -172,8 +184,8 @@ class RaceStart extends React.Component {
         </span>
         <RaceTime />
         {
-          this.state.raceStarted ?
-          <p> Utrka startala: <b>{(new Date(DraftResultStore.getRaceStartDate())).toLocaleString()}</b></p>
+          this.state.raceStarted && DraftResultStore.getStartedRaceData().length < 2 ?
+          <p> Utrka startala: <b>{(new Date(DraftResultStore.getStartedRaceData()[0].started_at)).toLocaleString()}</b></p>
           :
           null
         }

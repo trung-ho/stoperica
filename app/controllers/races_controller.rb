@@ -70,7 +70,16 @@ class RacesController < ApplicationController
 
   def get_live
     race = Race.where.not(started_at: nil).where(ended_at: nil).first
-    render json: race
+    response = if race && race.race_results.group(:category_id, :started_at).count.size > 1
+      race.categories.joins(:race_results).includes(:race_results)
+        .where.not(race_results: {started_at: nil}).map do |c|
+          c.slice(:id, :race_id, :name)
+            .merge(c.race_results.first.slice(:started_at))
+        end
+    else
+      [race.slice(:id, :name, :started_at)]
+    end
+    render json: response
   end
 
   # GET /races/new

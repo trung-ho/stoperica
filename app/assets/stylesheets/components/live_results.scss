@@ -1,10 +1,21 @@
 #liveResults {
   #raceTime {
     float: none;
+    
     h1 {
       font-size: 88px;
       text-align: center;
     }
+    .race-name {
+      text-align: center;
+    }
+  }
+  
+  h2 {
+    text-align: center;
+  }
+  .category-name {
+    text-align: center;
   }
 }
 

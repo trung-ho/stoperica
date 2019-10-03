@@ -57,8 +57,11 @@ class DraftResult extends React.Component {
 
   render() {
     const {result} = this.props;
-    const raceStartTime = DraftResultStore.getRaceStartDate();
-    const timeDiff = result.time - raceStartTime;
+    // Get the first of race or its categories.
+    const raceStartTime = DraftResultStore.getStartedRaceData().filter((race) => {
+      return race.id == DraftResultStore.getRaceId() || race.race_id == DraftResultStore.getRaceId();
+    })[0];
+    const timeDiff = result.time - new Date(raceStartTime.start_at);
     return (
       <tr>
         <td>{result.racerNumber}</td>

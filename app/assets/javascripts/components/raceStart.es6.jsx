@@ -60,11 +60,13 @@ class RaceStart extends React.Component {
           let categories = updatedCategories.map((cat) => {
             return (({ id, race_id, name, started_at }) => ({ id, race_id, name, started_at }))(cat);
           });
+          console.log(categories);
           RaceResultActions.startRace(categories);
         } else {
           RaceResultActions.startRace(
             [(({ id, race_id, name, started_at }) => ({ id, race_id, name, started_at }))(selectedRace)]
           );
+          console.log(selectedRace)
         }
 
         RaceResultActions.setRace(selectedRace);

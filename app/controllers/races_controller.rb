@@ -70,16 +70,7 @@ class RacesController < ApplicationController
 
   def get_live
     race = Race.where.not(started_at: nil).where(ended_at: nil).first
-    response = if race && race.race_results.group(:category_id, :started_at).count.size > 1
-      race.categories.joins(:race_results).includes(:race_results)
-        .where.not(race_results: {started_at: nil}).map do |c|
-          c.slice(:id, :race_id, :name)
-            .merge(c.race_results.first.slice(:started_at))
-        end
-    else
-      race ? [race.slice(:id, :name, :started_at)] : []
-    end
-    render json: response
+    render json: race
   end
 
   # GET /races/new
@@ -113,18 +104,8 @@ class RacesController < ApplicationController
     if params[:started_at].present? && @race.started_at.nil?
       @race.started_at = Time.at(params[:started_at].to_i / 1000)
     end
-
-    if params[:ended_at].present? && params[:categories].present?
-      end_time = Time.at(params[:ended_at].to_i / 1000)
-      @race.race_results.where(category_id: params[:categories]).update(ended_at: end_time)
-      # End the race if all the race_results are ended...
-      params[:categories] = nil if @race.race_results.where(ended_at: nil).count < 1
-    end
-
-    if params[:ended_at].present? && params[:categories].blank?
-      @race.ended_at = Time.at(params[:ended_at].to_i / 1000)
-      @race.save!
-    end
+    @race.ended_at = Time.at(params[:ended_at].to_i / 1000) if params[:ended_at].present?
+    @race.save!
 
     if params[:ended_at].present? && @race.ended_at
       @race.assign_positions

@@ -7,6 +7,7 @@ class DraftResult extends React.Component {
 
     this.state = {
       status: 'uploading',
+      racerName: undefined,
       failed: false
     }
   }
@@ -38,7 +39,11 @@ class DraftResult extends React.Component {
     let ajax = new Ajax(
       '/race_results/from_timing',
       (data) => {
-        this.setState({status: 'spremljeno', failed: false})
+        this.setState({
+          status: 'spremljeno',
+          failed: false,
+          racerName: `${data.race.first_name} ${data.race.last_name}`
+        })
       },
       (error, status) => {
         console.log(error, status);
@@ -62,6 +67,7 @@ class DraftResult extends React.Component {
     return (
       <tr>
         <td>{result.racerNumber}</td>
+        <td>{this.state.racerName ? this.state.racerName : ''}</td>
         <td>{this.prettyStatus()}</td>
         <td>
           {timeSync.humanTime(timeDiff)}

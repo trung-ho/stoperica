@@ -113,8 +113,18 @@ class RacesController < ApplicationController
     if params[:started_at].present? && @race.started_at.nil?
       @race.started_at = Time.at(params[:started_at].to_i / 1000)
     end
-    @race.ended_at = Time.at(params[:ended_at].to_i / 1000) if params[:ended_at].present?
-    @race.save!
+
+    if params[:ended_at].present? && params[:categories].present?
+      end_time = Time.at(params[:ended_at].to_i / 1000)
+      @race.race_results.where(category_id: params[:categories]).update(ended_at: end_time)
+      # End the race if all the race_results are ended...
+      params[:categories] = nil if @race.race_results.where(ended_at: nil).count < 1
+    end
+
+    if params[:ended_at].present? && params[:categories].blank?
+      @race.ended_at = Time.at(params[:ended_at].to_i / 1000)
+      @race.save!
+    end
 
     if params[:ended_at].present? && @race.ended_at
       @race.assign_positions

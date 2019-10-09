@@ -84,12 +84,15 @@ class RaceStart extends React.Component {
 
   endRace() {
     let data = {
-      ended_at: timeSync.now()
+      ended_at: timeSync.now(),
+      categories: selectedCategories
     }
     let ajax = new Ajax(
       `/races/${this.state.selectedRace.id}`,
       (data) => {
-        window.location = `/races/${this.state.selectedRace.id}`;
+        if (data.ended_at) {
+          window.location = `/races/${this.state.selectedRace.id}`;
+        }
       },
       (error, status) => {
         console.log(error, status);

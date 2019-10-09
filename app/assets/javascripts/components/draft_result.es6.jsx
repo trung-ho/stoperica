@@ -42,7 +42,7 @@ class DraftResult extends React.Component {
         this.setState({
           status: 'spremljeno',
           failed: false,
-          racerName: `${data.race.first_name} ${data.race.last_name}`
+          racerName: `${data.racer.first_name} ${data.racer.last_name}`
         })
       },
       (error, status) => {

@@ -66,10 +66,9 @@ class RaceStart extends React.Component {
           RaceResultActions.startRace(
             [(({ id, race_id, name, started_at }) => ({ id, race_id, name, started_at }))(selectedRace)]
           );
-          console.log(selectedRace)
+          console.log(selectedRace);
         }
 
-        RaceResultActions.setRace(selectedRace);
         const startedCategories = categories.map(c => {
           if (selectedCategories.includes(c.id.toString())) return c.name;
         });

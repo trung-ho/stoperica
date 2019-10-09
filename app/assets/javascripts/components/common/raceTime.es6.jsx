@@ -10,6 +10,7 @@ class RaceTime extends React.Component {
   }
 
   onChange() {
+    console.log(this.state);
     const storeRaceTimes = DraftResultStore.getStartedRaceData();
     if(storeRaceTimes.length > 0) {
       setInterval(() => {

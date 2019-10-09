@@ -79,7 +79,7 @@ class TimingDashboard extends React.Component {
             (
               <div>
                 <hr/>
-                <MissedControlPointsForm/>
+                <MissedControlPointsForm />
               </div>
             )
             :

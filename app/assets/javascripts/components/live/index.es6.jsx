@@ -3,7 +3,7 @@ class LiveResults extends React.Component {
     super();
 
     this.state = {
-      raceId: undefined,
+      race: undefined,
       message: undefined
     }
   }
@@ -13,16 +13,9 @@ class LiveResults extends React.Component {
       '/races/get_live',
       (data) => {
         if(data != null) {
-          if (data[0] && data[0].race_id) {
-            this.setState({raceId: data[0].race_id});
-          } else if (data[0]) {
-            this.setState({raceId: data[0].id});
-          }
-          else {
-            this.setState({message: 'Nema aktivne utrke.'});  
-          }
-
-          RaceResultActions.startRace(data);
+          this.setState({race: data});
+          RaceResultActions.setRace(data);
+          RaceResultActions.startRace(new Date(data.started_at));
         }
         else {
           this.setState({message: 'Nema aktivne utrke.'});
@@ -47,8 +40,8 @@ class LiveResults extends React.Component {
         <RaceTime />
         <hr/>
         {
-          this.state.raceId ?
-          <RaceResults raceId={this.state.raceId} />
+          this.state.race ?
+          <RaceResults raceId={this.state.race.id} />
           : null
         }
       </span>

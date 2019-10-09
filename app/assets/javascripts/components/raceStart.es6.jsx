@@ -17,8 +17,7 @@ class RaceStart extends React.Component {
       `/races/${raceId}.json`,
       data => {
         if(data.started_at) {
-          const {id, started_at, name} = data;
-          RaceResultActions.startRace([{id, name, started_at}]);
+          RaceResultActions.startRace(new Date(data.started_at));
           this.setState({ raceStarted: true });
         }
         RaceResultActions.setRace(data);
@@ -55,20 +54,8 @@ class RaceStart extends React.Component {
           selectedCategories: [],
           categories: updatedCategories
         });
-
-        if (updatedCategories.length > 0) {
-          let categories = updatedCategories.map((cat) => {
-            return (({ id, race_id, name, started_at }) => ({ id, race_id, name, started_at }))(cat);
-          });
-          console.log(categories);
-          RaceResultActions.startRace(categories);
-        } else {
-          RaceResultActions.startRace(
-            [(({ id, race_id, name, started_at }) => ({ id, race_id, name, started_at }))(selectedRace)]
-          );
-          console.log(selectedRace);
-        }
-
+        RaceResultActions.startRace(new Date(data.started_at));
+        RaceResultActions.setRace(selectedRace);
         const startedCategories = categories.map(c => {
           if (selectedCategories.includes(c.id.toString())) return c.name;
         });
@@ -84,15 +71,12 @@ class RaceStart extends React.Component {
 
   endRace() {
     let data = {
-      ended_at: timeSync.now(),
-      categories: selectedCategories
+      ended_at: timeSync.now()
     }
     let ajax = new Ajax(
       `/races/${this.state.selectedRace.id}`,
       (data) => {
-        if (data.ended_at) {
-          window.location = `/races/${this.state.selectedRace.id}`;
-        }
+        window.location = `/races/${this.state.selectedRace.id}`;
       },
       (error, status) => {
         console.log(error, status);
@@ -188,8 +172,8 @@ class RaceStart extends React.Component {
         </span>
         <RaceTime />
         {
-          this.state.raceStarted && DraftResultStore.getStartedRaceData().length < 2 ?
-          <p> Utrka startala: <b>{(new Date(DraftResultStore.getStartedRaceData()[0].started_at)).toLocaleString()}</b></p>
+          this.state.raceStarted ?
+          <p> Utrka startala: <b>{(new Date(DraftResultStore.getRaceStartDate())).toLocaleString()}</b></p>
           :
           null
         }

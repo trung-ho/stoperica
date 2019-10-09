@@ -30,7 +30,7 @@ class DraftResults extends React.Component {
           <thead>
             <tr>
               <td>Broj</td>
-              <td>Racer</td>
+              <td>Status utrke</td>
               <td>Vrijeme</td>
               <td>Status</td>
               <td></td>

@@ -38,8 +38,8 @@ var DraftResultStore = flux.createStore({
         });
         this.emit('draftResultStore.newTempResult');
     },
-    startRace: function(startedRaceData) {
-        this.startedRaceData = startedRaceData;
+    startRace: function(raceStartDate) {
+        this.raceStartDate = raceStartDate;
         this.emit('draftResultStore.startRace');
     },
     setRace: function(race) {
@@ -62,8 +62,8 @@ var DraftResultStore = flux.createStore({
         getUploadedResults: function () {
             return this.raceResults;
         },
-        getStartedRaceData: function() {
-          return this.startedRaceData;
+        getRaceStartDate: function() {
+          return this.raceStartDate;
         }
     }
 });

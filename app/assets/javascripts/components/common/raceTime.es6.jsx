@@ -5,21 +5,29 @@ class RaceTime extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.columnClass = this.columnClass.bind(this);
     this.state = {
-      raceTimes: []
+      raceTimes: [],
+      intervalId: undefined
     }
   }
 
   onChange() {
-    console.log(this.state);
     const storeRaceTimes = DraftResultStore.getStartedRaceData();
+    console.log(storeRaceTimes);
     if(storeRaceTimes.length > 0) {
-      setInterval(() => {
+      if (this.state.intervalId) {
+        clearInterval(this.state.intervalId);
+      }
+      
+      const intervalId = setInterval(() => {
         let raceTimes = storeRaceTimes.map((time) => {
           return {...time, raceTime: timeSync.humanTime(timeSync.now() - new Date(time.started_at))};
         });
         
         this.setState({raceTimes: raceTimes});
+        console.log(this.state);
       }, 1000);
+
+      this.setState({ intervalId });
     }
   }
 
@@ -36,7 +44,7 @@ class RaceTime extends React.Component {
   }
 
   render() {
-    return(
+    return (
       <span id="raceTime">
         { this.state.raceTimes.length > 0  ?
           (

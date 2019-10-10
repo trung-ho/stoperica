@@ -23,7 +23,7 @@ class DraftResults extends React.Component {
   }
 
   sortResults(results) {
-    results.sort((a, b) => {
+    return results.sort((a, b) => {
       return b.time - a.time;
     });
   }

@@ -3,27 +3,11 @@ class DraftResult extends React.Component {
     super();
 
     this.uploadResult = this.uploadResult.bind(this);
-    this.prettyStatus = this.prettyStatus.bind(this);
 
     this.state = {
       status: 'uploading',
       racerName: undefined,
       failed: false
-    }
-  }
-
-  prettyStatus() {
-    switch(this.props.result.status) {
-      case 3:
-        return 'Zavrsio';
-      case 4:
-        return 'DNF';
-      case 5:
-        return 'DSQ';
-      case 6:
-        return 'DNS';
-      default:
-        return 'Prijavljen'
     }
   }
 
@@ -68,7 +52,6 @@ class DraftResult extends React.Component {
       <tr>
         <td>{result.racerNumber}</td>
         <td>{this.state.racerName ? this.state.racerName : ''}</td>
-        <td>{this.prettyStatus()}</td>
         <td>
           {timeSync.humanTime(timeDiff)}
         </td>

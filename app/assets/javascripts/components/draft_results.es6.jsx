@@ -3,14 +3,15 @@ class DraftResults extends React.Component {
     super();
 
     this.onChange = this.onChange.bind(this);
+    this.sortResults = this.sortResults.bind(this);
 
     this.state = {
-      draftResults: DraftResultStore.getRaceResults()
+      draftResults: tihs.sortResults(DraftResultStore.getRaceResults())
     };
   }
 
   onChange() {
-    this.setState({draftResults: DraftResultStore.getRaceResults()});
+    this.setState({draftResults: this.sortResults(DraftResultStore.getRaceResults())});
   }
 
   componentDidMount() {
@@ -21,6 +22,11 @@ class DraftResults extends React.Component {
     DraftResultStore.off('draftResultStore.change', this.onChange);
   }
 
+  sortResults(results) {
+    results.sort((a, b) => {
+      return b.time - a.time;
+    });
+  }
 
   render() {
     return (
@@ -38,9 +44,7 @@ class DraftResults extends React.Component {
           </thead>
           <tbody>
             {
-              this.state.draftResults.sort((a, b) => {
-                return b - a;
-              }).map((result) => {
+              this.state.draftResults.map((result) => {
                 return <DraftResult key={`draft-result-${result.racerNumber}-${result.time}`} result={result} />;
               })
             }

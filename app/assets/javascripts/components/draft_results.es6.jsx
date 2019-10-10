@@ -6,7 +6,7 @@ class DraftResults extends React.Component {
     this.sortResults = this.sortResults.bind(this);
 
     this.state = {
-      draftResults: tihs.sortResults(DraftResultStore.getRaceResults())
+      draftResults: this.sortResults(DraftResultStore.getRaceResults())
     };
   }
 

@@ -39,7 +39,7 @@ class DraftResults extends React.Component {
           <tbody>
             {
               this.state.draftResults.sort((a, b) => {
-                return a - b;
+                return b - a;
               }).map((result) => {
                 return <DraftResult key={`draft-result-${result.racerNumber}-${result.time}`} result={result} />;
               })

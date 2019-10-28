@@ -147,7 +147,13 @@ class RaceResult < ApplicationRecord
   def lap_millis lap_position = nil
     return nil if lap_times.length.zero?
     return control_point_millis if race.xco? && lap_position.nil?
-    return control_point_millis 0 unless lap_position
+    unless lap_position
+      if control_point_millis 0
+        return control_point_millis 0
+      else
+        return control_point_millis nil
+      end
+    end
     lap_time = lap_times[lap_position - 1]
     return nil unless lap_time
     time = lap_time.is_a?(Hash) ? lap_time.with_indifferent_access[:time] : lap_time
@@ -177,7 +183,6 @@ class RaceResult < ApplicationRecord
 
     reference_race_result = RaceResult.where(category: category, race: race, status: 3).order(:position).limit(1).first
     lap_diff = reference_race_result.lap_times.length - lap_times.length
-
 
     unless lap_times.empty?
       if lap_diff.zero?

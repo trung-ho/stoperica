@@ -37,6 +37,17 @@
         = race_result.racer.uci_name
       - else
         = race_result.racer.full_name
+    - if @is_admin && @all_race_results.present?
+      - racer = race_result.racer
+      - absent_acount = 0
+      - @all_race_results.each do |past_race|
+        - next if past_race.racer_id != racer.id
+        - absent_acount += 1 if past_race.status == 1
+        - break if past_race.status != 1
+      
+      - if absent_acount > 0
+        %p.color-red
+          = "Number of Race was missed: " + absent_acount.to_s
   .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
     = race_result.racer.club_name(@race.uci_display?)
   - unless @race.laps.nil?

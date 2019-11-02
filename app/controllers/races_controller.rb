@@ -42,6 +42,11 @@ class RacesController < ApplicationController
       @start_numbers = []
     end
 
+    past_races = @race.league.races.where.not(ended_at: nil).where("id < ?", @race.id)
+    if past_races.any?
+      @all_race_results = RaceResult.where(race_id: past_races).order(race_id: :desc)
+    end
+
     respond_to do |format|
       format.html { render :show }
       format.json do
@@ -85,7 +90,6 @@ class RacesController < ApplicationController
   # POST /races.json
   def create
     @race = Race.new(race_params)
-
     respond_to do |format|
       if @race.save
         format.html { redirect_to @race, notice: 'Race was successfully created.' }

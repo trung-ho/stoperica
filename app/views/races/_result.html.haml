@@ -31,14 +31,15 @@
   .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
     - racer = race_result.racer
     - absent_acount = 0
-    - if @is_admin && @all_race_results.present?
+    - if @all_race_results.present?
       - @all_race_results.each do |past_race|
         - next if past_race.racer_id != racer.id
         - absent_acount += 1 if past_race.status == 1
         - break if past_race.status != 1
+    - racer_link_class = (absent_acount > 0) ? 'color-red' : ''
     - if @is_admin
       = race_result.racer.year_of_birth
-    = link_to race_result.racer, class: "color-red" do
+    = link_to race_result.racer, class: "#{racer_link_class}" do
       .emoji= race_result.racer.country_flag
       - if @race.uci_display?
         = race_result.racer.uci_name

@@ -47,7 +47,7 @@
         = race_result.racer.full_name
     - if @is_admin && absent_acount > 0
       %p.color-red
-        = "Number of Race was missed: " + absent_acount.to_s
+        = "Penal: " + absent_acount.to_s
   .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
     = race_result.racer.club_name(@race.uci_display?)
   - unless @race.laps.nil?

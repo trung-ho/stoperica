@@ -44,7 +44,7 @@ class RacesController < ApplicationController
 
     @race_league = @race.league
     @all_race_results = nil
-    if @race_league.present? && @race_league.league_type: "xczld"
+    if @race_league.present? && @race_league.league_type == "xczld"
       past_races = @race_league.races.where.not(ended_at: nil).where("id < ?", @race.id)
       if past_races.any?
         @all_race_results = RaceResult.where(race_id: past_races).order(race_id: :desc)

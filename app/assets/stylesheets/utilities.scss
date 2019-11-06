@@ -65,3 +65,13 @@
 .d-ib {
   display: inline-block;
 }
+
+.flex-row {
+  -ms-flex-direction: row!important;
+  flex-direction: row!important;
+}
+
+.d-flex {
+  display: -ms-flexbox!important;
+  display: flex!important;
+}

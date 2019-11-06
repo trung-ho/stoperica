@@ -1,4 +1,4 @@
-%h1.text-hidden.cu-p
+%h3.text-hidden.cu-p
   = @race.name
   %p  
     - if @is_admin || @is_race_admin
@@ -6,16 +6,14 @@
       %i.material-icons.up.is-pulled-right.cu-p.expand-less{style: "display: none;"} expand_less
 
 - if @is_admin || @is_race_admin
-
   #info{style: "display: none;"}
-
-    %h4
+    %h5
       Vrijeme utrke:
       %b
         = l @race.date, format: :long
 
     - if @race.location_url.present?
-      %h4
+      %h5
         %a{ href: @race.location_url, target: 'blank', style: "text-decoration: none" }
           %i.material-icons.is-vcentered location_on
           Lokacija utrke
@@ -26,7 +24,7 @@
         = @race.auth_token
 
     - unless @race.started_at
-      %h4
+      %h5
         Prijave otvorene do:
         %b#raceResultLocked{ class: @race.lock_race_results ? 'shame' : '' }
           = l @race.registration_threshold, format: :long
@@ -36,7 +34,7 @@
             Odjave su onemogućene za ovu utrku.
 
     - if @is_admin && @race.pool
-      %h4
+      %h5
         Baza brojeva:
         = link_to @race.pool&.name, pool_path(@race.pool)
       %hr
@@ -72,7 +70,7 @@
     .mb-3
       - if @race.displayable_description.present? && @race.description_url.present?
         #add-info-toggler
-          %h4.cu-p.d-i
+          %h5.cu-p.d-i
             Dodatne informacije
           %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
           %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
@@ -81,10 +79,10 @@
           = link_to @race.description_text.html_safe, @race.description_url, target: '_blank'
       - elsif @race.description_url.present?
         = link_to @race.description_url, target: '_blank', id: 'additional-information' do
-          %h4 Dodatne informacije
+          %h5 Dodatne informacije
       - elsif @race.displayable_description.present?
         #add-info-toggler
-          %h4.cu-p.d-i
+          %h5.cu-p.d-i
             Dodatne informacije
           %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
           %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
@@ -96,18 +94,18 @@
   %hr
   = render 'admin_race_result_form'
 - else
-  %h4
+  %h5
     Vrijeme utrke:
     %b
       = l @race.date, format: :long
   - if @race.location_url.present?
-    %h4
+    %h5
       %a{ href: @race.location_url, target: 'blank', style: "text-decoration: none" }
         %i.material-icons.is-vcentered location_on
         Lokacija utrke
     
   - unless @race.started_at
-    %h4
+    %h5
       Prijave otvorene do:
       %b#raceResultLocked{ class: @race.lock_race_results ? 'shame' : '' }
         = l @race.registration_threshold, format: :long
@@ -123,7 +121,7 @@
   .mb-3
     - if @race.displayable_description.present? && @race.description_url.present?
       #add-info-toggler
-        %h4.cu-p.d-i
+        %h5.cu-p.d-i
           Dodatne informacije
         %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
         %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
@@ -132,10 +130,10 @@
         = link_to @race.description_text.html_safe, @race.description_url, target: '_blank'
     - elsif @race.description_url.present?
       = link_to @race.description_url, target: '_blank', id: 'additional-information' do
-        %h4 Dodatne informacije
+        %h5 Dodatne informacije
     - elsif @race.displayable_description.present?
       #add-info-toggler
-        %h4.cu-p.d-i
+        %h5.cu-p.d-i
           Dodatne informacije
         %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
         %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
@@ -147,7 +145,7 @@
   - else
     = render 'application'
 
-%h4
+%h5
   Natjecatelji
   %br
 

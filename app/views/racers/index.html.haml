@@ -39,7 +39,6 @@
   .mdl-cell.mdl-cell--2-col Godina rodenja
   .mdl-cell.mdl-cell--2-col Klub
   - if user_signed_in? && current_user.admin
-    .mdl-cell.mdl-cell--1-col UCI ID
     .mdl-cell.mdl-cell--1-col Email
     .mdl-cell.mdl-cell--1-col Broj mobitela
     .mdl-cell.mdl-cell--2-col
@@ -52,7 +51,6 @@
     .mdl-cell.mdl-cell--2-col= racer.year_of_birth
     .mdl-cell.mdl-cell--2-col= racer.club_name
     - if user_signed_in? && current_user.admin
-      .mdl-cell.mdl-cell--1-col= racer.uci_id
       .mdl-cell.mdl-cell--1-col= racer.email
       .mdl-cell.mdl-cell--1-col
         %a{href: "tel:#{racer.phone_number}"}
@@ -60,7 +58,31 @@
       .mdl-cell.mdl-cell--1-col
         = link_to 'Izmijeni', edit_racer_path(racer), class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored', style: 'color: white;'
       .mdl-cell.mdl-cell--1-col
-        = form_for racer, method: :delete do |f|
-          = f.submit 'Izbrisi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent', style: 'color: white;'
-
+        %button.cd-popup-trigger.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent{:href => "#destroy-user-#{racer.id}", :onclick => "showPopup(#{racer.id})"} Izbrisi
+        .cd-popup{role: "alert", "data-racer-id": "#{racer.id}"}
+          .cd-popup-container
+            %p Izbrisati natjecatelja? (Delete racer?)
+            %ul.cd-buttons
+              %li
+                = form_for racer, method: :delete do |f|
+                  = f.submit 'DA', class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent'
+              %li
+                %button{class: 'mdl-button mdl-js-button mdl-button--closed mdl-js-ripple-effect mdl-button--accent', :onclick => "hidePopup(#{racer.id})"} OTKAŽI
+            %butong.cd-popup-close.img-replace{:onclick => "hidePopup(#{racer.id})"}
 = paginate @racers
+
+:javascript
+  function showPopup(racerId) {
+    var popUp = document.querySelectorAll("[data-racer-id='" + racerId + "']");
+    console.log(popUp);
+    if(popUp.length > 0){
+      popUp[0].classList.add("is-visible");
+    }
+  }
+  function hidePopup(racerId) {
+    var popUp = document.querySelectorAll("[data-racer-id='" + racerId + "']");
+    console.log(popUp);
+    if(popUp.length > 0){
+      popUp[0].classList.remove("is-visible");
+    }
+  }

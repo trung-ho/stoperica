@@ -96,24 +96,26 @@
 - else
   .mobile-view
     %h6
-      - if @race.location_url.present?
-        %span
-          %a{ href: @race.location_url, target: 'blank', style: "text-decoration: none" }
-            %i.material-icons.is-vcentered location_on
-            Lokacija utrke
       %span
         Vrijeme utrke:
         %b
-          = l @race.date, format: :long
+          = @race.date.strftime("%d.%m.%Y. %R")
+    %h6 
       - unless @race.started_at
         %span
-          Prijave otvorene do:
+          Prijave do:
           %b#raceResultLocked{ class: @race.lock_race_results ? 'shame' : '' }
-            = l @race.registration_threshold, format: :long
+            = @race.registration_threshold.strftime("%d.%m.%Y. %R")
           - if @race.lock_race_results
             .mdl-tooltip.mdl-tooltip--large{for: "raceResultLocked"}
               %b Napomena:
               Odjave su onemogućene za ovu utrku.
+    - if @race.location_url.present?
+      %h6
+        %span
+          %a{ href: @race.location_url, target: 'blank', style: "text-decoration: none" }
+            %i.material-icons.is-vcentered location_on
+            Lokacija utrke
       .mb-1
         - if @race.displayable_description.present? && @race.description_url.present?
           #add-info-toggler
@@ -150,26 +152,19 @@
     %h5
       Vrijeme utrke:
       %b
-        = l @race.date, format: :long
+        = @race.date.strftime("%d.%m.%Y. %R")
+      Prijave do:
+      %b#raceResultLocked{ class: @race.lock_race_results ? 'shame' : '' }
+        = @race.registration_threshold.strftime("%d.%m.%Y. %R")
+      - if @race.lock_race_results
+        .mdl-tooltip.mdl-tooltip--large{for: "raceResultLocked"}
+          %b Napomena:
+          Odjave su onemogućene za ovu utrku.
     - if @race.location_url.present?
       %h5
         %a{ href: @race.location_url, target: 'blank', style: "text-decoration: none" }
           %i.material-icons.is-vcentered location_on
           Lokacija utrke
-    - unless @race.started_at
-      %h5
-        Prijave otvorene do:
-        %b#raceResultLocked{ class: @race.lock_race_results ? 'shame' : '' }
-          = l @race.registration_threshold, format: :long
-        - if @race.lock_race_results
-          .mdl-tooltip.mdl-tooltip--large{for: "raceResultLocked"}
-            %b Napomena:
-            Odjave su onemogućene za ovu utrku.
-
-    .race-actions
-      = link_to races_path do
-        .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
-          Natrag
     .mb-3
       - if @race.displayable_description.present? && @race.description_url.present?
         #add-info-toggler
@@ -192,10 +187,15 @@
         #additional-information{style: "display: none;"}
           %href
           = @race.description_text.to_s.html_safe
-    - if @current_racer&.club_admin? && DateTime.now < @race.registration_threshold && @club_racers.to_a.size > 0
-      = render 'club_admin_form'
-    - else
-      = render 'application'
+    .display-item-inline.d-flex.flex-row
+      .race-actions
+        = link_to races_path do
+          .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
+            Natrag
+      - if @current_racer&.club_admin? && DateTime.now < @race.registration_threshold && @club_racers.to_a.size > 0
+        = render 'club_admin_form'
+      - else
+        = render 'application'
 
 %h5
   Natjecatelji

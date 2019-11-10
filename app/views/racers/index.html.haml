@@ -39,9 +39,9 @@
   .mdl-cell.mdl-cell--2-col Godina rodenja
   .mdl-cell.mdl-cell--2-col Klub
   - if user_signed_in? && current_user.admin
-    .mdl-cell.mdl-cell--1-col Email
+    .mdl-cell.mdl-cell--2-col Email
     .mdl-cell.mdl-cell--1-col Broj mobitela
-    .mdl-cell.mdl-cell--2-col
+    .mdl-cell.mdl-cell--1-col
 
 - @racers.each_with_index do |racer, index|
   .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
@@ -51,14 +51,14 @@
     .mdl-cell.mdl-cell--2-col= racer.year_of_birth
     .mdl-cell.mdl-cell--2-col= racer.club_name
     - if user_signed_in? && current_user.admin
-      .mdl-cell.mdl-cell--1-col= racer.email
+      .mdl-cell.mdl-cell--2-col= racer.email
       .mdl-cell.mdl-cell--1-col
         %a{href: "tel:#{racer.phone_number}"}
           = racer.phone_number
       .mdl-cell.mdl-cell--1-col
-        = link_to 'Izmijeni', edit_racer_path(racer), class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored', style: 'color: white;'
+        = link_to 'Izmijeni', edit_racer_path(racer), class: 'mdl-button px-5 mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored', style: 'color: white;'
       .mdl-cell.mdl-cell--1-col
-        %button.cd-popup-trigger.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent{:href => "#destroy-user-#{racer.id}", :onclick => "showPopup(#{racer.id})"} Izbrisi
+        %button.px-5.cd-popup-trigger.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent{:href => "#destroy-user-#{racer.id}", :onclick => "showPopup(#{racer.id})"} Izbrisi
         .cd-popup{role: "alert", "data-racer-id": "#{racer.id}"}
           .cd-popup-container
             %p Izbrisati natjecatelja?

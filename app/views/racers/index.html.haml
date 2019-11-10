@@ -61,7 +61,7 @@
         %button.cd-popup-trigger.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent{:href => "#destroy-user-#{racer.id}", :onclick => "showPopup(#{racer.id})"} Izbrisi
         .cd-popup{role: "alert", "data-racer-id": "#{racer.id}"}
           .cd-popup-container
-            %p Izbrisati natjecatelja? (Delete racer?)
+            %p Izbrisati natjecatelja?
             %ul.cd-buttons
               %li
                 = form_for racer, method: :delete do |f|

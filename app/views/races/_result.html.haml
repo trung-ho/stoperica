@@ -78,7 +78,7 @@
 
   - if @is_admin || @is_race_admin
     .mdl-cell.mdl-cell--2-col
-      %a.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--accent.mdl-js-ripple-effect.min-width-auto{:href => href="http://localhost:3000/race_results/14/edit" }
+      %a.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--accent.mdl-js-ripple-effect.min-width-auto{:href => href="#{edit_race_result_url(race_result)}" }
         %i.fas.fa-edit
 
       = form_for race_result, method: :delete do |f|

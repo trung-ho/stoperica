@@ -158,10 +158,24 @@ svg {
   .material-icons {
     vertical-align: middle;
   }
+
+  .collapse {
+    .mdl-grid {
+      padding-top: 0;
+
+      .mdl-cell {
+        padding-bottom: 0;
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 .edit_race_result {
-  select {
-    min-width: 55px;
+  select.start_number_select {
+    min-width: 47px;
+  }
+  select.category_id_select {
+    min-width: 65px;
   }
 }

@@ -4,9 +4,9 @@
     - if @race.pool.present?
       #adminFormContainer.mdl-cell.mdl-cell--2-col
         = form_for race_result, html: { id: 'start_number_form' } do |f|
-          = f.select :start_number, options_for_select(@start_numbers, race_result.start_number&.value), include_blank: true
-          = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: race_result.category_id
-          = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+          = f.select :start_number, options_for_select(@start_numbers, race_result.start_number&.value), {include_blank: true}, { class: 'start_number_select' }
+          = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, {value: race_result.category_id}, { class: 'category_id_select' }
+          = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect m-0'
   .mdl-cell.mdl-cell--1-col
     - if race_result.status == 3 && @race.ended_at.present?
       %b= index + 1

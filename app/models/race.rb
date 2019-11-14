@@ -266,6 +266,20 @@ class Race < ApplicationRecord
     Nokogiri(self.description_text.to_s).text
   end
 
+  def start_box_racers
+    categories = self.categories.where(name: ['7-19', '19-30', '30-40', '40-50', '50+'])
+    race_results_hash = {}
+
+    categories.each do |category|
+      race_results = self.sorted_results[category]
+      number_of_start_box = race_results.size / 10
+      number_of_start_box = 2 if number_of_start_box < 2
+      best_results = race_results.first(number_of_start_box)
+      race_results_hash[category.name.to_sym] = best_results
+    end
+    race_results_hash
+  end
+
   private
 
     def set_auth_token

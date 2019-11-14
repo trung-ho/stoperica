@@ -49,6 +49,9 @@ class RacesController < ApplicationController
       if past_races.any?
         @all_race_results = RaceResult.where(race_id: past_races).order(race_id: :desc)
       end
+
+      #start box function
+      @start_box_racers = @race.start_box_racers
     end
 
     respond_to do |format|

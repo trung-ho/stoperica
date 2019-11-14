@@ -267,7 +267,7 @@ class Race < ApplicationRecord
   end
 
   def start_box_racers
-    categories = self.categories.where(name: ['7-19', '19-30', '30-40', '40-50', '50+'])
+    categories = self.categories.where(name: ['17-19', '19-30', '30-40', '40-50', '50+'])
     race_results_hash = {}
 
     categories.each do |category|

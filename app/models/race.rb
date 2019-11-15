@@ -267,14 +267,20 @@ class Race < ApplicationRecord
   end
 
   def start_box_racers
+    general_rank, base_time = self.league.general_rank
     categories = self.categories
+    best_results = []
     race_results_hash = {}
 
     categories.each do |category|
-      race_results = self.sorted_results[category]
-      number_of_start_box = race_results.size / 10
+      top_racer_ids = general_rank[category.name].map { |rank| rank.first }
+      racers_list = self.racers.to_a
+      number_of_start_box = racers_list.size / 10
       number_of_start_box = 2 if number_of_start_box < 2
-      best_results = race_results.first(number_of_start_box)
+
+      (0..(number_of_start_box-1)).each do |num|
+        best_results << racers_list.select{ |racer| racer.id == top_racer_ids[num] }.first
+      end
       race_results_hash[category.name.to_sym] = best_results
     end
     race_results_hash

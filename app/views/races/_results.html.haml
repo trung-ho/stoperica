@@ -43,17 +43,13 @@
           - sb_cat_class = (index%2 == 0) ? 'even' : ''
           .mdl-grid.start-box-racers{ class: "#{sb_cat_class}"}
             %h5.start-box-category= key
-            - value.each do |race_result|
-              = link_to race_result.racer do
-                .emoji= race_result.racer.country_flag
+            - value.each do |racer|
+              = link_to racer do
+                .emoji= racer.country_flag
                 - if @race.uci_display?
-                  = race_result.racer.uci_name
+                  = racer.uci_name
                 - else
-                  = race_result.racer.full_name
-
-
-
-
+                  = racer.full_name
 
     - @race.categories.order(id: :asc).each_with_index do |category, index|
       .mdl-grid{ class: "cat-#{index}", onclick: "collapse('#collapse-#{category.id}', event)" }

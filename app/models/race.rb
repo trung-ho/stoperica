@@ -280,8 +280,8 @@ class Race < ApplicationRecord
     race_results_hash
   end
 
-  def has_started?
-    started_at.present?
+  def not_start_yet?
+    started_at.nil?
   end
 
   private

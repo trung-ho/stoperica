@@ -278,8 +278,14 @@ class Race < ApplicationRecord
       number_of_start_box = racers_list.size / 10
       number_of_start_box = 2 if number_of_start_box < 2
 
-      (0..(number_of_start_box-1)).each do |num|
-        best_results << racers_list.select{ |racer| racer.id == top_racer_ids[num] }.first
+      count = 0
+      top_racer_ids.each do |racer_id|
+        racer = racers_list.select{ |racer| racer.id == racer_id }.first
+        if racer.present?
+          best_results << racer
+          count += 1 
+        end
+        break if count == number_of_start_box
       end
       race_results_hash[category.name.to_sym] = best_results
     end

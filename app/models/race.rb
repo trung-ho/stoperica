@@ -267,7 +267,7 @@ class Race < ApplicationRecord
   end
 
   def start_box_racers
-    categories = self.categories.where(name: ['17-19', '19-30', '30-40', '40-50', '50+'])
+    categories = self.categories
     race_results_hash = {}
 
     categories.each do |category|
@@ -278,6 +278,10 @@ class Race < ApplicationRecord
       race_results_hash[category.name.to_sym] = best_results
     end
     race_results_hash
+  end
+
+  def has_started?
+    started_at.present?
   end
 
   private

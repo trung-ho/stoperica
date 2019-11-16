@@ -37,7 +37,13 @@
   - else
     - if @start_box_racers.any?
       .mdl-grid.cat-startbox{ onclick: "collapse('#collapse-startbox', event)" }
-        .mdl-cell.mdl-cell--12-col.collapse-trigger.start-box-header Start Box
+        .mdl-cell.mdl-cell--12-col.collapse-trigger.start-box-header 
+          = 'Start Box'
+
+          %i.material-icons.down.is-pulled-right expand_more
+          %i.material-icons.up.is-pulled-right expand_less
+          %span.is-pulled-right
+            %i.fas.fa-bell
       .collapse#collapse-startbox
         - @start_box_racers.each_with_index do |(key, value), index|
           - sb_cat_class = (index%2 == 0) ? 'even' : ''

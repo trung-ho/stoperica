@@ -5,6 +5,7 @@ const getClubName = (racer, isUci) => {
 }
 
 class RaceResults extends React.Component {
+
   constructor() {
     super();
 
@@ -38,7 +39,7 @@ class RaceResults extends React.Component {
   _renderSequential() {
     const newestFirst = this.state.newestFirst;
     const isUci = this.state.race.uci_display;
-    console.log();
+
     return this.state.race.race_results.filter((a)=>{
         return a.live_time.time != '- -' && a.status == 3
       }).sort((a, b)=>{
@@ -71,9 +72,29 @@ class RaceResults extends React.Component {
   }
 
   _renderActive() {
+    const dnfStatuses = [4, 5, 6];
     const isUci = this.state.race.uci_display;
+
     return this.state.race.race_results.filter((a)=>{
-        return a.live_time.time === '- -'
+        return a.live_time.time === '- -' && !dnfStatuses.includes(a.status);
+      }).map((raceResult)=>{
+        return (<tr key={`race-result-${raceResult.id}`}>
+          <td>{raceResult.start_number && raceResult.start_number.value}</td>
+          <td>{raceResult.category.name.toUpperCase()}</td>
+          <td>{`${raceResult.racer.first_name} ${raceResult.racer.last_name}`}</td>
+          <td>{raceResult.racer && raceResult.racer.club && getClubName(raceResult.racer, isUci)}</td>
+          <td>{this._prettyStatus(raceResult.status)}</td>
+        </tr>)
+      });
+  }
+
+
+  _renderDidNotFinish() {
+    const dnfStatuses = [4, 5, 6];
+    const isUci = this.state.race.uci_display;
+
+    return this.state.race.race_results.filter((a)=>{
+        return dnfStatuses.includes(a.status);
       }).map((raceResult)=>{
         return (<tr key={`race-result-${raceResult.id}`}>
           <td>{raceResult.start_number && raceResult.start_number.value}</td>
@@ -170,9 +191,14 @@ class RaceResults extends React.Component {
   }
 
   render () {
+    const dnfStatuses = [4, 5, 6];
+
     const total = this.state.race.race_results.length;
-    const active = this.state.race.race_results.filter(a => a.live_time.time === '- -').length;
-    const finished = total - active;
+    const active = this.state.race.race_results.filter(
+      a => a.live_time.time === '- -' && !dnfStatuses.includes(a.status)
+    ).length;
+    const didNotFinish = this.state.race.race_results.filter(a => dnfStatuses.includes(a.status)).length;
+    const finished = total - (active + didNotFinish);
     return(
       <div>
         <h2>Trenutni rezultati ({ finished })</h2>
@@ -216,7 +242,7 @@ class RaceResults extends React.Component {
           </tbody>
         </table>
 
-        <h2>Nisu zavrsili({ active })</h2>
+        <h2>U utrci({ active })</h2>
 
         <table
           className={`${this.state.largeView ? 'large-view' : ''} mdl-data-table wide_table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp`}
@@ -233,6 +259,27 @@ class RaceResults extends React.Component {
           <tbody>
             {
               this._renderActive()
+            }
+          </tbody>
+        </table>
+
+        <h2>Van poretka({ didNotFinish })</h2>
+
+        <table
+          className={`${this.state.largeView ? 'large-view' : ''} mdl-data-table wide_table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp`}
+        >
+          <thead>
+            <tr>
+              <td>Broj</td>
+              <td>Kategorija</td>
+              <td>Ime</td>
+              <td>Klub</td>
+              <td>Status</td>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              this._renderDidNotFinish()
             }
           </tbody>
         </table>

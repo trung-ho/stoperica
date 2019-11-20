@@ -71,6 +71,12 @@ class RaceResultsController < ApplicationController
     start_number = race.pool.start_numbers.find_by!(value: params[:start_number])
     race_result = RaceResult.find_by!(race: race, start_number: start_number)
     race_result.update!(missed_control_points: params[:missed_control_points])
+    
+    # If zero is entred, then delete all control points!
+    if race.treking? && params[:missed_control_points].to_i == 0
+      race.update!(control_points: [])
+    end
+    
     render json: race_result
   end
 
@@ -95,7 +101,7 @@ class RaceResultsController < ApplicationController
     race_result.insert_lap_time(millis, reader_id)
     race_result.update!(status: params[:status]) if params[:status].present? && params[:status] != 3
     respond_to do |format|
-      format.json { render json: race_result }
+      format.json { render json: {race_result: race_result, racer: race_result.racer} }
     end
   end
 

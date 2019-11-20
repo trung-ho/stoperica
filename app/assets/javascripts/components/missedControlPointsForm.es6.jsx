@@ -45,7 +45,7 @@ class MissedControlPointsForm extends React.Component {
           <label className="mdl-textfield__label" htmlFor="number">Startni broj</label>
         </div>
         <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input className="mdl-textfield__input" type="text" id="missed" onKeyUp={this.updateMissed}/>
+          <input className="mdl-textfield__input" type="number" id="missed" onKeyUp={this.updateMissed}/>
           <label className="mdl-textfield__label" htmlFor="missed">Zaostatak</label>
         </div>
         <button

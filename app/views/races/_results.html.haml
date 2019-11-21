@@ -35,7 +35,7 @@
           = render 'result', race_result: race_result, index: i
 
   - else
-    - if @start_box_racers.any?
+    - if @start_box_racers.present? && @start_box_racers.any?
       .mdl-grid.cat-startbox{ onclick: "collapse('#collapse-startbox', event)" }
         .mdl-cell.mdl-cell--12-col.collapse-trigger.start-box-header 
           = 'Start Box'

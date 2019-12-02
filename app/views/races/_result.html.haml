@@ -39,8 +39,8 @@
     - racer_link_class = (absent_acount > 0) ? 'color-red' : ''
     - if @is_admin
       = race_result.racer.year_of_birth
-    = link_to race_result.racer, class: "#{racer_link_class}" do
-      .emoji= race_result.racer.country_flag
+    .emoji= race_result.racer.country_flag
+    = link_to race_result.racer, class: "#{racer_link_class}" do  
       - if @race.uci_display?
         = race_result.racer.uci_name
       - else

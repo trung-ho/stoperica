@@ -17,7 +17,7 @@ class RacersController < ApplicationController
   # GET /racers.json
   def search
     term = "%#{params['term']}%"
-    @racers = Racer.where('first_name LIKE :term OR last_name LIKE :term OR email LIKE :term', term: term)
+    @racers = Racer.where('first_name LIKE :term OR last_name LIKE :term OR email LIKE :term OR phone_number LIKE :term', term: term)
     render json: @racers.collect{|r| { id: r.id, full_name: r.full_name } }
   end
 

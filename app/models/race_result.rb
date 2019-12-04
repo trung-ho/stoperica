@@ -46,6 +46,10 @@ class RaceResult < ApplicationRecord
     end
   end
 
+  def is_not_finsihed?
+    finish_delta && (['krug', 'kruga', 'krugova'].include? finish_delta.split(' ').last)
+  end
+
   def date_format
     race.millis_display? ? '%k:%M:%S.%2N' : '%k:%M:%S'
   end

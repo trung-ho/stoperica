@@ -58,7 +58,7 @@
       %b= race_result.pretty_status
     - else
       %b= race_result.finish_time
-      - if race_result.average_speed
+      - if race_result.average_speed && !race_result.is_not_finsihed?
         %br
         = race_result.average_speed
   - if @race.ended_at.blank?

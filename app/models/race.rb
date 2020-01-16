@@ -259,7 +259,7 @@ class Race < ApplicationRecord
           rr.missed_control_points, -rr.lap_times.length, rr.finish_time
         ]}
     end
-    sorted_results
+    sorted_results.reverse_each.to_h
   end
 
   def displayable_description

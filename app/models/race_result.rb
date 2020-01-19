@@ -369,5 +369,15 @@ class RaceResult < ApplicationRecord
     dur = seconds/3600
     "#{(len/dur).round 1} km/h"
   end
+
+  def points_readable
+    if(self.points.to_f % 1 == 0)
+      return self.points.to_i
+    else
+      return self.points
+    end
+  rescue
+    self.points
+  end
   
 end

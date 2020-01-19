@@ -1,4 +1,4 @@
-.mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
+.mdl-grid{ class: "#{index.odd? ? 'even' : ''} races_result_row" }
   - if @is_admin || @is_race_admin
 
     - if @race.pool.present?
@@ -16,7 +16,8 @@
 
 
   - if @race.league&.xczld? || @race.league&.trail?
-    .mdl-cell.mdl-cell--1-col= race_result.points
+    .mdl-cell.mdl-cell--1-col= race_result.points_readable
+    
   - elsif @race.league&.running?
     .mdl-cell.mdl-cell--1-col{ title: 'Ukupno = bodovi u kategoriji + bodovi u ukupnom poretku' }
       - if race_result.total_points

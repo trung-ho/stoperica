@@ -57,6 +57,7 @@
         = link_to edit_race_path(@race) do
           .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
             Izmijeni
+        = link_to 'IZBRIŠI',url_for(action: :destroy,id: @race.id),method: :delete, data: {confirm: "Da li ste sigurni da želite obrisati utrku #{@race.name} ?"}, class: 'btn-red mdl-button'
 
     .race-actions
       %span
@@ -284,3 +285,5 @@
       window.location.search = window.location.search.replace(/&flags=true/, "");
     }
   });
+
+

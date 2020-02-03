@@ -3,9 +3,10 @@ class Race < ApplicationRecord
   belongs_to :league, optional: true
   belongs_to :pool
   
-  has_many :race_results
-  has_many :categories
+  has_many :race_results, dependent: :destroy
+  has_many :categories, dependent: :destroy
   has_many :racers, through: :race_results
+  has_many :race_admins, dependent: :destroy
 
   before_validation :parse_json
   before_save :set_auth_token

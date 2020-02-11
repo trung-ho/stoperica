@@ -5,6 +5,17 @@
 - if user_signed_in? && current_user.admin?
   = link_to 'Dodaj', new_racer_path, class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'
   %br
+  = form_for :racer, url: { action: "search", type: 'admin_search' }, method: 'get' do |f|
+    .mdl-grid
+      .mdl-cell.mdl-cell--3-col
+        = f.text_field :last_name, class: 'mdl-textfield__input', placeholder: "Pretraži po imenu"
+      .mdl-cell.mdl-cell--3-col
+        = f.text_field :phone_number, class: 'mdl-textfield__input', placeholder: "Pretraži broju mobitela"
+      .mdl-cell.mdl-cell--3-col
+        = f.text_field :email, class: 'mdl-textfield__input', placeholder: "Pretraži po email adresi"
+        = hidden_field_tag :search_type, 'admin'
+      .mdl-cell.mdl-cell--3-col        
+        = f.submit 'Search', class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent'
 
   .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.mdl-js-textfield--accent
     %input#search.mdl-textfield__input{ type: 'text' }

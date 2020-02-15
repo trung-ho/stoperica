@@ -8,7 +8,7 @@
   = form_for :racer, url: { action: "search", type: 'admin_search' }, method: 'get' do |f|
     .mdl-grid
       .mdl-cell.mdl-cell--3-col
-        = f.text_field :last_name, class: 'mdl-textfield__input', placeholder: "Pretraži po imenu"
+        = f.text_field :last_name, class: 'mdl-textfield__input', placeholder: "Pretraži po imenu/prezimenu"
       .mdl-cell.mdl-cell--3-col
         = f.text_field :phone_number, class: 'mdl-textfield__input', placeholder: "Pretraži broju mobitela"
       .mdl-cell.mdl-cell--3-col

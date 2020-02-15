@@ -26,7 +26,8 @@ class RacersController < ApplicationController
         email: user_email,
         phone_number: user_phone_number
 
-      @racers = Racer.where("last_name LIKE ? OR email LIKE ? OR phone_number LIKE ?", 
+      @racers = Racer.where("last_name LIKE ? OR first_name LIKE ? OR email LIKE ? OR phone_number LIKE ?", 
+        "#{user_last_name.nil? ? nil : '%' + user_last_name + '%'}", 
         "#{user_last_name.nil? ? nil : '%' + user_last_name + '%'}", 
         "#{user_email.nil? ? nil : '%' + user_email + '%'}", 
         "#{user_phone_number.nil? ? nil : '%' + user_phone_number + '%'}"

@@ -16,7 +16,7 @@
 
 
   - if @race.league&.xczld? || @race.league&.trail?
-    .mdl-cell.mdl-cell--1-col= race_result.points_readable
+    .mdl-cell.mdl-cell--1-col= (race_result.points_readable != 0) ? race_result.points_readable : ''
     
   - elsif @race.league&.running?
     .mdl-cell.mdl-cell--1-col{ title: 'Ukupno = bodovi u kategoriji + bodovi u ukupnom poretku' }

@@ -272,10 +272,10 @@ class Race < ApplicationRecord
     categories = self.categories
     best_results = []
     race_results_hash = {}
-
+    
     categories.each do |category|
-      next if general_rank[category.name].nil?
-      top_racer_ids = general_rank[category.name].map { |rank| rank.first }
+      next if general_rank[category.category].nil?
+      top_racer_ids = general_rank[category.category].map { |rank| rank.first }
       racers_list = self.racers.to_a
       number_of_start_box = racers_list.size / 10
       number_of_start_box = 2 if number_of_start_box < 2

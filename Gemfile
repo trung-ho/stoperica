@@ -32,6 +32,8 @@ gem 'country_select', require: 'country_select_without_sort_alphabetical'
 # For excel exports..
 gem 'axlsx'
 
+gem 'jquery-rails'
+
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'rubocop', require: false

@@ -1,12 +1,12 @@
-.mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
+.mdl-grid{ class: "#{index.odd? ? 'even' : ''} races_result_row" }
   - if @is_admin || @is_race_admin
 
     - if @race.pool.present?
       #adminFormContainer.mdl-cell.mdl-cell--2-col
         = form_for race_result, html: { id: 'start_number_form' } do |f|
-          = f.select :start_number, options_for_select(@start_numbers, race_result.start_number&.value), include_blank: true
-          = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, value: race_result.category_id
-          = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+          = f.select :start_number, options_for_select(@start_numbers, race_result.start_number&.value), {include_blank: true}, { class: 'start_number_select' }
+          = f.select :category_id, @race.categories.collect{|c| [c.name, c.id]}, {value: race_result.category_id}, { class: 'category_id_select' }
+          = f.submit 'Spremi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect m-0'
   .mdl-cell.mdl-cell--1-col
     - if race_result.status == 3 && @race.ended_at.present?
       %b= index + 1
@@ -16,7 +16,8 @@
 
 
   - if @race.league&.xczld? || @race.league&.trail?
-    .mdl-cell.mdl-cell--1-col= race_result.points
+    .mdl-cell.mdl-cell--1-col= (race_result.points_readable != 0) ? race_result.points_readable : ''
+    
   - elsif @race.league&.running?
     .mdl-cell.mdl-cell--1-col{ title: 'Ukupno = bodovi u kategoriji + bodovi u ukupnom poretku' }
       - if race_result.total_points
@@ -29,14 +30,25 @@
     .mdl-cell.mdl-cell--2-col
       %b= race_result.racer.uci_id
   .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
+    - racer = race_result.racer
+    - absent_acount = 0
+    - if @all_race_results.present?
+      - @all_race_results.each do |past_race|
+        - next if past_race.racer_id != racer.id
+        - absent_acount += 1 if past_race.status == 1
+        - break if past_race.status != 1
+    - racer_link_class = (absent_acount > 0) ? 'color-red' : ''
     - if @is_admin
       = race_result.racer.year_of_birth
-    = link_to race_result.racer do
-      .emoji= race_result.racer.country_flag
+    .emoji= race_result.racer.country_flag
+    = link_to race_result.racer, class: "#{racer_link_class}" do  
       - if @race.uci_display?
         = race_result.racer.uci_name
       - else
         = race_result.racer.full_name
+    - if @is_admin && absent_acount > 0
+      %p.color-red
+        = "Penal: " + absent_acount.to_s
   .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-phone
     = race_result.racer.club_name(@race.uci_display?)
   - unless @race.laps.nil?
@@ -47,17 +59,18 @@
       %b= race_result.pretty_status
     - else
       %b= race_result.finish_time
-      - if race_result.average_speed
+      - if race_result.average_speed && !race_result.is_not_finsihed?
         %br
         = race_result.average_speed
   - if @race.ended_at.blank?
     .mdl-cell.mdl-cell--1-col= '- -'
   - else
-    - if index.zero?
-      .mdl-cell.mdl-cell--1-col
-    -else
-      .mdl-cell.mdl-cell--1-col.losers
-        = race_result.finish_delta
+    - if params && params[:absolute] != 'true'
+      - if index.zero?
+        .mdl-cell.mdl-cell--1-col
+      -else
+        .mdl-cell.mdl-cell--1-col.losers
+          = race_result.finish_delta
 
   - if  @is_club_admin && race_result.racer.club_id == @current_racer&.club_id && DateTime.now < @race.registration_threshold
     .mdl-cell.mdl-cell--2-col
@@ -67,7 +80,9 @@
 
   - if @is_admin || @is_race_admin
     .mdl-cell.mdl-cell--2-col
-      = link_to 'Izmijeni', edit_race_result_url(race_result), class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect'
+      %a.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--accent.mdl-js-ripple-effect.min-width-auto{:href => href="#{edit_race_result_url(race_result)}" }
+        %i.fas.fa-edit
+
       = form_for race_result, method: :delete do |f|
         .actions
           = f.submit 'Odjavi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect', onclick: "return confirm('Ovo ce izbrisati rezultat iz baze podataka. Molim potvrdi.')"

@@ -35,6 +35,27 @@
           = render 'result', race_result: race_result, index: i
 
   - else
+    - if @start_box_racers.present? && @start_box_racers.any?
+      .mdl-grid.cat-startbox{ onclick: "collapse('#collapse-startbox', event)" }
+        .mdl-cell.mdl-cell--12-col.collapse-trigger.start-box-header 
+          = 'Start Box'
+          %i.material-icons.down.is-pulled-right expand_more
+          %i.material-icons.up.is-pulled-right expand_less
+          %span.is-pulled-right
+            %i.fas.fa-bell
+      .collapse#collapse-startbox
+        - @start_box_racers.each_with_index do |(key, value), index|
+          - sb_cat_class = (index%2 == 0) ? 'even' : ''
+          .mdl-grid.start-box-racers{ class: "#{sb_cat_class}"}
+            %h5.start-box-category= key
+            - value.each do |racer|
+              = link_to racer do
+                .emoji= racer.country_flag
+                - if @race.uci_display?
+                  = racer.uci_name
+                - else
+                  = racer.full_name
+
     - @race.categories.order(id: :asc).each_with_index do |category, index|
       .mdl-grid{ class: "cat-#{index}", onclick: "collapse('#collapse-#{category.id}', event)" }
         .mdl-cell.mdl-cell--12-col.collapse-trigger

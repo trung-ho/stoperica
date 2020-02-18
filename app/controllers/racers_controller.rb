@@ -17,8 +17,27 @@ class RacersController < ApplicationController
   # GET /racers.json
   def search
     term = "%#{params['term']}%"
-    @racers = Racer.where('first_name LIKE :term OR last_name LIKE :term OR email LIKE :term', term: term)
-    render json: @racers.collect{|r| { id: r.id, full_name: r.full_name } }
+    if params['search_type'] && params['search_type'] == 'admin'
+      user_last_name = params['racer']['last_name'].present? ? params['racer']['last_name'] : nil
+      user_email = params['racer']['email'].present? ? params['racer']['email'] : nil
+      user_phone_number = params['racer']['phone_number'].present? ? params['racer']['phone_number'] : nil
+
+      @racer = Racer.new last_name: user_last_name,
+        email: user_email,
+        phone_number: user_phone_number
+
+      @racers = Racer.where("last_name LIKE ? OR first_name LIKE ? OR email LIKE ? OR phone_number LIKE ?", 
+        "#{user_last_name.nil? ? nil : '%' + user_last_name + '%'}", 
+        "#{user_last_name.nil? ? nil : '%' + user_last_name + '%'}", 
+        "#{user_email.nil? ? nil : '%' + user_email + '%'}", 
+        "#{user_phone_number.nil? ? nil : '%' + user_phone_number + '%'}"
+      ).page(params[:page])
+
+      render :index
+    else
+      @racers = Racer.where('first_name LIKE :term OR last_name LIKE :term', term: term)
+      render json: @racers.collect{|r| { id: r.id, full_name: r.full_name } }
+    end
   end
 
   # GET /racers/1

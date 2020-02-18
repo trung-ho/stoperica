@@ -19,6 +19,8 @@
 //= require react_ujs
 //= require react-flux
 //= require components
+//= require jquery
+//= require jquery_ujs
 //= require_tree .
 
 document.addEventListener('turbolinks:load', function () {

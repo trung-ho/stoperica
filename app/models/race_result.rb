@@ -46,6 +46,10 @@ class RaceResult < ApplicationRecord
     end
   end
 
+  def is_not_finsihed?
+    finish_delta && (['krug', 'kruga', 'krugova'].include? finish_delta.split(' ').last)
+  end
+
   def date_format
     race.millis_display? ? '%k:%M:%S.%2N' : '%k:%M:%S'
   end
@@ -364,6 +368,16 @@ class RaceResult < ApplicationRecord
     seconds = ended_at - start_time
     dur = seconds/3600
     "#{(len/dur).round 1} km/h"
+  end
+
+  def points_readable
+    if(self.points.to_f % 1 == 0)
+      return self.points.to_i
+    else
+      return self.points
+    end
+  rescue
+    self.points
   end
   
 end

@@ -1,4 +1,4 @@
-%h1.text-hidden.cu-p
+%h3.text-hidden.cu-p.race-show-name
   = @race.name
   %p  
     - if @is_admin || @is_race_admin
@@ -6,16 +6,14 @@
       %i.material-icons.up.is-pulled-right.cu-p.expand-less{style: "display: none;"} expand_less
 
 - if @is_admin || @is_race_admin
-
   #info{style: "display: none;"}
-
-    %h4
+    %h5
       Vrijeme utrke:
       %b
         = l @race.date, format: :long
 
     - if @race.location_url.present?
-      %h4
+      %h5
         %a{ href: @race.location_url, target: 'blank', style: "text-decoration: none" }
           %i.material-icons.is-vcentered location_on
           Lokacija utrke
@@ -26,7 +24,7 @@
         = @race.auth_token
 
     - unless @race.started_at
-      %h4
+      %h5
         Prijave otvorene do:
         %b#raceResultLocked{ class: @race.lock_race_results ? 'shame' : '' }
           = l @race.registration_threshold, format: :long
@@ -36,7 +34,7 @@
             Odjave su onemogućene za ovu utrku.
 
     - if @is_admin && @race.pool
-      %h4
+      %h5
         Baza brojeva:
         = link_to @race.pool&.name, pool_path(@race.pool)
       %hr
@@ -59,6 +57,7 @@
         = link_to edit_race_path(@race) do
           .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect
             Izmijeni
+        = link_to 'IZBRIŠI',url_for(action: :destroy,id: @race.id),method: :delete, data: {confirm: "Da li ste sigurni da želite obrisati utrku #{@race.name} ?"}, class: 'btn-red mdl-button'
 
     .race-actions
       %span
@@ -72,7 +71,7 @@
     .mb-3
       - if @race.displayable_description.present? && @race.description_url.present?
         #add-info-toggler
-          %h4.cu-p.d-i
+          %h5.cu-p.d-i
             Dodatne informacije
           %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
           %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
@@ -81,10 +80,10 @@
           = link_to @race.description_text.html_safe, @race.description_url, target: '_blank'
       - elsif @race.description_url.present?
         = link_to @race.description_url, target: '_blank', id: 'additional-information' do
-          %h4 Dodatne informacije
+          %h5 Dodatne informacije
       - elsif @race.displayable_description.present?
         #add-info-toggler
-          %h4.cu-p.d-i
+          %h5.cu-p.d-i
             Dodatne informacije
           %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
           %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
@@ -96,58 +95,110 @@
   %hr
   = render 'admin_race_result_form'
 - else
-  %h4
-    Vrijeme utrke:
-    %b
-      = l @race.date, format: :long
-  - if @race.location_url.present?
-    %h4
-      %a{ href: @race.location_url, target: 'blank', style: "text-decoration: none" }
-        %i.material-icons.is-vcentered location_on
-        Lokacija utrke
-    
-  - unless @race.started_at
-    %h4
-      Prijave otvorene do:
+  .mobile-view
+    %h6
+      %span
+        Vrijeme utrke:
+        %b
+          = @race.date.strftime("%d.%m.%Y. %R")
+    %h6 
+      - unless @race.started_at
+        %span
+          Prijave do:
+          %b#raceResultLocked{ class: @race.lock_race_results ? 'shame' : '' }
+            = @race.registration_threshold.strftime("%d.%m.%Y. %R")
+          - if @race.lock_race_results
+            .mdl-tooltip.mdl-tooltip--large{for: "raceResultLocked"}
+              %b Napomena:
+              Odjave su onemogućene za ovu utrku.
+    - if @race.location_url.present?
+      %h6
+        %span
+          %a{ href: @race.location_url, target: 'blank', style: "text-decoration: none" }
+            %i.material-icons.is-vcentered location_on
+            Lokacija utrke
+      .mb-1
+        - if @race.displayable_description.present? && @race.description_url.present?
+          #add-info-toggler
+            %h6.cu-p.d-i
+              Dodatne informacije
+            %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
+            %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
+          #additional-information{style: "display: none;"}
+            %hr
+            = link_to @race.description_text.html_safe, @race.description_url, target: '_blank'
+        - elsif @race.description_url.present?
+          = link_to @race.description_url, target: '_blank', id: 'additional-information' do
+            %h6 Dodatne informacije
+        - elsif @race.displayable_description.present?
+          #add-info-toggler
+            %h6.cu-p.d-i
+              Dodatne informacije
+            %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
+            %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
+          #additional-information{style: "display: none;"}
+            %href
+            = @race.description_text.to_s.html_safe
+      .display-item-inline.d-flex.flex-row
+        .race-actions
+          = link_to races_path do
+            .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
+              Natrag
+        - if @current_racer&.club_admin? && DateTime.now < @race.registration_threshold && @club_racers.to_a.size > 0
+          = render 'club_admin_form'
+        - else
+          = render 'application'
+
+  .desktop-view
+    %h5
+      Vrijeme utrke:
+      %b
+        = @race.date.strftime("%d.%m.%Y. %R")
+      Prijave do:
       %b#raceResultLocked{ class: @race.lock_race_results ? 'shame' : '' }
-        = l @race.registration_threshold, format: :long
+        = @race.registration_threshold.strftime("%d.%m.%Y. %R")
       - if @race.lock_race_results
         .mdl-tooltip.mdl-tooltip--large{for: "raceResultLocked"}
           %b Napomena:
           Odjave su onemogućene za ovu utrku.
+    - if @race.location_url.present?
+      %h5
+        %a{ href: @race.location_url, target: 'blank', style: "text-decoration: none" }
+          %i.material-icons.is-vcentered location_on
+          Lokacija utrke
+    .mb-3
+      - if @race.displayable_description.present? && @race.description_url.present?
+        #add-info-toggler
+          %h5.cu-p.d-i
+            Dodatne informacije
+          %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
+          %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
+        #additional-information{style: "display: none;"}
+          %hr
+          = link_to @race.description_text.html_safe, @race.description_url, target: '_blank'
+      - elsif @race.description_url.present?
+        = link_to @race.description_url, target: '_blank', id: 'additional-information' do
+          %h5 Dodatne informacije
+      - elsif @race.displayable_description.present?
+        #add-info-toggler
+          %h5.cu-p.d-i
+            Dodatne informacije
+          %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
+          %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
+        #additional-information{style: "display: none;"}
+          %href
+          = @race.description_text.to_s.html_safe
+    .display-item-inline.d-flex.flex-row
+      .race-actions
+        = link_to races_path do
+          .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
+            Natrag
+      - if @current_racer&.club_admin? && DateTime.now < @race.registration_threshold && @club_racers.to_a.size > 0
+        = render 'club_admin_form'
+      - else
+        = render 'application'
 
-  .race-actions
-    = link_to races_path do
-      .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
-        Natrag
-  .mb-3
-    - if @race.displayable_description.present? && @race.description_url.present?
-      #add-info-toggler
-        %h4.cu-p.d-i
-          Dodatne informacije
-        %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
-        %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
-      #additional-information{style: "display: none;"}
-        %hr
-        = link_to @race.description_text.html_safe, @race.description_url, target: '_blank'
-    - elsif @race.description_url.present?
-      = link_to @race.description_url, target: '_blank', id: 'additional-information' do
-        %h4 Dodatne informacije
-    - elsif @race.displayable_description.present?
-      #add-info-toggler
-        %h4.cu-p.d-i
-          Dodatne informacije
-        %i.material-icons.down.is-pulled-right.cu-p#expand-more expand_more
-        %i.material-icons.up.is-pulled-right.cu-p#expand-less{style: "display: none;"} expand_less
-      #additional-information{style: "display: none;"}
-        %href
-        = @race.description_text.to_s.html_safe
-  - if @current_racer&.club_admin? && DateTime.now < @race.registration_threshold && @club_racers.to_a.size > 0
-    = render 'club_admin_form'
-  - else
-    = render 'application'
-
-%h4
+%h5
   Natjecatelji
   %br
 
@@ -234,3 +285,5 @@
       window.location.search = window.location.search.replace(/&flags=true/, "");
     }
   });
+
+

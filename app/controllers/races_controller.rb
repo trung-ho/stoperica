@@ -42,6 +42,20 @@ class RacesController < ApplicationController
       @start_numbers = []
     end
 
+    @race_league = @race.league
+    @all_race_results = nil
+    @start_box_racers = []
+    if @race.not_start_yet? && @race_league && @race_league.races.size > 1 && 
+        @race_league.present? && @race_league.league_type == "xczld"
+      past_races = @race_league.races.where.not(ended_at: nil).where("id < ?", @race.id)
+      if past_races.any?
+        @all_race_results = RaceResult.where(race_id: past_races).order(race_id: :desc)
+      end
+
+      #start box function
+      @start_box_racers = @race.start_box_racers
+    end
+
     respond_to do |format|
       format.html { render :show }
       format.json do
@@ -85,7 +99,6 @@ class RacesController < ApplicationController
   # POST /races.json
   def create
     @race = Race.new(race_params)
-
     respond_to do |format|
       if @race.save
         format.html { redirect_to @race, notice: 'Race was successfully created.' }

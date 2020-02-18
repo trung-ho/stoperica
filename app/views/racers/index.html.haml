@@ -5,6 +5,17 @@
 - if user_signed_in? && current_user.admin?
   = link_to 'Dodaj', new_racer_path, class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'
   %br
+  = form_for :racer, url: { action: "search", type: 'admin_search' }, method: 'get' do |f|
+    .mdl-grid
+      .mdl-cell.mdl-cell--3-col
+        = f.text_field :last_name, class: 'mdl-textfield__input', placeholder: "Pretraži po imenu/prezimenu"
+      .mdl-cell.mdl-cell--3-col
+        = f.text_field :phone_number, class: 'mdl-textfield__input', placeholder: "Pretraži broju mobitela"
+      .mdl-cell.mdl-cell--3-col
+        = f.text_field :email, class: 'mdl-textfield__input', placeholder: "Pretraži po email adresi"
+        = hidden_field_tag :search_type, 'admin'
+      .mdl-cell.mdl-cell--3-col        
+        = f.submit 'Search', class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent'
 
 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.mdl-js-textfield--accent
   %input#search.mdl-textfield__input{ type: 'text' }
@@ -39,10 +50,9 @@
   .mdl-cell.mdl-cell--2-col Godina rodenja
   .mdl-cell.mdl-cell--2-col Klub
   - if user_signed_in? && current_user.admin
-    .mdl-cell.mdl-cell--1-col UCI ID
-    .mdl-cell.mdl-cell--1-col Email
+    .mdl-cell.mdl-cell--2-col Email
     .mdl-cell.mdl-cell--1-col Broj mobitela
-    .mdl-cell.mdl-cell--2-col
+    .mdl-cell.mdl-cell--1-col
 
 - @racers.each_with_index do |racer, index|
   .mdl-grid{ class: "#{index.odd? ? 'even' : ''}" }
@@ -52,15 +62,38 @@
     .mdl-cell.mdl-cell--2-col= racer.year_of_birth
     .mdl-cell.mdl-cell--2-col= racer.club_name
     - if user_signed_in? && current_user.admin
-      .mdl-cell.mdl-cell--1-col= racer.uci_id
-      .mdl-cell.mdl-cell--1-col= racer.email
+      .mdl-cell.mdl-cell--2-col= racer.email
       .mdl-cell.mdl-cell--1-col
         %a{href: "tel:#{racer.phone_number}"}
           = racer.phone_number
       .mdl-cell.mdl-cell--1-col
-        = link_to 'Izmijeni', edit_racer_path(racer), class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored', style: 'color: white;'
+        = link_to 'Izmijeni', edit_racer_path(racer), class: 'mdl-button px-5 mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored', style: 'color: white;'
       .mdl-cell.mdl-cell--1-col
-        = form_for racer, method: :delete do |f|
-          = f.submit 'Izbrisi', class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent', style: 'color: white;'
-
+        %button.px-5.cd-popup-trigger.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent{:href => "#destroy-user-#{racer.id}", :onclick => "showPopup(#{racer.id})"} Izbrisi
+        .cd-popup{role: "alert", "data-racer-id": "#{racer.id}"}
+          .cd-popup-container
+            %p Izbrisati natjecatelja?
+            %ul.cd-buttons
+              %li
+                = form_for racer, method: :delete do |f|
+                  = f.submit 'DA', class: 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent'
+              %li
+                %button{class: 'mdl-button mdl-js-button mdl-button--closed mdl-js-ripple-effect mdl-button--accent', :onclick => "hidePopup(#{racer.id})"} OTKAŽI
+            %butong.cd-popup-close.img-replace{:onclick => "hidePopup(#{racer.id})"}
 = paginate @racers
+
+:javascript
+  function showPopup(racerId) {
+    var popUp = document.querySelectorAll("[data-racer-id='" + racerId + "']");
+    console.log(popUp);
+    if(popUp.length > 0){
+      popUp[0].classList.add("is-visible");
+    }
+  }
+  function hidePopup(racerId) {
+    var popUp = document.querySelectorAll("[data-racer-id='" + racerId + "']");
+    console.log(popUp);
+    if(popUp.length > 0){
+      popUp[0].classList.remove("is-visible");
+    }
+  }

@@ -3,9 +3,10 @@ class Race < ApplicationRecord
   belongs_to :league, optional: true
   belongs_to :pool
   
-  has_many :race_results
-  has_many :categories
+  has_many :race_results, dependent: :destroy
+  has_many :categories, dependent: :destroy
   has_many :racers, through: :race_results
+  has_many :race_admins, dependent: :destroy
 
   before_validation :parse_json
   before_save :set_auth_token
@@ -259,11 +260,42 @@ class Race < ApplicationRecord
           rr.missed_control_points, -rr.lap_times.length, rr.finish_time
         ]}
     end
-    sorted_results
+    sorted_results.reverse_each.to_h
   end
 
   def displayable_description
     Nokogiri(self.description_text.to_s).text
+  end
+
+  def start_box_racers
+    general_rank, base_time = self.league.general_rank
+    categories = self.categories
+    best_results = []
+    race_results_hash = {}
+    start_box_category = ['17-19', '19-30', '30-40', '40-50', '50+']
+    categories.each do |category|
+      next if general_rank[category.category].nil? || !(start_box_category.include? category.category)
+      top_racer_ids = general_rank[category.category].map { |rank| rank.first }
+      racers_list = self.racers.to_a
+      number_of_start_box = racers_list.size / 10
+      number_of_start_box = 2 if number_of_start_box < 2
+
+      count = 0
+      top_racer_ids.each do |racer_id|
+        racer = racers_list.select{ |racer| racer.id == racer_id }.first
+        if racer.present?
+          best_results << racer
+          count += 1 
+        end
+        break if count == number_of_start_box
+      end
+      race_results_hash[category.name.to_sym] = best_results
+    end
+    race_results_hash
+  end
+
+  def not_start_yet?
+    started_at.nil?
   end
 
   private

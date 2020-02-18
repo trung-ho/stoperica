@@ -41,7 +41,8 @@
                   = link_to results[0].racer.uci_name, racer_path(results[0].racer)
                   %span.mdl-list__item-sub-title= results[0].racer.club&.name
                 %b.mdl-list__item-secondary-info
-                  = results.sum{ |r| r.points || 0 }
+                  - point = results.sum{ |r| r.points || 0 }
+                  = (point % 1 == 0) ? point.to_i : point.to_f.round(1)
 
     - if @league.stage_competitors_only?
       - @categories.each_with_index do |cat, index|

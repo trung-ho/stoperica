@@ -133,6 +133,10 @@ option {
 }
 
 /* category colors */
+.cat-startbox {
+  background-color: #fef202b3;
+}
+
 .cat-0 {
   background-color: #29B6F6;
 }
@@ -269,4 +273,8 @@ option {
   .mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
     padding: 0 1rem;
   }
+}
+
+.color-red {
+  color: red !important;
 }

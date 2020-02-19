@@ -53,7 +53,7 @@ class RacesController < ApplicationController
       end
 
       #start box function
-      @start_box_racers = @race.start_box_racers
+      # @start_box_racers = @race.start_box_racers
     end
 
     respond_to do |format|

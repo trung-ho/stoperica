@@ -270,18 +270,19 @@ class Race < ApplicationRecord
   def start_box_racers
     general_rank, base_time = self.league.general_rank
     categories = self.categories
-    best_results = []
+    
     race_results_hash = {}
     start_box_category = ['17-19', '19-30', '30-40', '40-50', '50+']
     categories.each do |category|
       next if general_rank[category.category].nil? || !(start_box_category.include? category.category)
-      top_racer_ids = general_rank[category.category].map { |rank| rank.first }
-      racers_list = self.racers.to_a
+      best_results = []
+      racer_ids = RaceResult.where(category_id: category.id, race_id: self.id).pluck(:racer_id)
+      racers_list = Racer.where(id: racer_ids)
       number_of_start_box = racers_list.size / 10
       number_of_start_box = 2 if number_of_start_box < 2
 
       count = 0
-      top_racer_ids.each do |racer_id|
+      racer_ids.each do |racer_id|
         racer = racers_list.select{ |racer| racer.id == racer_id }.first
         if racer.present?
           best_results << racer
@@ -289,7 +290,7 @@ class Race < ApplicationRecord
         end
         break if count == number_of_start_box
       end
-      race_results_hash[category.name.to_sym] = best_results
+      race_results_hash[category.name.to_s] = best_results
     end
     race_results_hash
   end

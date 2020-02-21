@@ -272,25 +272,18 @@ class Race < ApplicationRecord
     categories = self.categories
     
     race_results_hash = {}
-    start_box_category = ['17-19', '19-30', '30-40', '40-50', '50+']
+    start_box_category = ['17-19', '19-30', '30-40', '40-50', '50']
     categories.each do |category|
-      next if general_rank[category.category].nil? || !(start_box_category.include? category.category)
-      best_results = []
-      racer_ids = RaceResult.where(category_id: category.id, race_id: self.id).pluck(:racer_id)
-      racers_list = Racer.where(id: racer_ids)
-      number_of_start_box = racers_list.size / 10
+      next if !(start_box_category.include? category.category)
+      current_racers = RaceResult.where(category_id: category.id, race_id: self.id)
+      number_of_start_box = current_racers.size / 10
       number_of_start_box = 2 if number_of_start_box < 2
+      top_racer = self.league.racers[category.category]&.sort_by{|k, v| v.sum{|r| -(r.points || 0)}}.first[number_of_start_box]
 
-      count = 0
-      racer_ids.each do |racer_id|
-        racer = racers_list.select{ |racer| racer.id == racer_id }.first
-        if racer.present?
-          best_results << racer
-          count += 1 
-        end
-        break if count == number_of_start_box
-      end
-      race_results_hash[category.name.to_s] = best_results
+      racer_ids = self.league.racers[category.category]&.sort_by{|k, v| v.sum{|r| -(r.points || 0)}}.map{|e| e.first}.first(number_of_start_box)
+      best_racers = Racer.where(id: racer_ids)
+      
+      race_results_hash[category.name.to_s] = best_racers
     end
     race_results_hash
   end

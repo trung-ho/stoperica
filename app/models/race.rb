@@ -278,11 +278,20 @@ class Race < ApplicationRecord
       current_racers = RaceResult.where(category_id: category.id, race_id: self.id)
       number_of_start_box = current_racers.size / 10
       number_of_start_box = 2 if number_of_start_box < 2
-      top_racer = self.league.racers[category.category]&.sort_by{|k, v| v.sum{|r| -(r.points || 0)}}.first[number_of_start_box]
 
-      racer_ids = self.league.racers[category.category]&.sort_by{|k, v| v.sum{|r| -(r.points || 0)}}.map{|e| e.first}.first(number_of_start_box)
-      best_racers = Racer.where(id: racer_ids)
+      best_overall_racers = self.league.racers[category.category]&.sort_by{|k, v| v.sum{|r| -(r.points || 0)}}
+      current_racer_ids = current_racers.pluck(:racer_id)
+      starbox_ids = []
+
+      count = 0
+      best_overall_racers.each do |racer|
+        next unless current_racer_ids.include? racer.first
+        starbox_ids << racer.first
+        count += 1 
+        break if count == number_of_start_box
+      end
       
+      best_racers = Racer.where id: starbox_ids
       race_results_hash[category.name.to_s] = best_racers
     end
     race_results_hash

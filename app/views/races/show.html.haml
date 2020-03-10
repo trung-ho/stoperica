@@ -139,15 +139,15 @@
           #additional-information{style: "display: none;"}
             %href
             = @race.description_text.to_s.html_safe
-      .display-item-inline.d-flex.flex-row
-        .race-actions
-          = link_to races_path do
-            .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
-              Natrag
-        - if @current_racer&.club_admin? && DateTime.now < @race.registration_threshold && @club_racers.to_a.size > 0
-          = render 'club_admin_form'
-        - else
-          = render 'application'
+    .display-item-inline.d-flex.flex-row
+      .race-actions
+        = link_to races_path do
+          .mdl-button.mdl-button--raised.mdl-button--accent.mdl-js-button.mdl-js-ripple-effect
+            Natrag
+      - if @current_racer&.club_admin? && DateTime.now < @race.registration_threshold && @club_racers.to_a.size > 0
+        = render 'club_admin_form'
+      - else
+        = render 'application'
 
   .desktop-view
     %h5
@@ -197,7 +197,7 @@
         = render 'club_admin_form'
       - else
         = render 'application'
-
+  
 %h5
   Natjecatelji
   %br

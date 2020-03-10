@@ -80,8 +80,15 @@
               %li
                 %button{class: 'mdl-button mdl-js-button mdl-button--closed mdl-js-ripple-effect mdl-button--accent', :onclick => "hidePopup(#{racer.id})"} OTKAŽI
             %butong.cd-popup-close.img-replace{:onclick => "hidePopup(#{racer.id})"}
-= paginate @racers
-
+= paginate @racers, window: 1, outer_window: 0
+:css
+  .pagination {
+    width: auto;
+  }
+  span.page.gap {
+    display: none;
+  }
+  
 :javascript
   function showPopup(racerId) {
     var popUp = document.querySelectorAll("[data-racer-id='" + racerId + "']");

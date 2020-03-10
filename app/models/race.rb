@@ -270,26 +270,29 @@ class Race < ApplicationRecord
   def start_box_racers
     general_rank, base_time = self.league.general_rank
     categories = self.categories
-    best_results = []
+    
     race_results_hash = {}
-    start_box_category = ['17-19', '19-30', '30-40', '40-50', '50+']
+    start_box_category = ['17-19', '19-30', '30-40', '40-50', '50']
     categories.each do |category|
-      next if general_rank[category.category].nil? || !(start_box_category.include? category.category)
-      top_racer_ids = general_rank[category.category].map { |rank| rank.first }
-      racers_list = self.racers.to_a
-      number_of_start_box = racers_list.size / 10
+      next if !(start_box_category.include? category.category)
+      current_racers = RaceResult.where(category_id: category.id, race_id: self.id)
+      number_of_start_box = current_racers.size / 10
       number_of_start_box = 2 if number_of_start_box < 2
 
+      best_overall_racers = self.league.racers[category.category]&.sort_by{|k, v| v.sum{|r| -(r.points || 0)}}
+      current_racer_ids = current_racers.pluck(:racer_id)
+      starbox_ids = []
+
       count = 0
-      top_racer_ids.each do |racer_id|
-        racer = racers_list.select{ |racer| racer.id == racer_id }.first
-        if racer.present?
-          best_results << racer
-          count += 1 
-        end
+      best_overall_racers.each do |racer|
+        next unless current_racer_ids.include? racer.first
+        starbox_ids << racer.first
+        count += 1 
         break if count == number_of_start_box
       end
-      race_results_hash[category.name.to_sym] = best_results
+      
+      best_racers = Racer.where id: starbox_ids
+      race_results_hash[category.name.to_s] = best_racers
     end
     race_results_hash
   end

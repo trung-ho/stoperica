@@ -15,4 +15,13 @@ class Category < ApplicationRecord
   def self.generics
     {'zene' => categories[:zene], 'muskarci' => categories[:muskarci]}
   end
+
+  def self.xczld_categories
+    {"zene" => 0, "u16" => 1, "u17" => 3, 
+      "17-19" => 4, "16-20" => 5, "19-30" => 6, 
+      "20-30" => 7, "30-40" => 8, "50" => 9, 
+      "u15m" => 10, "u15w" => 11, "u13m" => 12, 
+      "u13w" => 13, "u11m" => 14, "u11w" => 15, 
+      "u9m" => 16, "u9w" => 17}
+  end
 end

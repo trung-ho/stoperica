@@ -11,7 +11,7 @@ class LeaguesController < ApplicationController
   # GET /leagues/1
   # GET /leagues/1.json
   def show
-    @categories = @league.xczld? ? Category.categories.except(:muskarci) : Category.generics
+    @categories = @league.xczld? ? Category.xczld_categories.except(:muskarci) : Category.generics
     @races_count = @league.races.count
     @ranks, @base_time = @league.general_rank if @league.stage_competitors_only?
   end

@@ -140,7 +140,8 @@ GEM
       ast (~> 2.4.0)
     pg (0.21.0)
     powerpack (0.1.1)
-    puma (3.10.0)
+    puma (4.3.8)
+      nio4r (~> 2.0)
     rack (2.0.3)
     rack-test (0.7.0)
       rack (>= 1.0, < 3)
@@ -282,7 +283,7 @@ DEPENDENCIES
   kaminari
   material_design_lite-rails
   pg
-  puma (~> 3.0)
+  puma (~> 4.3)
   rails (>= 5.0)
   react-flux-rails
   react-rails
